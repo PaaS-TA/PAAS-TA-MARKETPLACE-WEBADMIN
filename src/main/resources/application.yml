@@ -1,0 +1,58 @@
+spring:
+  application:
+    name: marketplace-web-admin
+
+logging:
+  level:
+    org.springframework.web: DEBUG
+    org.springframework.web.client.RestTemplate: TRACE
+    org.openpaas.paasta.marketplace.web.config.LoggingInterceptor: DEBUG
+
+server:
+  port: 8778
+
+
+market:
+  place:
+    api:
+      uri: http://localhost:8777
+      authorization:
+        username: admin
+        password: xxxxxxxxx
+    org:
+      name: market-org
+    space:
+      name: market-space
+    quota:
+      name: market-quota
+    web:
+      seller:
+        uri: http://localhost:8780
+
+
+cf:
+  java:
+    client:
+      api:
+        uri: http://localhost:2222
+        authorization:
+          username: admin
+          password: xxxxxxxxx
+  uaa:
+    oauth:
+      info:
+        uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/userinfo
+      token:
+        check:
+          uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/check_token
+        access:
+          uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/oauth/token
+      logout:
+        uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/logout
+      authorization:
+        uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/oauth/authorize
+      client:
+        id: marketclient
+        secret: clientsecret
+  api:
+    url: https://api.XXX.XXX.XXX.XXX.xip.io

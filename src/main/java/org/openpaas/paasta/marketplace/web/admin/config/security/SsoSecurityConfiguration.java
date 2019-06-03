@@ -1,11 +1,24 @@
 package org.openpaas.paasta.marketplace.web.admin.config.security;
 
 
-import org.openpaas.paasta.marketplace.web.admin.common.Common;
-import org.openpaas.paasta.marketplace.web.admin.common.Constants;
-import org.openpaas.paasta.marketplace.web.admin.security.*;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import static java.util.Arrays.asList;
+
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.util.Enumeration;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
+import org.openpaas.paasta.marketplace.web.admin.common.AdminConstants;
+import org.openpaas.paasta.marketplace.web.admin.common.PropertyService;
+import org.openpaas.paasta.marketplace.web.admin.security.SSLUtils;
+import org.openpaas.paasta.marketplace.web.admin.security.SsoAuthenticationDetails;
+import org.openpaas.paasta.marketplace.web.admin.security.SsoAuthenticationDetailsSource;
+import org.openpaas.paasta.marketplace.web.admin.security.SsoAuthenticationFailureHandler;
+import org.openpaas.paasta.marketplace.web.admin.security.SsoAuthenticationProcessingFilter;
+import org.openpaas.paasta.marketplace.web.admin.security.SsoAuthenticationSuccessHandler;
+import org.openpaas.paasta.marketplace.web.admin.security.SsoLogoutRedirectStrategy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -21,20 +34,18 @@ import org.springframework.security.oauth2.client.filter.OAuth2ClientContextFilt
 import org.springframework.security.oauth2.client.token.AccessTokenRequest;
 import org.springframework.security.oauth2.client.token.DefaultAccessTokenRequest;
 import org.springframework.security.oauth2.client.token.grant.code.AuthorizationCodeResourceDetails;
-import org.springframework.security.oauth2.provider.token.*;
+import org.springframework.security.oauth2.provider.token.AccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.DefaultAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.DefaultUserAuthenticationConverter;
+import org.springframework.security.oauth2.provider.token.RemoteTokenServices;
+import org.springframework.security.oauth2.provider.token.ResourceServerTokenServices;
 import org.springframework.security.web.authentication.logout.LogoutSuccessHandler;
 import org.springframework.security.web.authentication.logout.SimpleUrlLogoutSuccessHandler;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.context.WebApplicationContext;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
-import java.security.KeyManagementException;
-import java.security.NoSuchAlgorithmException;
-import java.util.Enumeration;
-
-import static java.util.Arrays.asList;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * SsoSecurityConfiguration 클래스.
@@ -44,8 +55,8 @@ import static java.util.Arrays.asList;
  * @since 2019.03.21
  */
 @Configuration
-public class SsoSecurityConfiguration extends Common {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SsoAuthenticationDetailsSource.class);
+@Slf4j
+public class SsoSecurityConfiguration {
 
     public static String isManagingApp() {
         return "(authentication.details != null) " +
@@ -56,6 +67,9 @@ public class SsoSecurityConfiguration extends Common {
     private String sessionRedirectUrl = "";
 
     @Autowired
+    private PropertyService property;
+
+    @Autowired
     @Qualifier("authenticationManager")
     private AuthenticationManager authenticationManager;
 
@@ -64,7 +78,7 @@ public class SsoSecurityConfiguration extends Common {
 
     @Bean(name = "ssoEntryPointMatcher")
     public RequestMatcher ssoEntryPointMatcher() {
-        return new AntPathRequestMatcher(Constants.MARKET_INIT_URL + "/**");
+        return new AntPathRequestMatcher(AdminConstants.MARKET_ADMIN_URL + "/**");
     }
 
     @Bean(name = "ssoClientContextFilter")
@@ -106,10 +120,10 @@ public class SsoSecurityConfiguration extends Common {
                 return true;
             }
         };
-        resourceDetails.setClientId(clientId);
-        resourceDetails.setClientSecret(clientSecret);
-        resourceDetails.setUserAuthorizationUri(authorizationUri);
-        resourceDetails.setAccessTokenUri(accessUri);
+        resourceDetails.setClientId(property.getCfClientId());
+        resourceDetails.setClientSecret(property.getCfClientSecret());
+        resourceDetails.setUserAuthorizationUri(property.getCfAuthorizationUri());
+        resourceDetails.setAccessTokenUri(property.getCfAccessUri());
         resourceDetails.setScope(asList("openid", "cloud_controller_service_permissions.read", "cloud_controller.read", "cloud_controller.write"));
         resourceDetails.setUseCurrentUri(false);
         resourceDetails.setPreEstablishedRedirectUri(serverDomain(httpServletRequest));
@@ -180,9 +194,9 @@ public class SsoSecurityConfiguration extends Common {
     public ResourceServerTokenServices ssoResourceServerTokenServices() {
         final RemoteTokenServices remoteTokenServices = new RemoteTokenServices();
 
-        remoteTokenServices.setClientId(clientId);
-        remoteTokenServices.setClientSecret(clientSecret);
-        remoteTokenServices.setCheckTokenEndpointUrl(checkTokenUri);
+        remoteTokenServices.setClientId(property.getCfClientId());
+        remoteTokenServices.setClientSecret(property.getCfClientSecret());
+        remoteTokenServices.setCheckTokenEndpointUrl(property.getCfCheckTokenUri());
         remoteTokenServices.setAccessTokenConverter(ssoAccessTokenConverter());
 
         return remoteTokenServices;
@@ -191,14 +205,14 @@ public class SsoSecurityConfiguration extends Common {
     @Bean(name = "ssoAuthenticationDetailsSource")
     @Autowired
     public AuthenticationDetailsSource ssoAuthenticationDetailsSource() {
-        return new SsoAuthenticationDetailsSource(ssoRestOperations(), uaaUserInfo, apiUrl);
+        return new SsoAuthenticationDetailsSource(ssoRestOperations(), property.getCfUaaUserInfo(), property.getCfApiUrl());
     }
 
 
     @Bean(name = "ssoLogoutSuccessHandler")
     public LogoutSuccessHandler ssoLogoutSuccessHandler() {
         final SimpleUrlLogoutSuccessHandler logoutSuccessHandler = new SimpleUrlLogoutSuccessHandler();
-        logoutSuccessHandler.setRedirectStrategy(new SsoLogoutRedirectStrategy(logoutUri));
+        logoutSuccessHandler.setRedirectStrategy(new SsoLogoutRedirectStrategy(property.getCfLogoutUri()));
 
         return logoutSuccessHandler;
     }
@@ -214,7 +228,7 @@ public class SsoSecurityConfiguration extends Common {
         try {
             HttpSession session =  request.getSession();
             String forward = session.getAttribute("x-forwarded-proto").toString();
-            LOGGER.info("Forward ::::::::: " + forward);
+            log.info("Forward ::::::::: " + forward);
             if (forward != null) {
                 serverDomain = serverDomain.replace("http", "").replace("https", "");
                 serverDomain = forward + serverDomain;
@@ -230,7 +244,7 @@ public class SsoSecurityConfiguration extends Common {
         while (paramNames.hasMoreElements()) {
             String key = (String) paramNames.nextElement();
             String value = request.getParameter(key);
-            LOGGER.info(" RequestParameter Data ==>  " + key + " : " + value + "");
+            log.info(" RequestParameter Data ==>  " + key + " : " + value + "");
             if(i == 0) {
                 addParam.append("?");
             } else {
@@ -246,12 +260,13 @@ public class SsoSecurityConfiguration extends Common {
             request.getSession().setAttribute("sessionRedirectUrl","");
             sessionRedirectUrl = uri;
         }
-        LOGGER.info("sessionRedirectUrl = "+sessionRedirectUrl);
+        log.info("sessionRedirectUrl = "+sessionRedirectUrl);
         if(!sessionRedirectUrl.equals("")) {
             request.getSession().setAttribute("sessionRedirectUrl",sessionRedirectUrl);
         }
 
-        LOGGER.info("Login ::::::::  " + serverDomain);
+        log.info("Login ::::::::  " + serverDomain);
+
         return serverDomain;
     }
 

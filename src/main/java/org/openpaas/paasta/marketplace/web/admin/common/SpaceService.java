@@ -1,16 +1,16 @@
-package org.openpaas.paasta.marketplace.web.admin.service;
+package org.openpaas.paasta.marketplace.web.admin.common;
+
+import java.util.Map;
+
+import javax.annotation.Resource;
 
 import org.cloudfoundry.client.v3.spaces.CreateSpaceResponse;
 import org.cloudfoundry.client.v3.spaces.ListSpacesResponse;
-import org.openpaas.paasta.marketplace.web.admin.common.Common;
 import org.openpaas.paasta.marketplace.web.admin.model.Space;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-
-import javax.annotation.Resource;
-import java.util.Map;
 
 /**
  * Space Service
@@ -20,7 +20,7 @@ import java.util.Map;
  * @since 2019-04-03
  */
 @Service
-public class SpaceService extends Common {
+public class SpaceService {
     private static final Logger LOGGER = LoggerFactory.getLogger(SpaceService.class);
 
 

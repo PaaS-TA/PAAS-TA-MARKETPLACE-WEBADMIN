@@ -1,4 +1,4 @@
-package org.openpaas.paasta.marketplace.web.admin.service;
+package org.openpaas.paasta.marketplace.web.admin.common;
 
 
 import org.openpaas.paasta.marketplace.web.admin.model.Quota;

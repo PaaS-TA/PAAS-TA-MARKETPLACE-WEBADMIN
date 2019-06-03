@@ -1,6 +1,6 @@
-package org.openpaas.paasta.marketplace.web.admin.controller;
+package org.openpaas.paasta.marketplace.web.admin.login;
 
-import org.openpaas.paasta.marketplace.web.admin.service.OrgService;
+import org.openpaas.paasta.marketplace.web.admin.common.OrgService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

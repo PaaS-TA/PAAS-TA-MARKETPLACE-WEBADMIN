@@ -1,4 +1,4 @@
-package org.openpaas.paasta.marketplace.web.admin.service;
+package org.openpaas.paasta.marketplace.web.admin.common;
 
 import org.cloudfoundry.client.v2.organizations.ListOrganizationsResponse;
 import org.openpaas.paasta.marketplace.web.admin.model.Org;

@@ -41,18 +41,14 @@ public class RestTemplateService {
 	public <T> T send(String targetApi, String restUrl, String token, HttpMethod httpMethod, Object bodyObject, Class<T> responseType) {
 		Map<String, String> requestMap = setApiUrlAuthorization(targetApi, token);
 		String apiFullUrl = requestMap.get("apiUrl") + restUrl;
-		String authorization1 = requestMap.get("authorization1");
-		String authorization2 = requestMap.get("authorization2");
 
 		HttpHeaders reqHeaders = new HttpHeaders();
-
-		if(AdminConstants.TARGET_API_CF.equals(targetApi)){
-			reqHeaders.add(AdminConstants.CF_AUTHORIZATION_HEADER_KEY, authorization1);
-			reqHeaders.add(AdminConstants.AUTHORIZATION_HEADER_KEY, authorization2);
-		}else{
-			reqHeaders.add(AdminConstants.AUTHORIZATION_HEADER_KEY, authorization1);
+		if(AdminConstants.TARGET_API_CF.equals(targetApi)) {
+			reqHeaders.add(AdminConstants.CF_AUTHORIZATION_HEADER_KEY, requestMap.get("authorizationCf"));
+			reqHeaders.add(AdminConstants.AUTHORIZATION_HEADER_KEY, requestMap.get("authorizationBasic"));
+		} else {
+			reqHeaders.add(AdminConstants.AUTHORIZATION_HEADER_KEY, requestMap.get("authorizationBasic"));
 		}
-
         reqHeaders.add(AdminConstants.CONTENT_TYPE, MediaType.APPLICATION_JSON_VALUE);
 
         HttpEntity<Object> reqEntity = new HttpEntity<>(bodyObject, reqHeaders);
@@ -92,14 +88,14 @@ public class RestTemplateService {
         // Cf API
         if (AdminConstants.TARGET_API_CF.equals(targetApi)) {
             requestMap.put("apiUrl", property.getCfJavaClientApiUri());
-            requestMap.put("authorization1", "bearer " + token);
-			requestMap.put("authorization2", "Basic " + Base64Utils.encodeToString((property.getCfJavaClientApiUsername() + ":" + property.getCfJavaClientApiPassword()).getBytes(StandardCharsets.UTF_8)));
+            requestMap.put("authorizationCf", "bearer " + token);
+			requestMap.put("authorizationBasic", "Basic " + Base64Utils.encodeToString((property.getCfJavaClientApiUsername() + ":" + property.getCfJavaClientApiPassword()).getBytes(StandardCharsets.UTF_8)));
         }
 
         // Market API
         if (AdminConstants.TARGET_API_MARKET.equals(targetApi)) {
             requestMap.put("apiUrl", property.getMarketApiUri());
-            requestMap.put("authorization1", "Basic " + Base64Utils.encodeToString((property.getMarketApiUsername() + ":" + property.getMarketApiPassword()).getBytes(StandardCharsets.UTF_8)));
+            requestMap.put("authorizationBasic", "Basic " + Base64Utils.encodeToString((property.getMarketApiUsername() + ":" + property.getMarketApiPassword()).getBytes(StandardCharsets.UTF_8)));
         }
 
         return requestMap;

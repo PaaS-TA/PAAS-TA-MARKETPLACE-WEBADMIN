@@ -46,17 +46,6 @@ public class SellerProfileService {
     }
 
     /**
-     * 판매자 프로필 등록
-     *
-     * @param sellerProfile the seller profile
-     * @return SellerProfile
-     * @throws Exception 
-     */
-    public SellerProfile createProfile(SellerProfile sellerProfile) {
-    	return marketApiRest.send(AdminConstants.TARGET_API_MARKET, AdminConstants.URI_API_SELLER_PROFILE, null, HttpMethod.POST, sellerProfile, SellerProfile.class);
-    }
-
-    /**
      * 판매자 프로필 수정
      *
      * @param sellerProfile the seller profile

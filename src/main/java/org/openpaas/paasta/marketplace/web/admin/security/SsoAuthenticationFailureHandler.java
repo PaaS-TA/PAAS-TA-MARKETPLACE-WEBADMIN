@@ -32,7 +32,7 @@ public class SsoAuthenticationFailureHandler implements AuthenticationFailureHan
         request.getSession().invalidate();
         SecurityContextHolder.clearContext();
 
-        response.sendRedirect(AdminConstants.MARKET_INIT_URL);
+        response.sendRedirect(AdminConstants.MARKET_ADMIN_URL);
 
         LOGGER.info("** onAuthenticationFailure out");
     }

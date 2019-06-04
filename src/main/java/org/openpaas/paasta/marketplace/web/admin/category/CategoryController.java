@@ -5,6 +5,7 @@ import java.util.List;
 import org.openpaas.paasta.marketplace.web.admin.common.AdminConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import lombok.extern.slf4j.Slf4j;
@@ -29,9 +30,20 @@ public class CategoryController {
      * @return CategoryList
      */
     @GetMapping(value = AdminConstants.URI_WEB_CATEGORY_LIST)
-    public CategoryList getCategoryList(){
+    public List<Category> getCategoryList(){
     	log.info("category...");
         return categoryService.getCategoryListByDeleteYn();
+    }
+
+    /**
+     * 카테고리 상세 조회
+     * 
+     * @param id
+     * @return
+     */
+    @GetMapping(value = AdminConstants.URI_DB_CATEGORY_DETAIL)
+    private Category getCategory(@PathVariable Long id) {
+    	return categoryService.getCategory(id);
     }
 
 }

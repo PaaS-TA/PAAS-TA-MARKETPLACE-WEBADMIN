@@ -16,21 +16,20 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  * @since 2019-05-29
  */
-@RestController
 @Slf4j
+@RestController
 public class CategoryController {
 
 	@Autowired
     private CategoryService categoryService;
 
     /**
-     * GroupCode로 단위코드 목록 조회
+     * 카테고리 목록 조회
      *
-     * @param groupCode
-     * @return List<CustomCode>
+     * @return CategoryList
      */
     @GetMapping(value = AdminConstants.URI_WEB_CATEGORY_LIST)
-    public List<Category> getCategoryList(){
+    public CategoryList getCategoryList(){
     	log.info("category...");
         return categoryService.getCategoryListByDeleteYn();
     }

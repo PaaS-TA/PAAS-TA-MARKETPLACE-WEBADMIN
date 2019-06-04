@@ -5,10 +5,9 @@ import org.openpaas.paasta.marketplace.web.admin.model.Quota;
 import org.openpaas.paasta.marketplace.web.admin.model.QuotaList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
-
-import javax.annotation.Resource;
 
 /**
  * Quota Service
@@ -21,9 +20,8 @@ import javax.annotation.Resource;
 public class QuotaService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrgService.class);
 
-
-    @Resource(name = "cfJavaClientApiRest")
-    RestTemplate cfJavaClientApiRest;
+    @Autowired
+    RestTemplateService marketApiRest;
 
     /**
      * Org Quota 생성
@@ -31,8 +29,8 @@ public class QuotaService {
      * @param quota the quota
      * @return Quota
      */
-    public Quota createOrgQuota(Quota quota){
-        return cfJavaClientApiRest.postForObject("/v3/orgs/quota-definitions", quota, Quota.class);
+    public Quota createOrgQuota(Quota quota, String token){
+        return marketApiRest.send(AdminConstants.TARGET_API_CF,"/v3/orgs/quota-definitions", token, HttpMethod.POST, quota, Quota.class);
     }
 
     /**
@@ -40,7 +38,7 @@ public class QuotaService {
      *
      * @return QuotaList
      */
-    public QuotaList getOrgQuotas() {
-        return cfJavaClientApiRest.getForObject("/v3/orgs/quota-definitions", QuotaList.class);
+    public QuotaList getOrgQuotas(String token) {
+        return marketApiRest.send(AdminConstants.TARGET_API_CF,"/v3/orgs/quota-definitions", token, HttpMethod.GET, null, QuotaList.class);
     }
 }

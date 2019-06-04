@@ -3,12 +3,10 @@ package org.openpaas.paasta.marketplace.web.admin.common;
 import org.cloudfoundry.client.v2.organizations.ListOrganizationsResponse;
 import org.openpaas.paasta.marketplace.web.admin.model.Org;
 import org.openpaas.paasta.marketplace.web.admin.model.UserRole;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
 import java.util.Map;
 
 /**
@@ -19,11 +17,8 @@ import java.util.Map;
 @Service
 public class OrgService {
 
-    private static final Logger LOGGER = LoggerFactory.getLogger(OrgService.class);
-
-
-    @Resource(name = "cfJavaClientApiRest")
-    RestTemplate cfJavaClientApiRest;
+    @Autowired
+    RestTemplateService marketApiRest;
 
 
     /**
@@ -34,19 +29,10 @@ public class OrgService {
      *
      * 권한 : 사용자
      */
-    public boolean isExistOrgByOrgName(String orgName) {
-        return cfJavaClientApiRest.getForObject("/v3/orgs/" + orgName + "/exist", boolean.class);
+    public boolean isExistOrgByOrgName(String orgName, String token) {
+        return marketApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs/" + orgName + "/exist", token, HttpMethod.GET, null, Boolean.class);
     }
 
-
-    /**
-     * Org 생성 V3 (-> 쿼터 지정 부분이 없음.)
-     *
-     * @return Org
-     */
-    public Org createOrgV3(String orgName){
-        return cfJavaClientApiRest.postForObject("/v3/orgs", orgName, Org.class);
-    }
 
 
     /**
@@ -55,13 +41,8 @@ public class OrgService {
      * @param org the org
      * @return Map
      */
-    public Map createOrg(Org org){
-        return cfJavaClientApiRest.postForObject("/v3/orgs", org, Map.class);
-    }
-
-
-    public void associateOrgUserRoles(String orgId, UserRole.RequestBody body) {
-        cfJavaClientApiRest.put("/v3/orgs/" + orgId + "/user-roles", body);
+    public Map createOrg(Org org, String token){
+        return marketApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs", token, HttpMethod.POST, org, Map.class);
     }
 
     /**
@@ -69,7 +50,7 @@ public class OrgService {
      *
      * @return ListOrganizationsResponse
      */
-    public ListOrganizationsResponse getOrgsListV3() {
-        return cfJavaClientApiRest.getForObject("/v3/orgs-admin", ListOrganizationsResponse.class);
+    public ListOrganizationsResponse getOrgsList() {
+        return marketApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs-admin", null, HttpMethod.GET, null, ListOrganizationsResponse.class);
     }
 }

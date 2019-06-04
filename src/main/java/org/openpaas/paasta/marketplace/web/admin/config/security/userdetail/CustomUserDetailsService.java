@@ -7,8 +7,8 @@ import org.cloudfoundry.client.v3.spaces.ListSpacesResponse;
 import org.cloudfoundry.client.v3.spaces.SpaceResource;
 import org.openpaas.paasta.marketplace.web.admin.common.OrgService;
 import org.openpaas.paasta.marketplace.web.admin.common.QuotaService;
+import org.openpaas.paasta.marketplace.web.admin.common.RestTemplateService;
 import org.openpaas.paasta.marketplace.web.admin.common.SpaceService;
-import org.openpaas.paasta.marketplace.web.admin.config.UaaAccessTokenInterceptor;
 import org.openpaas.paasta.marketplace.web.admin.model.Org;
 import org.openpaas.paasta.marketplace.web.admin.model.Quota;
 import org.openpaas.paasta.marketplace.web.admin.model.QuotaList;
@@ -23,9 +23,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
-import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -58,11 +56,8 @@ public class CustomUserDetailsService implements UserDetailsService {
         this.token = token;
     }
 
-    @Resource(name = "cfJavaClientApiRest")
-    RestTemplate cfJavaClientApiRest;
-
-    @Resource(name = "marketApiRest")
-    RestTemplate marketApiRest;
+    @Autowired
+    private RestTemplateService restTemplateService;
 
     @Autowired
     public OrgService orgService;
@@ -106,13 +101,9 @@ public class CustomUserDetailsService implements UserDetailsService {
         String quotaGuid;
         String existQuotaGuid = "";
 
-
-        // 로그인 한 토큰을 interceptor 에 넣어준다.
-        cfJavaClientApiRest.getInterceptors().add(new UaaAccessTokenInterceptor(token));
-
         if(username.equals("admin")) {
             // 확인 후 없으면 org & space 생성 cf 호출. 생성 후 리턴으로 orgGuid & spaceGuid 전역변수로 추출할 것.
-            if (!orgService.isExistOrgByOrgName(orgName)) {
+            if (!orgService.isExistOrgByOrgName(orgName, token)) {
                 LOGGER.info("Org 가 존재하지 않습니다.");
 
                 // Org 에 대한 Quota 는 최대치로 부여한다.
@@ -130,7 +121,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
                 int count = 0;
 
-                QuotaList quotaList = quotaService.getOrgQuotas();
+                QuotaList quotaList = quotaService.getOrgQuotas(token);
 
                 for (Quota q : quotaList.getResources()) {
                     // quota 이름이 같을 경우
@@ -146,7 +137,7 @@ public class CustomUserDetailsService implements UserDetailsService {
                     LOGGER.info("Quota guid ::: " + orgQuota.getOrgQuotaGuid());
 
                 } else {
-                    orgQuota = quotaService.createOrgQuota(quota);
+                    orgQuota = quotaService.createOrgQuota(quota, token);
                     LOGGER.info("created Quota ::: " + orgQuota.toString());
                     quotaGuid = (String) orgQuota.getMetadata().get("guid");
                     orgQuota.setOrgQuotaGuid(quotaGuid);
@@ -161,11 +152,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
                 // org 생성
                 //Org createdOrg = orgService.createOrg(org);
-                Map createdOrg = orgService.createOrg(org);
+                Map createdOrg = orgService.createOrg(org, token);
                 LOGGER.info("created Org ::: " + createdOrg.toString());
 
                 // Org List 가져온다. 해당 이름 있는 Org 골라서 거기의 orgGuid 를 가져와서 아래 로직을 처리한다.
-                ListOrganizationsResponse orgList = orgService.getOrgsListV3();
+                ListOrganizationsResponse orgList = orgService.getOrgsList();
 
                 for (OrganizationResource o : orgList.getResources()){
                     // space 이름이 같은 것이 있을 때 space guid 를 부여한다.
@@ -192,11 +183,11 @@ public class CustomUserDetailsService implements UserDetailsService {
                     space.setUserId(uaaid);
 
                     // space 생성
-                    Map createdSpace = spaceService.createSpaceV2(space);
+                    Map createdSpace = spaceService.createSpace(space, token);
                     //CreateSpaceResponse createdSpace = spaceService.createSpaceV3(space);
                     LOGGER.info("created Space ~~~ " + createdSpace.toString());
 
-                    ListSpacesResponse spaceList = spaceService.getSpacesListV3(organization_guid);
+                    ListSpacesResponse spaceList = spaceService.getSpacesList(organization_guid, token);
 
                     for (SpaceResource s : spaceList.getResources()){
                         // space 이름이 같은 것이 있을 때 space guid 를 부여한다.

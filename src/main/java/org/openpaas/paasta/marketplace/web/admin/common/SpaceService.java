@@ -1,16 +1,14 @@
 package org.openpaas.paasta.marketplace.web.admin.common;
 
-import java.util.Map;
-
-import javax.annotation.Resource;
-
-import org.cloudfoundry.client.v3.spaces.CreateSpaceResponse;
 import org.cloudfoundry.client.v3.spaces.ListSpacesResponse;
 import org.openpaas.paasta.marketplace.web.admin.model.Space;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
+
+import java.util.Map;
 
 /**
  * Space Service
@@ -21,34 +19,19 @@ import org.springframework.web.client.RestTemplate;
  */
 @Service
 public class SpaceService {
-    private static final Logger LOGGER = LoggerFactory.getLogger(SpaceService.class);
 
-
-    @Resource(name = "cfJavaClientApiRest")
-    RestTemplate cfJavaClientApiRest;
-
-
-    /**
-     * Space 생성 V3
-     *
-     * @param space the space
-     * @return Space
-     */
-    public CreateSpaceResponse createSpaceV3(Space space) {
-        return cfJavaClientApiRest.postForObject("/v3/spaces", space, CreateSpaceResponse.class);
-    }
+    @Autowired
+    RestTemplateService marketApiRest;
 
 
     /**
-     * Space 생성 V2
+     * Space 생성
      *
      * @param space the space
      * @return Map
      */
-    public Map createSpaceV2(Space space) {
-        //return marketApiRest.postForObject("/spaces", space, Space.class);
-        //return restTemplateService.send("/spaces", getToken(), HttpMethod.POST, space, Map.class);
-        return cfJavaClientApiRest.postForObject("/v2/spaces", space, Map.class);
+    public Map createSpace(Space space, String token) {
+        return marketApiRest.send(AdminConstants.TARGET_API_CF,"/v3/spaces", token, HttpMethod.POST, space, Map.class);
     }
 
 
@@ -58,7 +41,7 @@ public class SpaceService {
      * @param orgGuid the org guid
      * @return ListSpacesResponse
      */
-    public ListSpacesResponse getSpacesListV3(String orgGuid) {
-        return cfJavaClientApiRest.getForObject("/v3/spaces-admin/" + orgGuid, ListSpacesResponse.class);
+    public ListSpacesResponse getSpacesList(String orgGuid, String token) {
+        return marketApiRest.send(AdminConstants.TARGET_API_CF,"/v3/spaces-admin/" + orgGuid, token, HttpMethod.GET, null, ListSpacesResponse.class);
     }
 }

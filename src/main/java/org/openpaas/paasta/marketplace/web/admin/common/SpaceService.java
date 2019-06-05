@@ -2,8 +2,6 @@ package org.openpaas.paasta.marketplace.web.admin.common;
 
 import org.cloudfoundry.client.v3.spaces.ListSpacesResponse;
 import org.openpaas.paasta.marketplace.web.admin.model.Space;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -21,7 +19,7 @@ import java.util.Map;
 public class SpaceService {
 
     @Autowired
-    RestTemplateService marketApiRest;
+    RestTemplateService cfApiRest;
 
 
     /**
@@ -31,7 +29,7 @@ public class SpaceService {
      * @return Map
      */
     public Map createSpace(Space space, String token) {
-        return marketApiRest.send(AdminConstants.TARGET_API_CF,"/v3/spaces", token, HttpMethod.POST, space, Map.class);
+        return cfApiRest.send(AdminConstants.TARGET_API_CF,"/v3/spaces", token, HttpMethod.POST, space, Map.class);
     }
 
 
@@ -42,6 +40,6 @@ public class SpaceService {
      * @return ListSpacesResponse
      */
     public ListSpacesResponse getSpacesList(String orgGuid, String token) {
-        return marketApiRest.send(AdminConstants.TARGET_API_CF,"/v3/spaces-admin/" + orgGuid, token, HttpMethod.GET, null, ListSpacesResponse.class);
+        return cfApiRest.send(AdminConstants.TARGET_API_CF,"/v3/spaces-admin/" + orgGuid, token, HttpMethod.GET, null, ListSpacesResponse.class);
     }
 }

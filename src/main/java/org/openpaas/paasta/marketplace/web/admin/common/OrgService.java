@@ -2,7 +2,6 @@ package org.openpaas.paasta.marketplace.web.admin.common;
 
 import org.cloudfoundry.client.v2.organizations.ListOrganizationsResponse;
 import org.openpaas.paasta.marketplace.web.admin.model.Org;
-import org.openpaas.paasta.marketplace.web.admin.model.UserRole;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -18,7 +17,7 @@ import java.util.Map;
 public class OrgService {
 
     @Autowired
-    RestTemplateService marketApiRest;
+    RestTemplateService cfApiRest;
 
 
     /**
@@ -30,7 +29,7 @@ public class OrgService {
      * 권한 : 사용자
      */
     public boolean isExistOrgByOrgName(String orgName, String token) {
-        return marketApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs/" + orgName + "/exist", token, HttpMethod.GET, null, Boolean.class);
+        return cfApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs/" + orgName + "/exist", token, HttpMethod.GET, null, Boolean.class);
     }
 
 
@@ -42,7 +41,7 @@ public class OrgService {
      * @return Map
      */
     public Map createOrg(Org org, String token){
-        return marketApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs", token, HttpMethod.POST, org, Map.class);
+        return cfApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs", token, HttpMethod.POST, org, Map.class);
     }
 
     /**
@@ -51,6 +50,6 @@ public class OrgService {
      * @return ListOrganizationsResponse
      */
     public ListOrganizationsResponse getOrgsList() {
-        return marketApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs-admin", null, HttpMethod.GET, null, ListOrganizationsResponse.class);
+        return cfApiRest.send(AdminConstants.TARGET_API_CF, "/v3/orgs-admin", null, HttpMethod.GET, null, ListOrganizationsResponse.class);
     }
 }

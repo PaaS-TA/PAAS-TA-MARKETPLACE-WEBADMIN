@@ -21,7 +21,7 @@ public class QuotaService {
     private static final Logger LOGGER = LoggerFactory.getLogger(OrgService.class);
 
     @Autowired
-    RestTemplateService marketApiRest;
+    RestTemplateService cfApiRest;
 
     /**
      * Org Quota 생성
@@ -30,7 +30,7 @@ public class QuotaService {
      * @return Quota
      */
     public Quota createOrgQuota(Quota quota, String token){
-        return marketApiRest.send(AdminConstants.TARGET_API_CF,"/v3/orgs/quota-definitions", token, HttpMethod.POST, quota, Quota.class);
+        return cfApiRest.send(AdminConstants.TARGET_API_CF,"/v3/orgs/quota-definitions", token, HttpMethod.POST, quota, Quota.class);
     }
 
     /**
@@ -39,6 +39,6 @@ public class QuotaService {
      * @return QuotaList
      */
     public QuotaList getOrgQuotas(String token) {
-        return marketApiRest.send(AdminConstants.TARGET_API_CF,"/v3/orgs/quota-definitions", token, HttpMethod.GET, null, QuotaList.class);
+        return cfApiRest.send(AdminConstants.TARGET_API_CF,"/v3/orgs/quota-definitions", token, HttpMethod.GET, null, QuotaList.class);
     }
 }

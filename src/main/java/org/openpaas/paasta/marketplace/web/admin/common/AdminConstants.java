@@ -36,17 +36,17 @@ public class AdminConstants {
     // market web admin page uri
     public static final String URI_WEB_CUSTOM_CODE_LIST = "/customCode/{groupCode}";
     public static final String URI_WEB_CATEGORY_LIST = "/category/list";
-    public static final String URI_WEB_CATEGORY_DETAIL = "/category/detail/{id}";
+    public static final String URI_WEB_CATEGORY_DETAIL = "/category/{id}/detail";
     public static final String URI_WEB_SELLER_PROFILE_LIST = "/seller/profile/list";
-    public static final String URI_WEB_SELLER_PROFILE_DETAIL = "/seller/profile/detail/{id}";
-    public static final String URI_WEB_SELLER_PROFILE_UPDATE = "/seller/profile/update/{id}";
+    public static final String URI_WEB_SELLER_PROFILE_DETAIL = "/seller/profile/{id}/detail";
+    public static final String URI_WEB_SELLER_PROFILE_UPDATE = "/seller/profile/{id}/update";
 
     // market web admin db uri
     public static final String URI_DB_CUSTOM_CODE_LIST = "/db/customCode/{groupCode}";
     public static final String URI_DB_CATEGORY_LIST = "/db/category/list";
-    public static final String URI_DB_CATEGORY_DETAIL = "/db/category/detail/{id}";
+    public static final String URI_DB_CATEGORY_DETAIL = "/db/category/{id}/detail";
     public static final String URI_DB_SELLER_PROFILE_LIST = "/db/seller/profile/list";
-    public static final String URI_DB_SELLER_PROFILE_DETAIL = "/db/seller/profile/detail/{id}";
+    public static final String URI_DB_SELLER_PROFILE_DETAIL = "/db/seller/profile/{id}/detail";
 
     // market web admin view file uri
     public static final String URI_VIEW_PROFILE = "/profile";

@@ -27,11 +27,11 @@ public class CustomCodeController {
     /**
      * GroupCode 로 단위코드 목록 조회
      *
-     * @param groupCode
-     * @return List<CustomCode>
+     * @param groupCode the group code
+     * @return CustomCodeList
      */
     @GetMapping(value = AdminConstants.URI_WEB_CUSTOM_CODE_LIST)
-    public List<CustomCode> getUnitCodeListByGroupCode(@PathVariable String groupCode){
+    public CustomCodeList getUnitCodeListByGroupCode(@PathVariable String groupCode){
     	log.info("custom code");
         return customCodeService.getUnitCodeListByGroupCode(groupCode);
     }

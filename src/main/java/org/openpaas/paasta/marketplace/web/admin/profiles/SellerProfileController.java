@@ -79,15 +79,7 @@ public class SellerProfileController {
      */
     @GetMapping(value = AdminConstants.URI_DB_SELLER_PROFILE_DETAIL)
     private SellerProfile getProfile(@PathVariable Long id) {
-    	SellerProfile seller = sellerProfileService.getProfile(id);
-		String createdDate = DateUtils.getConvertDate(seller.getCreateDate(), DateUtils.FORMAT_1);
-        String updatedDate = DateUtils.getConvertDate(seller.getCreateDate(), DateUtils.FORMAT_1);
-		log.info("createdDate: " + createdDate);
-        log.info("updatedDate: " + updatedDate);
-		seller.setStrCreateDate(createdDate);
-		seller.setStrUpdateDate(updatedDate);
-
-		return seller;
+    	return sellerProfileService.getProfile(id);
     }
 
     /**

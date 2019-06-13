@@ -49,7 +49,14 @@ public class SellerProfileService {
      * @return SellerProfile
      */
     public SellerProfile getProfile(Long id) {
-        return marketApiRest.send(AdminConstants.TARGET_API_MARKET, AdminConstants.URI_API_SELLER_PROFILE + "/" + id, null, HttpMethod.GET, null, SellerProfile.class);
+    	SellerProfile profile = marketApiRest.send(AdminConstants.TARGET_API_MARKET, AdminConstants.URI_API_SELLER_PROFILE + "/" + id, null, HttpMethod.GET, null, SellerProfile.class);
+    	String createdDate = DateUtils.getConvertDate(profile.getCreateDate(), DateUtils.FORMAT_1);
+        String updatedDate = DateUtils.getConvertDate(profile.getCreateDate(), DateUtils.FORMAT_1);
+		log.info("createdDate: " + createdDate);
+        log.info("updatedDate: " + updatedDate);
+        profile.setStrCreateDate(createdDate);
+        profile.setStrUpdateDate(updatedDate);
+        return profile;
     }
 
     /**

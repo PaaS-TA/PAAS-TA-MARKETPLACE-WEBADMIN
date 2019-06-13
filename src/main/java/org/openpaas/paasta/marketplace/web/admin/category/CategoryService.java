@@ -1,7 +1,5 @@
 package org.openpaas.paasta.marketplace.web.admin.category;
 
-import java.util.List;
-
 import org.openpaas.paasta.marketplace.web.admin.common.AdminConstants;
 import org.openpaas.paasta.marketplace.web.admin.common.RestTemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +17,8 @@ public class CategoryService {
      *
      * @return CategoryList
      */
-    public List<Category> getCategoryListByDeleteYn() {
-    	CategoryList categories = marketApiRest.send(AdminConstants.TARGET_API_MARKET, AdminConstants.URI_API_CATEGORY, null, HttpMethod.GET, null, CategoryList.class);
-    	return categories.getItems();
+    public CategoryList getCategoryListByDeleteYn() {
+    	return marketApiRest.send(AdminConstants.TARGET_API_MARKET, AdminConstants.URI_API_CATEGORY, null, HttpMethod.GET, null, CategoryList.class);
     }
 
     /**

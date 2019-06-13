@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.openpaas.paasta.marketplace.web.admin.common.AdminConstants;
 import org.openpaas.paasta.marketplace.web.admin.common.RestTemplateService;
+import org.openpaas.paasta.marketplace.web.admin.util.DateUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Service;
@@ -30,9 +31,15 @@ public class SellerProfileService {
      * @param 
      * @return SellerProfileList
      */
-    public List<SellerProfile> getSellerProfileList() {
+    public SellerProfileList getSellerProfileList() {
         SellerProfileList profiles = marketApiRest.send(AdminConstants.TARGET_API_MARKET, AdminConstants.URI_API_SELLER_PROFILE, null, HttpMethod.GET, null, SellerProfileList.class);
-        return profiles.getItems();
+        List<SellerProfile> profileList = profiles.getItems();
+        for (SellerProfile profile : profileList) {
+	        profile.setStrCreateDate(DateUtils.getConvertDate(profile.getCreateDate(), DateUtils.FORMAT_1));
+	        profile.setStrUpdateDate(DateUtils.getConvertDate(profile.getCreateDate(), DateUtils.FORMAT_1));
+    	}
+        profiles.setItems(profileList);
+        return profiles;
     }
 
     /**

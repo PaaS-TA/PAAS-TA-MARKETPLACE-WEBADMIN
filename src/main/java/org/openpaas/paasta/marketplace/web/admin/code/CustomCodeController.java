@@ -1,7 +1,5 @@
 package org.openpaas.paasta.marketplace.web.admin.code;
 
-import java.util.List;
-
 import org.openpaas.paasta.marketplace.web.admin.common.AdminConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;

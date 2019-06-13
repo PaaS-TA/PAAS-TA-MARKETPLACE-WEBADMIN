@@ -1,7 +1,5 @@
 package org.openpaas.paasta.marketplace.web.admin.profiles;
 
-import java.util.List;
-
 import javax.servlet.http.HttpServletRequest;
 
 import org.openpaas.paasta.marketplace.web.admin.common.AdminConstants;
@@ -56,14 +54,8 @@ public class SellerProfileController {
      * @return SellerProfile
      */
     @GetMapping(value = AdminConstants.URI_DB_SELLER_PROFILE_LIST)
-    private List<SellerProfile> getProfileList() {
-    	List<SellerProfile> profileList = sellerProfileService.getSellerProfileList();
-    	for (SellerProfile profile : profileList) {
-	        profile.setStrCreateDate(DateUtils.getConvertDate(profile.getCreateDate(), DateUtils.FORMAT_1));
-	        profile.setStrUpdateDate(DateUtils.getConvertDate(profile.getCreateDate(), DateUtils.FORMAT_1));
-    	}
-
-		return profileList;
+    private SellerProfileList getProfileList() {
+    	return sellerProfileService.getSellerProfileList();
     }
 
     /**

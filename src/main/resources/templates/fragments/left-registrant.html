@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<!--관리자용-->
+<div class="leftCnt on" th:fragment="leftFragment">
+    <div class="gnbMenu">
+        <div class="gnb-in" id="leftMenu">
+            <!-- depth1 START -->
+            <ul class="gnb-menu dept1 depth1">
+                <li class="dept1">
+                    <a class="dept1 on" href="javascript:void(0);" onclick="depth1Click(event);"><span class="ico ico-bul ico1"></span>등록 상품<span class="ico ico-arr"></span></a>
+                    <ul class="dept2" style="display:block;">
+                        <li class="dept2">
+                            <a class="dept2 on" th:href="@{/softwares}">상품 목록</a>
+                        </li>
+                        <li class="dept2">
+                            <a class="dept2" th:href="@{/softwares/create}">상품 등록</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dept1">
+                    <a class="dept1" href="javascript:void(0);" onclick="depth1Click(event);"><span class="ico ico-bul ico4"></span>사용 현황<span class="ico ico-arr"></span></a>
+                    <ul class="dept2" style="display:none;">
+                        <li class="dept2">
+                            <a class="dept2" href="">상품 현황</a>
+                        </li>
+                        <li class="dept2">
+                            <a class="dept2" href="">요금 계산</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="dept1">
+                    <a class="dept1" href="javascript:void(0);" onclick="depth1Click(event);"><span class="ico ico-bul ico3"></span>프로필 관리</a>
+                </li>
+            </ul>
+            <!-- depth1 END -->
+        </div>
+    </div>
+</div>
+
+</html>

@@ -1,0 +1,112 @@
+@charset "utf-8";
+
+/* modal layout */
+.modal-dialog {margin-top:10%;}
+.modal-content{position: relative; width: 600px; margin:0 auto; border:0; overflow: hidden;}
+.modal-content .close{position: absolute; right:10px; top:0px; z-index: 0; font-size:30px; margin-top: 0;opacity:1;color:#a7a7a7;text-shadow:none;}/*180404 opacity:1 color:#a7a7a7 추가 text-shadow 제거*/
+.modal-content .close span{display: inline-block; line-height: 62px; padding:0 5px; vertical-align: text-top;}
+.modal-content .close span{color:#a7a7a7; line-height:47px;}/*180404 스타일 갱신*/
+.modal-content .close:hover{color:#ffffff;}/*180404 스타일 추가*/
+.modal-content .close:hover span{color:#ffffff;}/*180404 스타일 추가*/
+.modal-header{position: relative; height: 47px;padding:15px 20px;background-color:#414653;}/*height, background-color, padding좌우 값 조정 38 > 20 180404추가*/
+.modal-title {font-size: 21px; color:#1e2d40; letter-spacing: -0.03em; font-weight: 700; text-align: left;}
+.modal-title {font-size: 18px; color:#ffffff;line-height:18px;}/*180404 스타일 갱신*/
+.modal-sel{position:absolute; right:60px; top:4px; z-index:0; background-color:#414653;color:#fff !important;border:none;}
+.modal-sel option, .modal-sel:focus option, .modal-sel:active option{color:#fff !important;}
+.modal-body{padding:30px 20px 10px;color:#888888;font-size:16px;}/*180404 color:#888888 추가, padding 좌우 값 조정 : 30 > 20, font-size 조정*/
+.modal-body.servInfo{padding-bottom:30px;}
+.modal-footer{padding-bottom: 30px; border-top:0; text-align: center; justify-content: center;}
+.modal-footer{border-top:1px solid #f0f0f0;text-align:right;}/*180404 스타일 갱신*/
+.modal-footer .btn{font-size: 16px; font-weight: 500; min-width: 90px; height: 36px; padding:0 10px;}
+.modal-footer .btn.btn-color1{background-color:#2196f3;}/*180404 스타일 추가*/
+.modal-footer .btn.btn-color1:hover{background-color:#335cc4;}/*180404 스타일 추가*/
+.modal-footer .btn.btn-color2{background-color:#a2a0a0;}/*180404 스타일 추가*/
+.modal-footer .btn.btn-color2:hover{background-color:#4d4d4d;}/*180404 스타일 추가*/
+
+
+.modal-content.modal-sm{width: 400px;margin:0 auto;}/*180404 width 300>400*/
+.modal-content.modal-sm .modal-header{padding:15px 20px;}/*180404 스타일 변경 padding 값 조정 : 10 28 > 15 20*/
+.modal-content.modal-sm .modal-title{line-height: 18px;}/*180404 line-height 25 > 18*/
+.modal-content.modal-sm .close{display: inline-block; right:5px; top:0px; font-size: 30px; height:46px;opacity:1;color:#a7a7a7;text-shadow:none;}/*180404 opacity:1, color:#a7a7a7;추가 text-shadow제거*/
+.modal-content.modal-sm .close:hover{color:#ffffff;}/*180404 스타일 추가*/
+.modal-content.modal-sm .close span{display: inline-block; font-size: 28px; line-height: 47px; height: auto;}/*180404 line-height : 46 > 47*/
+.modal-content.modal-sm .close span{font-size:18px;color:#a7a7a7;}/*180404스타일 갱신*/
+.modal-content.modal-sm .close:hover span{color:#ffffff;}/*180404 스타일 추가*/
+.modal-content.modal-sm .modal-body{padding:20px 20px 5px; text-align: center;}
+.modal-content.modal-sm .modal-body{font-size:17px;text-align: left;}/*180404 스타일 갱신*/
+.modal-content.modal-sm .modal-footer{padding:10px 10px 20px;}
+.modal-content.modal-sm .modal-footer .btn{min-width: 80px; height: 32px;}
+/*.modal-content.modal-sm .only-text{line-height: 20px; padding:10px 15px; border-radius:5px; background:#edf5fc;}*/
+.modal-content.modal-sm .only-text{line-height: 20px; padding:10px 0px 10px; color:#6e6e6e;}/*180404 스타일 갱신*/
+
+.modal-content.type2 {border:0; background-color: rgba(0,0,0,.49);}
+.modal-content.type2 .close{right:10px; top:10px; opacity:1; z-index: 1; text-shadow:none;}
+.modal-content.type2 .close span{color:#fff;}
+.modal-content.type2 .modal-body{color:#fff; z-index: 0; padding-top:50px;}
+.modal-content.type2 .only-text{font-size: 20px; line-height: 30px; text-align: center;}
+
+/* modal table */
+.modal-content .tbl tbody tr:nth-child(2n-1) td{background-color:#fafafa;}/*180404 스타일 추가*/
+.modal-content .tbl th{font-size: 15px;}
+.modal-content .tbl td{font-size: 15px;}
+
+.modal-content .tbl.type1 th{height: 40px; padding:5px;}
+.modal-content .tbl.type1 td{height: 40px; padding:5px;}
+
+.modal-content .tbl.type3{border-color: #ebebeb;}
+.modal-content .tbl.type3 th{color:#7d7d7d; height: 40px;}
+.modal-content .tbl.type3 td{height: 40px;}
+.modal-content .tbl.type3 tr:first-child td{ border-color: #ebebeb;}
+.modal-content .pagiWrap {margin-top: 20px;}
+
+.modal-content .tbw th, .modal .tbw td{font-size: 15px; height: 40px; padding:10px;}
+.modal-content .tbw.type1 td input[type="text"]{font-size: 14px; height:35px;}
+.modal-content .tbw.type1 td select{height:35px;}
+
+/* modal search */
+.modal-content .searchWrap {padding:0; margin-bottom: 20px; background: none; }
+.modal-content .searchWrap .input-group input{height:34px; border-right:0; border-top-right-radius: 0; border-bottom-right-radius: 0;}
+.modal-content .searchWrap .label{font-size: 15px; padding-right: 5px;}
+.modal-content .searchWrap .control-label{color:#666;}
+.modal-content .searchWrap .btn-sch{min-width: 40px; height:34px; padding:0 10px;}
+.modal-content .searchWrap .btn-sch{font-size: 19px;}
+
+/* modal list */
+.modal-content .was-list li .im{width:80px; height: 60px; margin-top: 5px; border-color:#c9c8c8;}
+.modal-content .was-list li .radio-inline.radio label{line-height: 21px;}
+.modal-content .was-list .was-txt{font-size: 13px; color:#888;}
+
+/* modal scroll */
+.modal-content .scroll-pane{padding-bottom:10px !important; margin-bottom: -10px;}
+
+/* modal setting */
+.modal-content .appl-power-text{font-size:20px; color:#1e2d40; line-height:35px; padding:30px 0; text-align:center; border-radius:4px; background:#edf5fc;}
+.modal-content .appl-power-text .txt1 > span{display: inline-block; vertical-align: top;}
+.modal-content .appl-power-text .txt1::before{display: inline-block; content:"\f10d"; line-height: 1; margin-right: 10px; vertical-align: top; font-family: 'FontAwesome';}
+.modal-content .appl-power-text .txt1::after{display: inline-block; content:"\f10e"; line-height: 1; margin-left: 10px; vertical-align: top; font-family: 'FontAwesome';}
+.modal-content .appl-power-text .txt2{font-size: 18px;}
+.modal-content .appl-power-form{margin-top:20px; padding-bottom: 20px; text-align: center; border-bottom:1px solid #ebebeb;}
+.modal-content .appl-power-form .radio label{font-size: 16px; color:#666; font-weight: 700; padding-right: 0;}
+.modal-content .appl-power-form .radio  + .radio{margin-left:50px;}
+
+/* 테스트용 영역 */
+.bs-example-modal .modal {position: relative; top: auto; right: auto; bottom: auto; left: auto; z-index: 1; display: block; padding:15px;}
+.bs-example-modal .modal-dialog { left: auto; margin-top: 30px; margin-right: auto; margin-left: auto;}
+
+/* 개발 팝업 */
+.md-dialog-container{min-height: 600px; overflow: auto;}
+md-dialog.md-default-theme, md-dialog{background-color: inherit;}
+md-dialog{overflow: hidden;}
+md-dialog .modal-body{max-height: 500px; overflow-y: auto;}
+
+/*팝업 타이틀*/
+.popTit {display:block; font-size:16px; font-weight:500; color:#333; line-height:16px; text-align:left; margin-bottom:20px;}
+.popTxt {font-size:16px; color:#333; line-height:16px; text-align:center; padding:20px 0;}
+
+.modal-content .pn_thumBox .pn_thum .thum_img {width:100px; height:100px;}
+.modal-content .pn_thumBox .pn_thum {width:100px; height:100px;}
+
+.popInBox .inTit {display:block; font-size:18px; font-weight:700; color:#333; text-align:center; line-height:18px; padding:10px 0;}
+.popInBox .inTxt {display:block; font-size:18px; text-align:center; line-height:18px; padding:5px 0;}
+.popInBox .inTxt > strong {color:#333;}
+.popInBox .inTxt > span {color:#666;}

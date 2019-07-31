@@ -1,0 +1,121 @@
+@charset "utf-8";
+
+.col-md-1, .col-md-2, .col-md-3, .col-md-4, .col-md-5, .col-md-6, .col-md-7, .col-md-8, .col-md-9, .col-md-10, .col-md-11, .col-md-12 {position: static;}
+
+
+/* 패널 디자인 재정의 */
+.dashboard .panel {margin-bottom: 15px;}
+.dashboard .panel.type2 .panel_body {height: inherit; padding: 5px 25px 25px 25px; clear: both;}
+.dashboard .panel.type2 .panel_body.noPadding{padding: 0;}
+.dashboard .panel.type2 .panel_head {min-height: 60px; padding: 15px 15px 0px 25px;}
+.dashboard .panel.type2 .panel_head.noBorder {border: 0;}
+.dashboard .panel.type2 .panel_head .tit {font-size:20px; line-height:30px;}
+.dashboard .panel.type2 .panel_head .tit.big {font-size:24px; line-height: 34px; min-height: 64px;}
+.dashboard .panel.type2 .panel_head .pull-right .btn {margin:0}
+.dashboard .panel.type2 .panel_body .image{width:100%}
+.dashboard .panel.type2 .panel_body .leftCon  {width:50%; border-right: 1px solid #efefef;}
+.dashboard .panel.type2 .panel_body .rightCon {width:50%; float:right;}
+
+/* 패널타이틀 */
+.dashboard .panelTitle {color:#888888; font-weight:bold; font-size:18px; text-align:center; padding-bottom: 20px;}
+
+/* 자원사용량 */
+.dashboard .explan {float:right;}
+.dashboard .explan .cpu  {width: 12px; height: 12px; vertical-align: middle; font-size: 0; display: inline-block; background-color:#c94ff6; margin: 0 10px 0 30px;}
+.dashboard .explan .disk {width: 12px; height: 12px; vertical-align: middle; font-size: 0; display: inline-block; background-color:#335cc4; margin: 0 10px 0 30px;}
+.dashboard .explan .mem  {width: 12px; height: 12px; vertical-align: middle; font-size: 0; display: inline-block; background-color:#139bbd; margin: 0 10px 0 30px;}
+.dashboard .explan .text   {font-size:12px; color:#333333; }
+
+/* 요약 */
+.dashboard .summary {float:left; width:40%; padding: 10px 0; border-radius:5px; color:#ffffff; font-weight:bold; text-align:center;}
+.dashboard .summary1 {background-color:#5bcae2;}
+.dashboard .summary2 {background-color:#32bda2;}
+.dashboard .summary3 {background-color:#f99119;}
+.dashboard .summary .number {font-size:50px; line-height:50px; line-height: 50px;}
+.dashboard .summary .small  {font-size:14px; line-height:12px; line-height: 18px;}
+
+/* 알림 */
+.dashboard .now1 {color:#b446db; float:right; font-size:20px; font-weight:normal;}
+.dashboard .now1 .small{color:#b446db; font-size:14px;}
+.dashboard .now2 {color:#319976; float:right; font-size:16px; font-weight:normal;}
+.dashboard .now3 {color:#bd641c; float:right; font-size:16px; font-weight:normal;}
+.dashboard .critical-text {color:#ff1100;}
+.dashboard .warning-text {color:#f7b628;}
+.dashboard .critical-bg {color:#ffffff; border-radius: 50px; background-color:#ff1100; padding: 5px 10px; float:right; font-size:20px; line-height:20px;}
+.dashboard .warning-bg  {color:#ffffff; border-radius: 50px; background-color:#f7b628; padding: 5px 10px; float:right; font-size:20px; line-height:20px;}
+
+/* 설명 */
+.dashboard .title{font-size:16px; color:#333333; line-height:24px; padding:15px 20px 10px 25px;}
+.dashboard .title .timeAgo{font-size:14px; color:#888888; float:right;}
+.dashboard .ment{font-size:14px; color:#888888; line-height:22px; padding:0 0px 15px 25px;}
+.dashboard .more{font-size:14px; color:#b2b2b2; border-top:1px solid #eeeeee; width: 100%; height:40px;}
+
+/* 퍼센트 */
+.dashboard .percent {color:#335cc4; font-size:44px; line-height:46px; font-weight:bold; padding:10px 0px 10px 25px;}
+.dashboard .percent2{color:#c94ff6; font-size:44px; line-height:46px; font-weight:bold; padding:10px 0px 10px 25px;}
+.dashboard .percent .small {font-size:26px;}
+
+/* 서비스 리스트 */
+.dashboard .serviceList {}
+.dashboard .serviceList li { border-bottom:1px solid #eeeeee; height:90px;}
+.dashboard .serviceList li.noBorder { border-bottom:0}
+.dashboard .serviceList > li:nth-child(2n) { background-color: #fafafa; }
+.dashboard .serviceList .title {float:left;  width:50%; line-height:65px !important;}
+.dashboard .serviceList .state {float:right; width:50%;}
+.dashboard .serviceList .state li:nth-child(2n) {border-bottom:0;}
+
+/* 이벤트 */
+.dashboard .state {}
+.dashboard .state .timeTitle {font-size:14px; color:#888888; padding: 0 10px; font-weight:normal;}
+.dashboard .state .bar   {font-size:14px; color:#888888; padding-right: 10px; font-weight:normal;}
+.dashboard .state li {height:45px; line-height:45px; border-bottom:1px solid #eeeeee; overflow: hidden;}
+.dashboard .state .run  {width: 18px; height: 18px; vertical-align: middle; border-radius: 50px; font-size: 0; display: inline-block; background-color:#5acc27;}
+.dashboard .state .stop {width: 18px; height: 18px; vertical-align: middle; border-radius: 50px; font-size: 0; display: inline-block; background-color:#f7b628;}
+.dashboard .state .over {width: 18px; height: 18px; vertical-align: middle; border-radius: 50px; font-size: 0; display: inline-block; background-color:#ff1100;}
+.dashboard .state .time   {font-size:14px; color:#888888; padding:0 15px 0 20px;}
+.dashboard .state .text   {font-size:14px; color:#333333; }
+.dashboard .state .detail {font-size:14px; color:#666666; padding: 0 5px; font-weight: normal;}
+.dashboard .state .count   {font-size:14px; color:#666666; float:right; padding-right:20px; font-weight: normal;}
+
+
+
+
+/* 관리자 박스 */
+.domain .panel{width: 360px; float: left; z-index: 1;}
+.domain .panel.short{width: 220px;}
+.domain .panel.short .pull-left {max-width: 150px;}
+/*.domain .btn.option{width:30px; height:30px; background:url("../images/router/option.png") no-repeat center center;}*/
+
+/* aside */
+.aside .domainHalf {width: 150px; float: left; line-height: 38px;}
+
+
+/* 도메인 */
+.domainWrap > li {background:url("../images/router/router-bg.png") repeat-y;}
+.domainWrap > li:last-child {background:none;}
+.domainWrap > li:only-child {background:none;}
+
+.buttonArea{ float:left; width:83px; height:160px; position:relative; background:url("../images/router/router_ball_L.png") no-repeat 0 73px;}
+.buttonArea button {position: absolute; top: 60px; left: 62px; width:46px; height:46px;}
+.buttonArea button.ico-big-right .ico{width:46px; height:46px; background-position: -429px -306px;}
+.buttonArea button.ico-big-left .ico{width:46px; height:46px; background-position: -429px -355px;}
+
+.domainWrap .domainList > li{padding-left: 87px; background:url("../images/router/router-mid.png") no-repeat}
+.domainWrap .domainList > li:first-child {background:url("../images/router/router-first.png") no-repeat}
+.domainWrap .domainList > li:last-child {background:url("../images/router/router-last.png") no-repeat}
+.domainWrap .domainList > li:only-child {background:url("../images/router/router_ball_R.png") no-repeat 17px 73px;}
+
+/* 도메인 관리자 */
+.domainList {float: left;}
+.domainList > li{padding-left: 120px; background:url("../images/router/router-admin-mid.png") no-repeat;}
+.domainList > li:first-child {background:url("../images/router/router-admin-first.png") no-repeat;}
+.domainList > li:last-child {background:url("../images/router/router-admin-last.png") no-repeat;}
+
+/* 추가 버튼 */
+.addRouter .btn-service-add{ width:360px; height: 160px; border:1px solid #ccc; border-radius: 5px; margin-bottom: 15px;}
+.addRouter .btn-service-add .ico{display: block; width:60px; height:60px; margin: auto; background-position: -10px -530px;}
+.addRouter .btn-service-add .txt{display: block; font-size: 16px; color:#888; margin-top: 10px;}
+
+
+
+

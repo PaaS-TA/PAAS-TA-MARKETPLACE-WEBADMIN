@@ -1,0 +1,89 @@
+/* override flexslider default style */
+
+.flexslider {
+	border:0;
+	-webkit-border-radius: 0;
+	-moz-border-radius: 0;
+	-o-border-radius: 0;
+	border-radius: 0;
+	margin:20px;
+	overflow:hidden;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	-o-box-shadow: none;
+	box-shadow: none;	
+}
+
+/* Coltrol Nav */
+.flex-control-nav {
+	width: 100%;
+	position: absolute;
+	bottom: 0;
+	text-align: center;
+	z-index:900;
+}
+
+/* Direction Nav */
+.flex-direction-nav {
+	height:90px;
+	width: 100%;
+	position: absolute;
+	top:50%;
+	left:0;
+	margin: -50px 0 0; 	
+	z-index:100;
+}
+
+.flex-direction-nav li {
+	overflow:visible;
+}
+
+.flex-direction-nav a  { 
+	overflow:visible;
+	width: 90px; 
+	height: 90px; 
+	margin: 0; 
+	opacity: 1;  
+	top:0;
+	color: rgba(0,0,0,0.8); 
+	text-indent:-9999em;
+	text-shadow: none; 
+	-webkit-transition:  all 0.3s ease-out; 
+	-moz-transition:  all 0.3s ease-out; 
+	transition:  all 0.3s ease-out; 
+	background-color: rgba(0,0,0,0.5) ;
+	-webkit-box-shadow: none;
+	-moz-box-shadow: none;
+	-o-box-shadow: none;
+	box-shadow: none;	
+}
+
+.flex-direction-nav .arrow {
+	position: absolute;
+	top:0;
+	left:0;
+	width: 90px; 
+	height: 90px; 
+	background: transparent url('../img/nav.png') no-repeat 5px 5px;	
+	z-index:200;
+}
+
+.flex-direction-nav a.flex-next .arrow {
+	background-position: -75px 5px ;
+}
+
+.flex-direction-nav .flex-prev { left:0px; }
+.flex-direction-nav .flex-next { right:0px; text-align: left;}
+.flexslider:hover .flex-prev { left:0; opacity:1}
+.flexslider:hover .flex-next { right:0; opacity:1}
+.flexslider:hover .flex-prev:hover .arrow { left:0; background-position:5px -95px; background-color: #fff;}
+.flexslider:hover .flex-next:hover .arrow { right:0; background-position: -75px -95px ;opacity:1;  background-color: #fff;}
+
+.flexslider:hover .flex-prev:hover,
+.flexslider:hover .flex-next:hover {
+	background-color: #fff;
+	opacity:1; 
+}
+
+/*Direction Nav 'display:none' Ã³¸®*/
+.flex-direction-nav {display:none !important;}

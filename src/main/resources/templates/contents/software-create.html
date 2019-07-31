@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-registrant}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+
+</th:block>
+
+<div class="rightCnt" layout:fragment="content">
+    <!-- title area -->
+    <div class="titWrap">
+        <h2 class="h2">상품 등록</h2>
+        <div class="breadWrap">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">등록 상품</a></li>
+                <li class="active">상품 등록</li><!-- 마지막 li -->
+            </ol>
+        </div>
+    </div>
+    <!-- //title area -->
+
+    <!-- content -->
+    <div class="content">
+    <!--  NOTE:  여기에서 th:object를 해주면 @Controller에서 넣어준 @ModelAttribute 객체를 submit할 때 채워준다-->
+    <!--  NOTE:  action은 form을 보낼 위치, action="#"은 이렇게 두는 것 이당-->
+    <form th:action="@{/softwares}" th:object="${software}" action="#" id="createSoftwareForm" method="post" enctype="multipart/form-data">
+        <!-- cBox1 -->
+        <div class="cBox type1 appCnt-info">
+            <div class="cBox-hd">
+                <h4 class="c-tit">상품 등록하기</h4>
+            </div>
+            <div class="cBox-cnt pt20">
+                <!-- inner -->
+                <div class="in d_block">
+                    <!-- table top -->
+                    <div class="tb-top">
+                        <div class="pull-right">
+                            <span class="point2"><i class="i_star">필수입력</i> 는 필수입력 사항입니다.</span>
+                        </div>
+                    </div>
+                    <!-- //table top -->
+                    <!-- table -->
+                    <div class="tbw type1">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width:15%;">
+                                <col style="width:auto;">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row">상품명<i class="i_star">필수입력</i></th>
+                                <!--  NOTE:  여기에서 field를 쓰면 th:object의 name (software.name)필드를 채워준다 validation도 해주는 것 같다 -->
+                                <td>
+                                    <input class="form-control" type="text" th:field="*{name}">
+                                    <!-- validation 체크는 아래와 같이 하도록 하세용 -->
+                                    <p class="i_star" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></p>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">카테고리<i class="i_star">필수입력</i></th>
+                                <td>
+                                    <select th:field="*{category.id}">
+                                        <option value="">선택</option>
+                                        <option th:each="category : ${categories}"
+                                                th:value="${category.id}"
+                                                th:utext="${category.name}">
+                                        </option>
+                                    </select>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">개요<i class="i_star">필수입력</i></th>
+                                <td><textarea name="name" th:field="*{summary}" style="height:150px;"></textarea></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">아이콘<i class="i_star">필수입력</i></th>
+                                <td>
+                                    <!-- 첨부파일 -->
+                                    <div class="fileUploadWrap selected_ico" style="width:50%;">
+                                        <input tabindex="-1" class="form-control" id="iconFileInput" style="position: absolute; clip: rect(0px 0px 0px 0px);" type="file" name="iconFile" data-icon-name="fa fa-upload" data-button-text="" data-class-input="form-control" data-class-button="btn btn-default" filestyle="">
+                                        <div class="bootstrap-filestyle input-group">
+                                                    <span tabindex="0" class="group-span-filestyle input-group-btn">
+                                                        <label class="btn btn-default " for="iconFileInput">
+                                                            <!-- <img src="../common/images/thum_ico06.png" alt="" /> --> <!--파일업로드 후 첨부한 이미지 넣는 영역-->
+                                                            <span class="ico ico_fileupload">파일찾기</span>
+                                                        </label>
+                                                    </span>
+                                            <div class="input-form-group">
+                                                <input name="userfile" disabled="" class="form-control" id="iconFile" type="text" placeholder="아이콘으로 등록할 이미지를 선택하세요.">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- //첨부파일 -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">스크린샷<i class="i_star">필수입력</i></th>
+                                <td>
+                                    <div class="screenShotBox">
+                                        <div class="sshotWrap">
+                                            <ul>
+                                                <li>
+                                                    <!-- 첨부파일 -->
+                                                    <div class="fileUploadWrap selected_sshot">
+                                                        <input tabindex="-1" class="form-control" id="screenshotFileInput" style="position: absolute; clip: rect(0px 0px 0px 0px);" type="file" name="screenshots" multiple="multiple" data-icon-name="fa fa-upload" data-button-text="" data-class-input="form-control" data-class-button="btn btn-default" filestyle="">
+                                                        <div class="bootstrap-filestyle input-group">
+                                                            <span tabindex="0" class="group-span-filestyle input-group-btn">
+                                                                <label class="btn btn-default " for="screenshotFileInput">
+                                                                    <span class="ico ico_fileupload">파일찾기</span>
+                                                                </label>
+                                                            </span>
+                                                        </div>
+                                                    </div>
+                                                    <!-- //첨부파일 -->
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">상세설명<i class="i_star">필수입력</i></th>
+                                <td><textarea name="name" th:field="*{description}" style="height:150px;"></textarea></td>
+                            </tr>
+                            <tr>
+                                <th scope="row">파일유형<i class="i_star">필수입력</i></th>
+                                <td>
+                                    <!--  NOTE:  th:value값은 꼭 있어야 에러가 나지 않는다 -->
+                                    <div class="radio radio-inline" th:each="type : ${types}">
+                                        <input name="radio11" th:id="'radio1-' + ${type}" type="radio" th:field="*{type}" th:value="${type}" >
+                                        <label class="label" th:for="'radio1-' + ${type}" th:text="${type}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">상품파일</th>
+                                <td>
+                                    <!-- 첨부파일 -->
+                                    <div class="fileUploadWrap" style="width:50%;">
+                                        <input tabindex="-1" class="form-control" id="productFileInput" style="position: absolute; clip: rect(0px 0px 0px 0px);" type="file" name="productFile" data-icon-name="fa fa-upload" data-button-text="" data-class-input="form-control" data-class-button="btn btn-default" filestyle="">
+                                        <div class="bootstrap-filestyle input-group">
+                                            <input name="userfile" disabled="" class="form-control" id="productFile" type="text">
+                                            <span tabindex="0" class="group-span-filestyle input-group-btn">
+                                                <label class="btn btn-default" for="productFileInput">
+                                                    <span class="btn btn-md btn-color1">파일찾기</span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="checkbox checkbox-inline">
+                                        <input id="check-id4" type="checkbox">
+                                        <label class="label-txt" for="check-id4">삭제</label>
+                                    </div>
+                                    <!-- //첨부파일 -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">환경파일</th>
+                                <td>
+                                    <!-- 첨부파일 -->
+                                    <div class="fileUploadWrap" style="width:50%;">
+                                        <input tabindex="-1" class="form-control" id="environmentFileInput" style="position: absolute; clip: rect(0px 0px 0px 0px);" type="file" name="environmentFile" data-icon-name="fa fa-upload" data-button-text="" data-class-input="form-control" data-class-button="btn btn-default" filestyle="">
+                                        <div class="bootstrap-filestyle input-group">
+                                            <input name="userfile" disabled="" class="form-control" id="environmentFile" type="text">
+                                            <span tabindex="0" class="group-span-filestyle input-group-btn">
+                                                <label class="btn btn-dfefault" for="environmentFileInput">
+                                                    <span class="btn btn-md btn-color1">파일찾기</span>
+                                                </label>
+                                            </span>
+                                        </div>
+                                    </div>
+
+                                    <div class="checkbox checkbox-inline">
+                                        <input id="check-id4" type="checkbox">
+                                        <label class="label-txt" for="check-id4">삭제</label>
+                                    </div>
+                                    <!-- //첨부파일 -->
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">판매가격<i class="i_star">필수입력</i></th>
+                                <td>
+                                    <div class="form-group">
+<!--                                        <select title="검색 구분 선택">-->
+<!--                                            <option value="">선택</option>-->
+<!--                                            <option value="">-</option>-->
+<!--                                            <option value="">-</option>-->
+<!--                                        </select>-->
+                                        <input style="width:100px;" type="number" th:field="*{pricePerDay}"> 원 / 일
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">전시여부<i class="i_star">필수입력</i></th>
+                                <td>
+                                    <div class="radio radio-inline" th:each="yn : ${yns}">
+                                        <input name="radio19" th:id="'radio1-' + ${yn}" type="radio" th:field="*{inUse}" th:value="${yn}" >
+                                        <label class="label" th:for="'radio1-' + ${yn}" th:text="${yn}"></label>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <th scope="row">등록버전</th>
+                                <td>
+                                    <div class="form-group">
+                                        <input style="width:100px;" type="text" th:field="*{version}">
+                                    </div>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- //table -->
+
+                </div>
+                <!-- //inner -->
+            </div>
+        </div>
+        <!-- //cBox1 -->
+        <div class="cont_btnBox">
+            <button name="button" class="btn btn-color7 btn-md" type="button">취소</button>
+
+            <button name="button" class="btn btn-color1 btn-md" type="button" data-toggle="modal" data-target="#myModal_ok">등록요청</button>
+            <!-- Modal -->
+            <div class="modal fade" id="myModal_ok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content modal-sm"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+                        <div class="modal-header">
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                            <h4 class="modal-title" id="myModalLabel">등록요청</h4>
+                        </div>
+                        <div class="modal-body">
+                            <div class="only-text">
+                                상품 등록을 요청하시겠습니까?<br>관리자 승인 후 상품이 등록됩니다.
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="button" class="btn btn-color1">확인</button>
+                            <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- //Modal -->
+        </div>
+    </form>
+    </div>
+    <!-- //content -->
+</div>
+</html>

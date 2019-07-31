@@ -1,0 +1,120 @@
+@charset "utf-8";
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 400;
+  src: url('../fonts/Montserrat-Regular.eot'),
+      url('../fonts/Montserrat-Regular.woff2') format('woff2'),
+      url('../fonts/Montserrat-Regular.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 500;
+  src: url('../fonts/Montserrat-Medium.eot'),
+       url('../fonts/Montserrat-Medium.woff2') format('woff2'),
+       url('../fonts/Montserrat-Medium.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 600;
+  src: url('../fonts/Montserrat-SemiBold.eot'),
+       url('../fonts/Montserrat-SemiBold.woff2') format('woff2'),
+       url('../fonts/Montserrat-SemiBold.woff') format('woff');
+}
+
+@font-face {
+  font-family: 'Montserrat';
+  font-style: normal;
+  font-weight: 700;
+  src: url('../fonts/Montserrat-Bold.eot'),
+       url('../fonts/Montserrat-Bold.woff2') format('woff2'),
+       url('../fonts/Montserrat-Bold.woff') format('woff');
+}
+
+
+@font-face {
+   font-family: 'Noto Sans KR';
+   font-style: normal;
+   font-weight: 400;
+   src: url("../fonts/NotoSansKR-Regular.woff2") format("woff2"),
+        url("../fonts/NotoSansKR-Regular.woff") format("woff"),
+        url("../fonts/NotoSansKR-Regular.otf") format("opentype");
+ }
+
+@font-face {
+   font-family: 'Noto Sans KR';
+   font-style: normal;
+   font-weight: 500;
+   src: url("../fonts/NotoSansKR-Medium.woff2") format("woff2"),
+        url("../fonts/NotoSansKR-Medium.woff") format("woff"),
+        url("../fonts/NotoSansKR-Medium.otf") format("opentype");
+ }
+
+@font-face {
+   font-family: 'Noto Sans KR';
+   font-style: normal;
+   font-weight: 700;
+   src: url("../fonts/NotoSansKR-Bold.woff2") format("woff2"),
+        url("../fonts/NotoSansKR-Bold.woff") format("woff"),
+        url("../fonts/NotoSansKR-Bold.otf") format("opentype");
+ }
+
+
+/* reset */
+html {height:100%; font-size:10px;}
+body {width:100%; height:100%; margin:0; font-size:14px; color:#333; letter-spacing: -0.02em; line-height: 18px; font-weight:400; font-family: 'Noto Sans KR', 'Montserrat','Apple SD Gothic Neo', sans-serif;}
+* {margin:0; padding:0; border:none; -webkit-text-size-adjust:none; -moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box; -webkit-tap-highlight-color:rgba(0,0,0,0) !important; }
+*:before, *:after {-moz-box-sizing:border-box; -webkit-box-sizing:border-box; box-sizing:border-box;}
+*:focus{outline: none !important; -webkit-tap-highlight-color:rgba(0,0,0,0) !important;}
+
+h1, h2, h3, h4, h5, h6 {color:inherit; font-size:inherit; margin:0; font-family:inherit;}
+fieldset, img {border:none; vertical-align:middle;}
+object:focus {outline:none !important;}
+iframe {overflow-x:hidden; overflow-y:hidden; margin:0; padding:0; border:none;}
+dl, ul, ol, menu, li {list-style:none; margin:0; padding:0;}
+blockquote, q {quotes:none}
+blockquote:before, blockquote:after, q:before, q:after {content:''; content:none;}
+input, select, textarea, label, button {vertical-align:middle; outline-style:none; border-radius: 4px;}
+input[type=text], input[type=password], input[type=tel], input[type=email], textarea{ /*-webkit-text-fill-color:#898989;*/ color:#777; height:28px; padding:0 5px; border:1px solid #ccc; -webkit-appearance:none;}
+input:focus, select:focus, textarea:focus{color:#898989; border:1px solid #2196f3 !important;}
+input[readonly], input[disabled]{color:#1e1e1e; -webkit-text-fill-color:#1e1e1e; opacity:1;}
+input[disabled]{background:#b4b4b4;}
+select:focus {outline:none !important; -webkit-tap-highlight-color:rgba(0,0,0,0) !important;}
+
+input:focus::-webkit-input-placeholder {color:transparent; opacity: 0;}
+input:focus:-moz-placeholder {color:transparent; opacity: 0;}
+input:focus::-moz-placeholder {color:transparent; opacity: 0;}
+input:focus:-ms-input-placeholder {color:transparent; }
+
+textarea{font-size:13px; padding:5px 8px;}
+::-webkit-input-placeholder { color: #c9caca !important;}
+::-moz-placeholder { color: #c9caca !important; }
+:-ms-input-placeholder { color: #c9caca !important;}
+:-moz-placeholder { color: #c9caca !important;}
+button,label {cursor:pointer; background:none; border:none;}
+button {border:none; background-color:transparent;}
+button:focus{outline: none; -webkit-tap-highlight-color:rgba(0,0,0,0); }
+/* button:focus{outline:1px solid #ffae00 !important; }*/
+i {font-style:normal; vertical-align: middle;}
+table {width:100%; border-collapse:collapse; border-spacing:0; empty-cells:show;}
+textarea {-webkit-appearance:none; resize:none; width:100%;}
+optgroup {background-color: #fff; color:#656262; font-weight:inherit;}
+option {display:block !important; color:#656262;}
+
+a {margin:0; padding:0; color:inherit; text-decoration:none;}
+a:active,
+a:hover,
+a:focus {color:inherit; text-decoration:none; }
+a:active {background-color:transparent;}
+
+caption, legend, hr {overflow:hidden; width:0; height:0; font-size:0; line-height:0;}
+address,caption,cite,code,dfn,em,var {font-style:normal; font-weight:normal;}
+
+p{margin:0;}
+
+/* scrollbar */

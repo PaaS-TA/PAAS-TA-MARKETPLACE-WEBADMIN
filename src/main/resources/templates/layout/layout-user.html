@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+
+<script th:replace="~{fragments/common-script}"></script>
+<script layout:fragment="script"></script>
+<!--</head>-->
+<body>
+    <div id="wrap">
+        <header th:replace="~{fragments/header :: headerFragment}"></header>
+        <div id="container">
+            <left th:replace="~{fragments/left :: leftFragment}"></left>
+            <div layout:fragment="content"></div>
+
+        </div>
+    </div>
+</body>
+
+</html>

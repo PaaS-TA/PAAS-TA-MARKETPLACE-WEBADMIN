@@ -19,6 +19,7 @@ war {
 }
 
 repositories {
+    mavenLocal()
     mavenCentral()
 }
 
@@ -28,39 +29,34 @@ ext {
     jstlVersion = '1.2'
     gsonVersion = '2.8.5'
     springSecurityTagLibsVersion = '5.0.7.RELEASE'
+    marketVersion = '0.0.1-SNAPSHOT';
 }
 
 dependencies {
-    implementation 'org.springframework.boot:spring-boot-starter-aop'
-    implementation 'org.springframework.boot:spring-boot-starter-oauth2-client'
-    implementation 'org.springframework.boot:spring-boot-starter-security'
-    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect'
 
-    compile "org.apache.tomcat.embed:tomcat-embed-jasper:${tomcatEmbedJasperVersion}"
-    compile "javax.servlet:jstl:${jstlVersion}"
-    compile "com.google.code.gson:gson:${gsonVersion}"
-    compileOnly "org.projectlombok:lombok:${lombokVersion}"
-    compile('org.springframework.boot:spring-boot-devtools')
-
-    compile "org.springframework.security:spring-security-taglibs:${springSecurityTagLibsVersion}"
+    // PAAS-TA-MARKETPLACE-DOMAIN dependency
+    compile "org.openpaas.paasta:PAAS-TA-MARKETPLACE-DOMAIN:${marketVersion}"
+    compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.1.6.RELEASE'
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.1.5.RELEASE'
     
-    //cloud foundry client
-    compile ('org.cloudfoundry:cloudfoundry-client-reactor:3.15.0.RELEASE')
-    compile ('org.cloudfoundry:cloudfoundry-operations:3.15.0.RELEASE')
-    compile ('org.cloudfoundry:cloudfoundry-client:3.15.0.RELEASE')
-    compile ('org.cloudfoundry:cloudfoundry-client-lib:1.1.3')
-    compile ('org.cloudfoundry:cloudfoundry-util:3.15.0.RELEASE')
-    compile ('io.projectreactor:reactor-core:3.1.8.RELEASE')
-    compile ('io.projectreactor.ipc:reactor-netty:0.7.7.RELEASE')
+    // for parsing jwt
+    compile group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '5.1.5.RELEASE'
 
+    // for skip ssl
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.9'
+
+    // for jdbc session
+    implementation('org.springframework.session:spring-session-jdbc')
+    implementation('org.springframework.boot:spring-boot-starter-jdbc')
+    implementation group: 'mysql', name: 'mysql-connector-java', version: '8.0.13'
+
+    // for using Page class
+    compile "org.springframework.boot:spring-boot-starter-data-jpa"
+
+    compileOnly 'org.projectlombok:lombok:1.18.8'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'org.springframework.security:spring-security-test'
-
-    //cloud foundry client
-    testCompile('org.cloudfoundry:cloudfoundry-client-reactor:3.15.0.RELEASE')
-    testCompile('org.cloudfoundry:cloudfoundry-operations:3.15.0.RELEASE')
-    testCompile('org.cloudfoundry:cloudfoundry-client-lib:1.1.3')
-    testCompile('io.projectreactor:reactor-core:3.1.8.RELEASE')
-    testCompile('io.projectreactor.ipc:reactor-netty:0.7.7.RELEASE')
 }

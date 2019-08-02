@@ -1,4 +1,4 @@
-@charset "utf-8";
+﻿@charset "utf-8";
 
 /* Common */
 .scroll-no{overflow: hidden !important;}
@@ -21,6 +21,7 @@
 
 /* ico */
 .ico{display:inline-block; position: relative; font-size: 0; vertical-align:middle; background:url("../images/ico_com.png") no-repeat; }
+.ico_dtl{display:inline-block; position: relative; font-size: 0; vertical-align:middle; background:url("../images/ico_detail.png") no-repeat; }
 .ico-info1{width:17px; height:17px; background-position: -110px -304px;}
 .ico-info2{width:17px; height:17px; vertical-align: middle; margin-left: 5px; background-position: -137px -304px;}
 
@@ -125,6 +126,7 @@ input[disabled]{color: #555 !important; background-color: #eee !important;}
 select, select.form-control{color:#777; min-width: 75px; height: 44px; padding:0px 50px 0px 10px; border: 1px solid #ccc; border-radius: 2px; background:#fff url("../images/ico_sel.png") no-repeat; background-position: center right; -webkit-appearance: listbox; -webkit-appearance: none; -moz-appearance: none; -ms-appearance: none; -o-appearance: none; appearance: none;}
 select::-ms-expand{display: none;}
 .form-control[disabled], .form-control[readonly], fieldset[disabled] .form-control{background-color: #f0f0f0;}
+.form-control-inline[disabled], .form-control-inline[readonly], fieldset[disabled] .form-control-inline{background-color: #f0f0f0;}
 .form-control{ -webkit-appearance: none; -webkit-box-shadow: none; -moz-box-shadow: none; box-shadow: none;}
 .input-group-btn select{height: 30px;}
 textarea.form-control{border:1px solid #d6d6d6;}
@@ -134,6 +136,7 @@ textarea.form-control{border:1px solid #d6d6d6;}
 select.has-error, input.has-error{border-color:#ff0740;}
 .has-error{color: #d40031; line-height: 18px; padding-top:10px; }
 .has-error::before{display: inline-block; content: ''; width:18px; height: 18px; margin-right: 5px; vertical-align: text-bottom; background: url("../images/ico_com.png") no-repeat; background-position: -508px -46px;}
+.tbw tr td div.form-group select [disabled]{background-color: #eee !important;}
 
 /* form */
 .form-inline .label-txt{color:#535f6c; margin-bottom: 0;}
@@ -492,6 +495,6 @@ i.i_star:before {content:"*"; display:inline-block; font-size:14px; color:#ff000
 /* date */
 .dateWrap{font-size:0;}
 .dateWrap .date-inpt{display: inline-block; position: relative; width:45%;}
-.dateWrap .date-inpt input[type="text"]{font-size:13px; width:100%; height: 38px; padding:0 35px 0 10px;}
+.dateWrap .date-inpt input[type="text"]{font-size:13px; width:100%; height: 42px; padding:0 35px 0 10px;}
 .dateWrap .date-inpt .ui-datepicker-trigger{position: absolute; top:12px; right:10px; z-index: 0; width:18px; height: 18px; border:0; border-radius: 0; cursor: pointer; background: url("../images/ico_calendar2.gif") no-repeat;}
 .dateWrap .wave{display: inline-block; font-size:14px; width:10%; text-align: center; vertical-align: middle;}

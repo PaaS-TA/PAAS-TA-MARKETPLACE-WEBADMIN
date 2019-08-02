@@ -344,7 +344,7 @@ type2~4:#497fb8/#7b6ccc/#3ea29a
 .stateDay{display: inline-block; font-size: 15px; color:#fff; line-height: 30px; font-weight: 700; padding:0 15px; border-radius: 4px; background:#44a3bd; font-family: 'Montserrat';}/*180405 스타일 갱신 background:#2957cc*/
 
 /* search */
-.searchWrap{padding:20px; margin-bottom: 50px; text-align: center; border-radius: 2px; background-color: #fff; border-top:1px solid #11a7af;}
+.searchWrap{padding:20px; margin-bottom: 20px; text-align: center; border-radius: 2px; background-color: #fff; border-top:1px solid #11a7af;}
 .searchBox .form-group{display: inline-block; margin: 0; vertical-align:middle;}
 .searchBox .form-group-area {padding:7px 0;}
 .searchBox .fm_label{display: inline-block; vertical-align:middle; padding-right:10px;}
@@ -384,7 +384,7 @@ select, select.form-control,
 .cBox h4.c-tit .point1{font-weight:700;}/*180409 스타일 갱신*/
 .cBox .cBox-hd .pull-right{padding:25px 0;}
 .cBox .cBox-hd .dropdown{display: inline-block;}
-.cBox .dropdown-menu{min-width:65px; -webkit-box-shadow: none; box-shadow: none;}
+.cBox .dropdown-menu{min-width:50px; -webkit-box-shadow: none; box-shadow: none;}
 .cBox .dropdown-menu>li>a{padding:3px 10px;}
 .cBox .cBox-hd .btn-toggle {padding:0;}
 .cBox .cBox-hd .btn-toggle .ico{width:38px; height:37px; background-position: 0 -181px;}
@@ -1296,25 +1296,134 @@ input[name='renameSev']{position:relative;width:100%;}
 
 /*사용현황*/
 .statusBox {margin-bottom:40px;}
-.statusBox ul {display:table; width:100%;}
-.statusBox ul li {display:table-cell; width:30%; box-sizing:border-box; padding-right:30px;}
-.statusBox ul li:last-child {padding-right:0;}
+.statusBox > ul {display:table; width:100%;}
+.statusBox > ul > li {display:table-cell; width:30%; box-sizing:border-box; vertical-align:top; padding-right:20px;}
+.statusBox > ul > li:last-child {padding-right:0;}
 .statusBox .inWrap {position:relative; border-radius:5px; padding:20px; -webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1); box-shadow: 0 4px 10px 0 rgba(0,0,0,0.1); -webkit-transform: translate(0, 0px); transform: translate(0, 0px);-webkit-transition: -webkit-box-shadow .3s,-webkit-transform .3s; transition: box-shadow .3s,transform .3s; cursor:pointer;}
 .statusBox .inWrap:hover{-webkit-box-shadow: 0 6px 15px 0 rgba(0,0,0,0.6); box-shadow: 0 6px 15px 0 rgba(0,0,0,0.6); -webkit-transform: translate(0, -4px); transform: translate(0, -4px);/* border:1px solid #333; */}
-.statusBox .inWrap .tit {position:absolute; top:20px; left:20px; display:block; font-size:18px; font-weight:700; color:#fff;}
+.statusBox .inWrap .tit {position:absolute; top:20px; left:20px; display:block; font-size:20px; font-weight:700; color:#fff;}
 .statusBox .inWrap .tit .tit_sm {font-size:15px;}
 .statusBox .inWrap.bg01 {background: url("../images/bg_ico_app01.png") no-repeat #fff 50px 60px; border:1px solid #d3dce6;}
 .statusBox .inWrap.bg01 .tit {color:#333;}
 .statusBox .inWrap.bg02 {background: url("../images/bg_ico_app02.png") no-repeat #004a8b 50px 60px;}
 .statusBox .inWrap.bg03 {background: url("../images/bg_ico_app03.png") no-repeat #028b93 50px 60px;}
+.statusBox .inWrap.bg05 {background: url("../images/bg_ico_app03.png") no-repeat #004a8b right 50px bottom 30px;}
 
-.statusBox .inWrap .in_txtBox {font-family: 'Montserrat'; text-align:right; padding-top:20px;}
+.statusBox.type2 .inWrap {height:242px; padding:20px; }
+.statusBox.type2 li:last-child .inWrap {height:242px; padding:20px;}
+.statusBox.type2 .inWrap.bg01 {background-position:50px 130px;}
+.statusBox.type2 .inWrap.bg02 {background-position:50px 130px;}
+
+.statusBox.type2 .inWrap.bg04 {background: url("../images/bg_ico_app04.png") no-repeat #028b93 center 20px;}
+.statusBox.type2 .inWrap.bg04 .tit {position:relative; top:0; left:0; display:block; text-align:center; padding:45px 0 10px 0;}
+.statusBox.type2 .inWrap.bg04 .today_txt {position:absolute; top:26px; right:30px; display:inline-block; font-size:13px; font-weight:500; color:#47c7ce;}
+.statusBox.type2 .inWrap.bg04 > ul {padding:10px 20px 0;}
+.statusBox.type2 .inWrap.bg04 > ul > li {display:table; width:100%; padding:10px 0;}
+.statusBox.type2 .inWrap.bg04 > ul > li:first-child {padding-top:0;}
+.statusBox.type2 .inWrap.bg04 > ul > li:last-child {padding-bottom:0;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div {display:table-cell; box-sizing:border-box;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div.ta_l {text-align:left;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div.ta_r {text-align:right;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div span {display:inline-block; vertical-align:middle;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div span.num_txt {font-family: 'Montserrat'; font-size:30px; font-weight:500; color:#00fff0;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div span.txt {/* width:270px; */ text-overflow:ellipsis; overflow:hidden; white-space:nowrap; font-size:16px; font-weight:500; color:#fff; padding-left:15px;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div em.s_txt {font-size:14px; font-weight:400; color:#89cbcf; padding-left:5px;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div span.ico_user {display:inline-block; width:18px; height:18px; font-size:0; background: url("../images/bg_ico_app05.png") no-repeat left top;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div span.ico_apps {display:inline-block; width:23px; height:25px; font-size:0; background: url("../images/bg_ico_app06.png") no-repeat left top;}
+.statusBox.type2 .inWrap.bg04 > ul > li > div span.count {display:inline-block; font-family: 'Montserrat'; font-size:25px; font-weight:500; color:#fff; text-align:left; padding-left:10px;}
+
+.statusBox .inWrap .in_txtBox {font-family: 'Montserrat'; text-align:right; padding-top:70px;}
 .statusBox .inWrap .in_txtBox .count {display:inline-block; font-size:50px; font-weight:500; color:#fff; line-height:60px;}
-.statusBox .inWrap .in_txtBox .txt {font-size:13px; font-weight:500; color:#fff; line-height:1.3;}
+.statusBox .inWrap .in_txtBox .txt {font-size:13px; font-weight:500; color:#fff; line-height:1.3; letter-spacing:-1px;}
 .statusBox .inWrap.bg01 .in_txtBox .count {color:#333;}
 .statusBox .inWrap.bg01 .in_txtBox .txt {color:#0d87b8;}
 .statusBox .inWrap.bg02 .in_txtBox .txt {color:#3283ca;}
 .statusBox .inWrap.bg03 .in_txtBox .txt {color:#47c7ce;}
+
+.statusBox .inWrap.bg05 {height:242px; padding:20px;}
+.statusBox .inWrap.bg05 .in_txtBox .tit {position:relative; top:0; left:0; display:block; text-align:center; line-height:20px; padding:45px 0 5px 0;}
+.statusBox .inWrap.bg05 .in_txtBox .txt {color:#3283ca; text-align:center;}
+.statusBox .inWrap.bg05 .in_txtBox .count {display:block; text-align:center; line-height:50px; padding:10px 0 0 0;}
+
+
+/*======================================================= 관리자 =======================================================*/
+.appCategoryBox {display:table; width:100%;}
+.appCategoryBox > div {display:table-cell; box-sizing:border-box; width:50%; vertical-align:top;}
+.appCategoryBox > div.cate_left {padding-right:30px;}
+.appCategoryBox > div.cate_right .cont_btnBox {text-align:right; padding-top:30px;}
+.appCategoryBox h4.c-tit-in {display:block; width:100%; font-size:18px; font-weight:500; color:#333; line-height:1.3; padding:0; margin-bottom:25px;}
+.appCategoryBox h4.c-tit-in::before {display:inline-block; content:''; width:4px; height:17px; background:#215ba3; margin-right:10px; }
+.appCategoryBox .tree-head {line-height:60px; padding:0 20px;}
+.appCategoryBox .tree-head .bx_left {float:left;}
+.appCategoryBox .tree-head .bx_right {float:right;}
+
+.treeWrap {border:1px solid #c2d1d9; clear:both; min-height:450px;}
+.tree-head {height:60px; background:#f6faff; border-bottom:1px solid #c2d1d9;}
+.tree-head .btn {font-size:16px; vertical-align:middle; padding-left:20px;}
+.tree-head .btn:first-child {padding-left:0;}
+.tree-head .ico_dtl {margin-right:5px;}
+.tree-head .only-ico.ico-expend .ico_dtl {width:23px; height:22px; background-position: -150px -35px;}
+.tree-head .only-ico.ico-expend:hover .ico_dtl {width:23px; height:22px; background-position: -150px -67px;}
+.tree-head .only-ico.ico-collapse .ico_dtl {width:23px; height:22px; background-position: -183px -35px;}
+.tree-head .only-ico.ico-collapse:hover .ico_dtl {width:23px; height:22px; background-position: -183px -67px;}
+.tree-head .only-ico.ico-regi .ico_dtl {width:19px; height:19px; background-position: -150px -5px;}
+.tree-head .only-ico.ico-del .ico_dtl {width:19px; height:20px; background-position: -179px -5px;}
+.tree-head .only-ico.ico-modi .ico_dtl {width:19px; height:19px; background-position: -208px -5px;}
+
+
+/*카테고리 트리*/
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul {padding:0 0 30px 38px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li {padding:0;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu .cate-title {padding:20px 30px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu .cate-title .ico_category {display:inline-block; width:20px; height:20px; background: url("../images/ico_category.png") no-repeat; vertical-align:middle; margin-right:10px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu .cate-title a {position:relative; display:inline-block; font-size:16px; line-height:16px; vertical-align:middle; padding:0;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li > ul {padding:15px 10px 15px 42px;}
+
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li {position:relative; background: url("../images/ico_category_dot1.png") repeat-y; padding:8px 0;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li > a {display:block; font-size:15px; line-height:30px; background: url("../images/ico_category_dot2.png") no-repeat; background-position:0 14px; padding:0 0 0 87px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li.only-li > a {padding:0 0 0 62px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li:last-child {padding-bottom:0;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li:last-child > a {background: url("../images/ico_category_dot3.png") no-repeat; background-position:0 -8px; line-height:36px;}
+
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li .plus {position:absolute; top:14px; left:60px; display:inline-block; width:18px; height:18px; background: url("../images/ico_detail.png") no-repeat;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li .plus.expandable-plus {background-position:-216px -35px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li .plus.expandable-plus:hover {background-position:-216px -67px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li .plus.collapsable-plus {background-position:-241px -35px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li .plus.collapsable-plus:hover {background-position:-241px -67px;}
+
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li .checkbox.checkbox-only {position:absolute; top:13px; left:35px;}
+
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li > ul > li {position:relative; background: url("../images/ico_category_dot1.png") repeat-y; padding:8px 0;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li > ul > li > a {display:block; font-size:15px; line-height:30px; background: url("../images/ico_category_dot2.png") no-repeat; background-position:0 14px; padding:0 0 0 87px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li > ul > li.only-li > a {padding:0 0 0 62px;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li > ul > li:last-child {padding-bottom:0;}
+.appCategoryBox .cate_left .treeWrap .tree-body .cate_treemenu > ul > li > ul > li:last-child > a {background: url("../images/ico_category_dot3.png") no-repeat; background-position:0 -8px; line-height:36px;}
+
+#ProtectDiv {position:absolute !important; top:-1000000px !important; display:none !important; width:0 !important; background-color:unset !important; border:0px !important; padding:0 !important; color:unset !important; }
+
+
+/*카테고리 관리화면*/
+.cBox.type2 .cBox-cnt {background:#e7ecf2; border-top:1px solid #c2d1d9;}
+.cBox.type2 .category_Box > ul > li {padding-bottom:20px;}
+.cBox.type2 .category_Box > ul > li > div {border:1px solid #c7ccd0; padding:20px 30px; background: #fff; -webkit-box-shadow: 0 2px 10px 0 rgba(0,0,0,0.1); box-shadow: 0 2px 10px 0 rgba(0,0,0,0.1); -webkit-transform: translate(0, 0px); transform: translate(0, 0px);-webkit-transition: -webkit-box-shadow .3s,-webkit-transform .3s; transition: box-shadow .3s,transform .3s; cursor: pointer;}
+.cBox.type2 .category_Box > ul > li > div:hover{-webkit-box-shadow: 0 6px 15px 0 rgba(0,0,0,0.6); box-shadow: 0 6px 15px 0 rgba(0,0,0,0.6); -webkit-transform: translate(0, -4px); transform: translate(0, -4px);border:1px solid #333;}
+.cBox.type2 .category_Box > ul > li > div > span {display:inline-block; font-size:17px; color:#555; line-height:1.5; background: url("../images/ico_category_menu.png") no-repeat left center; padding-left:25px;}
+
+.cBox.type2 .category_Box .cateWrap .btn_seq {display:inline-block; margin-right:30px;}
+.cBox.type2 .category_Box .cateWrap .btn_seq .btn:first-child {margin-right:8px;}
+.cBox.type2 .category_Box .cateWrap .btn_etc {display:inline-block;}
+.cBox.type2 .category_Box .cateWrap .btn_etc .btn:first-child {margin-right:15px;}
+.cBox.type2 .category_Box .cateWrap .only-ico.ico-top .ico_dtl {width:26px; height:26px; background-position:-150px -100px;}
+.cBox.type2 .category_Box .cateWrap .only-ico.ico-top:hover .ico_dtl {width:26px; height:26px; background-position:-150px -130px;}
+.cBox.type2 .category_Box .cateWrap .only-ico.ico-bottom .ico_dtl {width:26px; height:26px; background-position:-183px -100px;}
+.cBox.type2 .category_Box .cateWrap .only-ico.ico-bottom:hover .ico_dtl {width:26px; height:26px; background-position:-183px -130px;}
+.cBox.type2 .category_Box .cateWrap .only-ico.ico-modi .ico_dtl {width:21px; height:21px; background-position:-240px -5px;}
+.cBox.type2 .category_Box .cateWrap .only-ico.ico-del .ico_dtl {width:20px; height:22px; background-position:-270px -5px;}
+
+.cBox.type2 .category_Box .category_regi p {text-align:center; font-size:17px; color:#555; padding-top:40px;}
+.cBox.type2 .category_Box .category_regi a {display:block; border:1px solid #ccc; padding:20px 30px;}
+.cBox.type2 .category_Box .category_regi a:hover {border:1px solid #333; background:#fff;}
+.cBox.type2 .category_Box .category_regi a span {display:inline-block; font-size:17px; color:#555; line-height:1.5; background: url("../images/ico_btn_plus.png") no-repeat left center; padding-left:25px;}
 
 
 /*검색결과없음*/
@@ -1333,15 +1442,6 @@ input[name='renameSev']{position:relative;width:100%;}
 .tbw_file_list li > .btn-del-sm > span {display:inline-block; width:9px; height:9px; font-size:0; vertical-align:middle; background: url("../images/ico_com.png") no-repeat;}
 .tbw_file_list li > .btn-del-sm .ico_x {background-position: -478px -51px;}
 .tbw_file_list li > .btn-del-sm:hover .ico_x {background-position: -536px -420px;}
-
-/*좌측하단 배너(한전기술이전배너)*/
-.bannerBox {position:fixed; bottom:100px; -webkit-box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3); box-shadow: 0 4px 10px 0 rgba(0,0,0,0.3);}
-.bannerBox > a {position:relative; display:block; width:240px; height:120px; background:url("../images/banner_bg.png") no-repeat #2b3a48; color:#fff;}
-.bannerBox > a .txtBox {position:absolute; top:40px; left:17px;}
-.bannerBox > a > span {font-size:17px; font-weight:700;}
-.bannerBox .t_color {display:inline-block; color:#32ccff; line-height:17px;}
-.bannerBox .t_size {display:block; font-size:22px; line-height:22px; letter-spacing:-1px; padding-top:5px;}
-
 
 /*==== 사용현황 Chart ====*/
 /* .cht_area_wrap {width:100%; overflow:hidden;} */
@@ -1417,7 +1517,7 @@ input[name='renameSev']{position:relative;width:100%;}
 
 /*사용 추이*/
 .cht_line_wrap {padding-left:30px;}
-.cht_tit {position:relative; display:block; font-size:20px; font-weight:700; color:#333; text-align:center; padding:0 0 30px 0;}
+.cht_tit {position:relative; display:block; font-size:20px; font-weight:700; text-align:center; padding:0 0 30px 0;}
 .cht_tit > .s_txt{position:absolute; right:0;}
 .s_txt {font-size:13px; color:#888; font-weight:400;}
 
@@ -1470,6 +1570,8 @@ input[name='renameSev']{position:relative;width:100%;}
 .tui-chart-series-custom-event-area > div {background:none !important;}
 
 
+
+
 /*======================================================= 반응형 사이즈 =======================================================*/
 
 #wrap {min-width:unset;}
@@ -1488,16 +1590,32 @@ input[name='renameSev']{position:relative;width:100%;}
 
 @media screen and (max-width: 1800px) {
 	.ul-panel > li {width:30%;}
+
+	/*카테고리 관리*/
+	.appCategoryBox .cate_right .tbw.type1 col:first-child {width:30% !important;}
 }
 
 @media screen and (max-width: 1500px) {
 	.ul-panel > li {width:47%;}
-	
+
 	/*사용현황*/
 	.statusBox .inWrap.bg01 {background:#fff;}
 	.statusBox .inWrap.bg02 {background:#004a8b;}
 	.statusBox .inWrap.bg03 {background:#028b93;}
 	.statusBox .inWrap .in_txtBox {height:120px;}
+
+	.statusBox.type2 .inWrap.bg04 {background-image:none;}
+	.statusBox.type2 .inWrap.bg04 .tit {position:absolute; top:20px; left:20px; padding:0;}
+	.statusBox.type2 .inWrap.bg04 .today_txt {top:20px;}
+	.statusBox.type2 .inWrap.bg04 > ul {padding:70px 20px 0;}
+
+	/*카테고리 관리*/
+	.treeWrap {min-height:340px;}
+	.appCategoryBox {display:block;}
+	.appCategoryBox > div {display:block; width:100%; }
+	.appCategoryBox > div.cate_left {padding-right:0;}
+	.appCategoryBox > div.cate_right {padding-top:30px;}
+	.appCategoryBox .cate_right .tbw.type1 col:first-child {width:20% !important;}
 }
 
 @media screen and (max-width: 1280px) {
@@ -1510,6 +1628,24 @@ input[name='renameSev']{position:relative;width:100%;}
 	.searchBox .form-group-area .fm_box {display:table-cell; box-sizing:border-box; width:80%;}
 	.searchBox .form-group-area .fm_box select {width:100%;}
 	.searchBox .form-group-area .fm_box input {width:100% !important;}
+
+	/*사용현황*/
+	.statusBox.type2 {position:relative; height:242px;}
+	.statusBox.type2:after {display:block; content:''; clear:both;}
+	.statusBox.type2 > ul > li {position:absolute; width:40%;}
+	.statusBox.type2 > ul > li:nth-child(1) .inWrap {height:111px;}
+	.statusBox.type2 > ul > li:nth-child(2) .inWrap {height:111px;}
+	.statusBox.type2 > ul > li:nth-child(2) {top:131px;}
+	.statusBox.type2 > ul > li:last-child {width:60%; right:0;}
+	.statusBox.type2 > ul > li .inWrap {height:111px;}
+	.statusBox.type2 .inWrap .in_txtBox {height:auto; padding-top:20px;}
+	.statusBox.type2 .inWrap .in_txtBox .count {font-size:38px; line-height:38px;}
+
+	/*사용현황 박스 두개일 때*/
+	.statusBox.type2.box-two {height:344px;}
+	.statusBox.type2.box-two > ul > li {width:100%; padding-right:0}
+	.statusBox.type2.box-two > ul > li:last-child .inWrap {height:auto;}
+
 
 	/*상세화면 개요*/
 	.m_line {display:block; padding:10px 0 0 0;}
@@ -1536,7 +1672,7 @@ input[name='renameSev']{position:relative;width:100%;}
 }
 
 @media screen and (max-width: 1200px) {
-	.m_btn_wrap {display:block;}
+   .m_btn_wrap {display:block;}
 }
 
 
@@ -1565,6 +1701,9 @@ input[name='renameSev']{position:relative;width:100%;}
 
 
 @media screen and (max-width: 992px) {
+	/*사용현황*/
+	.statusBox.type2 .inWrap .in_txtBox {padding-top:30px;}
+	.statusBox.type2 .inWrap .in_txtBox .txt {display:none;}
 }
 
 @media screen and (min-width: 992px) {
@@ -1597,16 +1736,14 @@ input[name='renameSev']{position:relative;width:100%;}
 	.search_resultBox .txt_sm {font-size:16px;}
 
 	/*사용현황*/
-	.statusBox {position:relative; height:380px;}
-	.statusBox:after {display:block; content:''; clear:both;}
-	.statusBox > ul > li {position:absolute; width:100%; padding-right:0;}
-	.statusBox > ul > li:nth-child(1) {top:0; left:0;}
-	.statusBox > ul > li:nth-child(2) {top:134px; right:0;}
-	.statusBox > ul > li:last-child {top:268px; left:0;}
-	.statusBox li:last-child .inWrap {height:auto;}
-	.statusBox .inWrap .in_txtBox {height:auto;}
-	.statusBox .inWrap.bg04 > ul {padding:50px 20px 10px;}
-	.statusBox .inWrap .in_txtBox .count {font-size:38px; line-height:38px;}
+	.statusBox.type2 {height:331px;}
+	.statusBox.type2 > ul > li {position:absolute; width:50%;}
+	.statusBox.type2 > ul > li:nth-child(1) {top:0; left:0;}
+	.statusBox.type2 > ul > li:nth-child(2) {top:0; right:0; padding-right:0;}
+	.statusBox.type2 > ul > li:last-child {width:100%; top:131px; left:0;}
+	.statusBox.type2 li:last-child .inWrap {height:auto;}
+	.statusBox.type2 .inWrap.bg04 > ul {padding:50px 20px 10px;}
+	.statusBox.type2 .inWrap .in_txtBox .count {font-size:38px; line-height:38px;}
 }
 
 
@@ -1615,6 +1752,10 @@ input[name='renameSev']{position:relative;width:100%;}
 	.statusBox.type2 .inWrap .in_txtBox .txt {display:none;}
 	.statusBox .inWrap .tit {font-size:15px;}
 	.statusBox .inWrap .in_txtBox .count {font-size:40px;}
+
+	/*카테고리 관리*/
+	.bx_right .bx_btn_area {display:none;}
+	.bx_right .dropdown {display:block !important;}
 }
 
 @media screen and (max-width: 500px) {

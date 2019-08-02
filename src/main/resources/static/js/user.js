@@ -675,6 +675,26 @@ $(document).ready(function() {
 	 $('.m_menu_wrap').removeClass('active');  
 	 $('#wrap').removeClass('scroll-no');
    });
+
+  
+   /*카테고리 트리메뉴*/
+	$(".depth2").css("display","none");
+
+	$(".cate_treemenu").treeview({		
+	collapsed: true,
+	prerendered:true,
+	// 펼쳐짐 속도 빠르게 하고싶을땐 "fast"
+	animated: "fast",
+	// 확장취소 / 전체확장을 감싸줄div의 id값
+	control:".ctl-tree",	
+	// 확장되있던 하위트리를 저장합니다.
+	cookie:true,
+	// 저장될 쿠키이름을 지정합니다. 여러개일경우 다른쿠키명을 지정하여야 합니다.
+	cookieId:"cookie4"
+	});
+
 });
+
+
 
 

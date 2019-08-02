@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-user}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- // script 방법 2 -->
+<!--    <script type="text/javascript">-->
+<!--        console.log('::MarketPlace index text/javascript::');-->
+<!--    </script>-->
+</th:block>
+<div class="rightCnt" layout:fragment="content">
+    <!-- title area -->
+    <div class="titWrap">
+        <h2 class="h2">판매자별 현황 상세</h2>
+        <div class="breadWrap">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">사용현황</a></li>
+                <li><a href="#">판매자별 현황 상세</a></li><!-- 마지막 li -->
+            </ol>
+        </div>
+    </div>
+    <!-- //title area -->
+
+    <!-- content -->
+    <div class="content">
+        <!-- cBox1 -->
+        <div class="cBox type1 appCnt-info">
+            <div class="cBox-hd">
+                <h4 class="c-tit">판매자별 현황 상세</h4>
+            </div>
+            <div class="cBox-cnt">
+                <!-- inner -->
+                <div class="in pd0 d_block">
+                    <!-- table -->
+                    <div class="tbw type1">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width:;">
+                                <col style="width:;">
+                                <col style="width:;">
+                                <col style="width:;">
+                                <col style="width:;">
+                                <col style="width:;">
+                                <col style="width:;">
+                                <col style="width:;">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row">판매자</th>
+                                <td>(주)씨이랩</td>
+                                <th scope="row">승인상품수</th>
+                                <td>5</td>
+                                <th scope="row">판매상품수</th>
+                                <td>5</td>
+                                <th scope="row">사용자수</th>
+                                <td>27</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- //table -->
+                </div>
+                <!-- //inner -->
+            </div>
+        </div>
+        <!-- //cBox1 -->
+
+        <!-- 검색 Form -->
+        <div class="searchWrap mt50">
+            <div class="searchBox"><!--검색폼 두줄일 때 class="fm-row-2"-->
+                <!-- Form 그룹 -->
+                <div class="form-group">
+                    <div class="form-group-area">
+                        <div class="fm_label"><label for="" class="label">판매자명</label></div>
+                        <div class="fm_box">
+                            <input type="text" placeholder="검색어를 입력해 주세요." style="width:400px;">
+                        </div>
+                    </div>
+                </div>
+                <!-- //Form 그룹 -->
+                <button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+            </div>
+        </div>
+        <!-- //검색 Form -->
+
+        <div class="cont-titWrap mt30">
+            <h3 class="h-tit3">전체 상품 수 <span class="point4">(50)</span></h3>
+        </div>
+
+        <!-- 테이블 -->
+        <div class="tbl type1 pt20">
+            <table class="table">
+                <colgroup>
+                    <col style="width:8%;">
+                    <col style="width:auto;">
+                    <col style="width:10%;">
+                    <col style="width:10%;">
+                    <col style="width:10%;">
+                    <col style="width:10%;">
+                    <col style="width:10%;">
+                    <col style="width:10%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">판매자</th>
+                    <th scope="col">아이디</th>
+                    <th scope="col">유형</th>
+                    <th scope="col">프로필 등록일</th>
+                    <th scope="col">승인상품 수</th>
+                    <th scope="col">판매상품 수</th>
+                    <th scope="col">사용자 수</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>10</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>9</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>8</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>7</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>6</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>5</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>4</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>3</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                <tr>
+                    <td>1</td>
+                    <td>(주)씨이랩</td>
+                    <td>hongil98</td>
+                    <td>기업</td>
+                    <td>2019-04-01</td>
+                    <td>5</td>
+                    <td>3</td>
+                    <td>27</td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- //테이블 -->
+
+        <!-- page -->
+        <nav class="pagiWrap">
+            <ul class="pagination">
+                <li class="first disabled"><a href="#">맨 처음</a></li>
+                <li class="prev"><a href="#">이전</a></li>
+                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
+                <li class=" disabled"><a href="#">2</a></li>
+                <li><a href="#">3</a></li>
+                <li><a href="#">4</a></li>
+                <li><a href="#">5</a></li>
+                <li><a href="#">6</a></li>
+                <li><a href="#">7</a></li>
+                <li><a href="#">8</a></li>
+                <li><a href="#">9</a></li>
+                <li class="next"><a href="#">다음</a></li>
+                <li class="end"><a href="#">맨 끝</a></li>
+            </ul>
+        </nav>
+        <!-- //page -->
+
+    </div>
+    <!-- //content -->
+
+    <script type="text/javascript">
+        console.log('::MarketPlace index Init::');
+    </script>
+</div>
+
+<!--</div>-->
+</html>

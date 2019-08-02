@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-user}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+    <!-- // script 방법 2 -->
+<!--    <script type="text/javascript">-->
+<!--        console.log('::MarketPlace index text/javascript::');-->
+<!--    </script>-->
+</th:block>
+<div class="rightCnt" layout:fragment="content">
+    <!-- title area -->
+    <div class="titWrap">
+        <h2 class="h2">상품별 현황 상세</h2>
+        <div class="breadWrap">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">사용현황</a></li>
+                <li><a href="#">상품별 현황 상세</a></li><!-- 마지막 li -->
+            </ol>
+        </div>
+    </div>
+    <!-- //title area -->
+
+    <!-- content -->
+    <div class="content">
+
+        <!-- cBox1 -->
+        <div class="cBox type1 appCnt-info">
+            <div class="cBox-hd">
+                <h4 class="c-tit">상품별 현황 상세</h4>
+            </div>
+            <div class="cBox-cnt">
+                <!-- inner -->
+                <div class="in pd0 d_block">
+                    <!-- table -->
+                    <div class="tbw type1">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width:15%;">
+                                <col style="width:auto;">
+                            </colgroup>
+                            <tbody>
+                            <tr>
+                                <th scope="row">상품명</th>
+                                <td>우유니</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">카테고리</th>
+                                <td>교육</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">버전</th>
+                                <td>1.0</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">가격</th>
+                                <td>1,000원/일</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">판매자</th>
+                                <td>(주)씨이랩</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">등록일</th>
+                                <td>2018-12-12</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">승인일</th>
+                                <td>2018-12-12</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">개요</th>
+                                <td>우유니(Uyuni)는 딥러닝 프로젝트를 운영, 관리, 생성, 실행을 하기 위한 딥러닝 플랫폼 솔루션입니다.</td>
+                            </tr>
+                            <tr>
+                                <th scope="row">사용자수</th>
+                                <td>15명</td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- //table -->
+
+                    <!--사용추이 차트-->
+                    <div class="cht_area_wrap">
+                        <span class="cht_tit text-left mt50">사용자 추이<span class="s_txt">(2019년도 기준)</span></span>
+                        <div id="useStatusProdDetail" class="cht_area"></div>
+                    </div>
+                    <!--//사용추이 차트-->
+
+                </div>
+                <!-- //inner -->
+            </div>
+        </div>
+        <!-- //cBox1 -->
+
+        <div class="cont_btnBox">
+            <button name="button" class="btn btn-color1 btn-md" type="button">수정</button>
+        </div>
+    </div>
+    <!-- //content -->
+
+    <script type="text/javascript">
+        console.log('::MarketPlace index Init::');
+    </script>
+</div>
+
+<!--</div>-->
+</html>

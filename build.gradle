@@ -42,6 +42,9 @@ dependencies {
     compile "org.openpaas.paasta:PAAS-TA-MARKETPLACE-DOMAIN:${marketVersion}"
     compile group: 'org.springframework.security.oauth.boot', name: 'spring-security-oauth2-autoconfigure', version: '2.1.6.RELEASE'
     compile group: 'org.springframework.security', name: 'spring-security-oauth2-client', version: '5.1.5.RELEASE'
+
+    // thymeleaf auto-reflection
+    compile('org.springframework.boot:spring-boot-devtools')
     
     // for parsing jwt
     compile group: 'org.springframework.security', name: 'spring-security-oauth2-jose', version: '5.1.5.RELEASE'

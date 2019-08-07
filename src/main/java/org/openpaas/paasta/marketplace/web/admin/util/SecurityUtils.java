@@ -1,40 +1,33 @@
 package org.openpaas.paasta.marketplace.web.admin.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
+import org.openpaas.paasta.marketplace.api.domain.User;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+@Slf4j
 public class SecurityUtils {
 
-	private static final Logger logger = LoggerFactory.getLogger(SecurityUtils.class);
-
-    public static Object getUser() {
+    public static User getUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        logger.info("authentication={}", authentication);
+        log.debug("authentication={}", authentication);
 
         if (authentication == null) {
             return null;
         }
 
         Object principal = authentication.getPrincipal();
-        logger.info("principal={}", principal);
+        log.debug("principal={}", principal);
 
         if (principal == null) {
             return null;
-        } else {
-        	return principal;
-        }
-    }
-
-    public static String getUserId() {
-        Object user = getUser();
-
-        if (user == null) {
-            return null;
         }
 
-        return user.toString();
+        if (principal instanceof User) {
+            return (User) principal;
+        }
+
+        return null;
     }
 
 }

@@ -1,5 +1,6 @@
 package org.openpaas.paasta.marketplace.web.admin.config;
 
+import org.openpaas.paasta.marketplace.web.admin.config.security.AuthUserTokenHeaderInterceptor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,13 +21,6 @@ public class RestConfig {
     @Value("${marketplace.api.url}")
     private String marketplaceApi;
 
-    @Value("${marketplace.api.authorization.username}")
-    public String marketApiUsername;
-
-    @Value("${marketplace.api.authorization.password}")
-    public String marketApiPassword;
-
-
     @Bean
     RestTemplate paasApiRest() {
         RestTemplate restTemplate = new RestTemplate();
@@ -36,8 +30,8 @@ public class RestConfig {
     }
 
     @Bean
-    AuthHeaderInterceptor paasUserInterceptor() {
-        AuthHeaderInterceptor tokenHeaderInterceptor = new AuthHeaderInterceptor(AUTH_TOKEN_HEADER_NAME, marketApiUsername, marketApiPassword);
+    AuthUserTokenHeaderInterceptor paasUserInterceptor() {
+        AuthUserTokenHeaderInterceptor tokenHeaderInterceptor = new AuthUserTokenHeaderInterceptor(AUTH_TOKEN_HEADER_NAME);
         return tokenHeaderInterceptor;
     }
 

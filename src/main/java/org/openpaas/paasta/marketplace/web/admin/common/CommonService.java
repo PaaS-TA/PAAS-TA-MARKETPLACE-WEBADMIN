@@ -10,12 +10,63 @@ import java.util.Map;
 /**
  * Common Service 클래스
  *
- * @author REX
+ * @author hrjin
  * @version 1.0
- * @since 2018.08.02
+ * @since 2019.08.02
  */
 @Service
 public class CommonService {
+
+    public String setParameters(HttpServletRequest httpServletRequest) {
+        Map<String, String[]> parametersMap = httpServletRequest.getParameterMap();
+        String[] parametersObject;
+        String parametersKey;
+        String resultString = "";
+
+        StringBuilder stringBuilder = new StringBuilder();
+
+        for (int i = 0; i < ParametersList.values().length; i++) {
+            parametersKey = ParametersList.values()[i].actualValue;
+            parametersObject = parametersMap.get(parametersKey);
+
+            if (parametersObject != null && !"".equals(parametersObject[0])) {
+                stringBuilder.append("&").append(parametersKey).append("=").append(parametersObject[0]);
+            }
+        }
+
+        if (stringBuilder.length() > 0) {
+            resultString = "?" + stringBuilder.substring(1);
+        }
+
+        return resultString;
+    }
+
+//    public Map setParameters(HttpServletRequest httpServletRequest) {
+//        Map<String, String[]> parametersMap = httpServletRequest.getParameterMap();
+//        String[] parametersObject;
+//        String parametersKey;
+//        String resultString = "";
+//
+//        Map resultMap = new HashMap();
+//
+//        StringBuilder stringBuilder = new StringBuilder();
+//
+//        for (int i = 0; i < ParametersList.values().length; i++) {
+//            parametersKey = ParametersList.values()[i].actualValue;
+//            parametersObject = parametersMap.get(parametersKey);
+//
+//            if (parametersObject != null && !"".equals(parametersObject[0])) {
+//                resultMap.put(parametersKey, parametersObject[0]);
+//                //stringBuilder.append("&").append(parametersKey).append("=").append(parametersObject[0]);
+//            }
+//        }
+//
+//        if (stringBuilder.length() > 0) {
+//            resultString = "?" + stringBuilder.substring(1);
+//        }
+//
+//        return resultMap;
+//    }
 
     /**
      * Sets path variables.
@@ -63,10 +114,6 @@ public class CommonService {
      */
     enum PathVariablesList {
         /**
-         * Path service name path variables list.
-         */
-        PATH_SERVICE_NAME("serviceName"),
-        /**
          * Path variables id path variables list.
          */
         PATH_VARIABLES_ID("id");
@@ -86,23 +133,23 @@ public class CommonService {
         /**
          * Parameters id parameters list.
          */
-        PARAMETERS_ID("id"),
+        PARAMETERS_ID("categoryId"),
         /**
          * Parameters name parameters list.
          */
-        PARAMETERS_NAME("name"),
+        PARAMETERS_NAME("nameLike"),
         /**
          * Parameters page parameters list.
          */
-        PARAMETERS_PAGE("page"),
+        PARAMETERS_PAGE("status"),
         /**
          * Parameters size parameters list.
          */
-        PARAMETERS_SIZE("size"),
+        PARAMETERS_SIZE("inUse"),
         /**
          * Parameters sort parameters list.
          */
-        PARAMETERS_SORT("sort");
+        PARAMETERS_SORT("createdBy");
 
         private String actualValue;
 

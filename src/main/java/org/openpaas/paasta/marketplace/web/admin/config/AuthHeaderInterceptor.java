@@ -1,8 +1,6 @@
 package org.openpaas.paasta.marketplace.web.admin.config;
 
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpRequest;
 import org.springframework.http.MediaType;
 import org.springframework.http.client.ClientHttpRequestExecution;
@@ -10,7 +8,8 @@ import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 import org.springframework.util.Base64Utils;
 
-import lombok.extern.slf4j.Slf4j;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 /**
  * Basic Oauth2 Token 을 header 에 넣어주는 Interceptor

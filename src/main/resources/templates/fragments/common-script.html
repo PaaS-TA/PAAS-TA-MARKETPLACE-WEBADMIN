@@ -30,7 +30,11 @@
 <script type="text/javascript" src="/static/js/jquery.treemenu.pack.js"></script>
 <link rel="stylesheet" type="text/css" href="/static/css/jquery.scrolling-tabs.min.css">
 <script type="text/javascript" src="/static/js/jquery.scrolling-tabs.min.js"></script>
+<script type="text/javascript" src="/static/js/common.js"></script>
 <script type="text/javascript">
+    var _csrf_token = $("meta[name='_csrf']").attr("content");
+    var _csrf_header = $("meta[name='_csrf_header']").attr("content");
+
     function reset(){
         var max=0
 

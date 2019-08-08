@@ -28,10 +28,11 @@
     <div class="content">
 
         <!-- cBox1 -->
-        <div class="cBox type1 appCnt-info">
-            <div class="cBox-hd">
+        <div class="cBox type1 appCnt-info" >
+            <div class="cBox-hd" >
                 <h4 class="c-tit">판매자 프로필 상세</h4>
             </div>
+            <!--/*@thymesVar id="spec" type=""*/-->
             <div class="cBox-cnt">
                 <!-- inner -->
                 <div class="in pd0 d_block">
@@ -45,27 +46,27 @@
                             <tbody>
                             <tr>
                                 <th scope="row">판매자명</th>
-                                <td>(주)인튜</td>
+                                <td th:text="${profiles.name}"></td>
                             </tr>
                             <tr>
                                 <th scope="row">유형</th>
-                                <td>기업</td>
+                                <td th:text="${profiles.type}"></td>
                             </tr>
                             <tr>
                                 <th scope="row">담당자명</th>
-                                <td>정승권</td>
+                                <td th:text="${profiles.manager}"></td>
                             </tr>
                             <tr>
                                 <th scope="row">메일주소</th>
-                                <td>jungsk@intune.co.kr</td>
+                                <td th:text="${profiles.email}"></td>
                             </tr>
                             <tr>
                                 <th scope="row">홈페이지주소</th>
-                                <td>www.intune.co.kr</td>
+                                <td th:text="${profiles.siteUrl}"></td>
                             </tr>
                             <tr>
                                 <th scope="row">등록일</th>
-                                <td>2018-12-12</td>
+                                <td th:text="${profiles.createdDate}"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -77,15 +78,25 @@
         </div>
         <!-- //cBox1 -->
 
-        <div class="cont_btnBox">
-            <button name="button" class="btn btn-color1 btn-md" type="button">수정</button>
-        </div>
+<!--        <div class="cont_btnBox">-->
+<!--            <button name="button" class="btn btn-color1 btn-md" type="button" onclick="moveProfilesUpdate()">수정</button>-->
+<!--        </div>-->
     </div>
     <!-- //content -->
 
-    <!-- // script 방법 1-->
+    <input type="hidden" id="id" name="id" th:value="${profiles.id}" />
     <script type="text/javascript">
-        console.log('::MarketPlace index Init::');
+        /*<![CDATA[*/
+        // ON LOAD
+        $(document).ready(function() {
+            console.log('::adminSellerProfile-detail::');
+        });
+
+        var moveProfilesUpdate = function() {
+            procMovePage("/softwares/page");
+        }
+
+        /*]]>*/
     </script>
 </div>
 

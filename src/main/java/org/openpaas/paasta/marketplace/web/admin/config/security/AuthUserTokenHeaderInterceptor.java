@@ -31,7 +31,7 @@ public class AuthUserTokenHeaderInterceptor implements ClientHttpRequestIntercep
             request.getHeaders().set(authTokenHeaderName, user.getToken());
         }
 
-        request.getHeaders().set(authTokenHeaderName, "hrjin");
+        request.getHeaders().set(authTokenHeaderName, "admin");
 
         return execution.execute(request, body);
     }

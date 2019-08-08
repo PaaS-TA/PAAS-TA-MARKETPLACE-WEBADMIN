@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-user}">
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-admin}">
 
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
@@ -49,7 +49,7 @@
                         <div class="form-group-area">
                             <div class="fm_label"><label for="" class="label">판매자명</label></div>
                             <div class="fm_box">
-                                <input type="text" placeholder="검색어를 입력해 주세요." th:field="*{nameLike}" onkeypress="if(event.keyCode==13) {search();}" id="nameLike" name="nameLike" style="width:400px;">
+                                <input type="text" placeholder="검색어를 입력해 주세요." style="width:400px;">
                             </div>
                         </div>
                     </div>
@@ -137,7 +137,7 @@
                         + "<td onclick=moveProfileDetail('"+content[i].id+"')>" + content[i].id + "</td>"
                         + "<td>" + content[i].type+ "</td>"
                         + "<td>" + content[i].manager + "</td>"
-                        + "<td>" + content[i].createdBy + "</td>"
+                        + "<td>" + content[i].createdDate + "</td>"
                         + "</tr>"
                     );
                 }

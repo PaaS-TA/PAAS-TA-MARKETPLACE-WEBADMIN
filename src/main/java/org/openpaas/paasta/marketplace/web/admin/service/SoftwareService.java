@@ -6,13 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.openpaas.paasta.marketplace.api.domain.Category;
 import org.openpaas.paasta.marketplace.api.domain.CustomPage;
 import org.openpaas.paasta.marketplace.api.domain.Software;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
@@ -22,19 +24,25 @@ import java.util.List;
 @Slf4j
 public class SoftwareService {
 
+    @Autowired
+    private final RestTemplate paasApiRest;
+    private static final Logger LOGGER = LoggerFactory.getLogger(SoftwareService.class);
+
     private final int PAGING_SIZE = 10;
     private final String SORT = "id,asc";
 
+    @SneakyThrows
+    public Software createSoftware(Software software) {
+        return paasApiRest.postForObject("/softwares", software, Software.class);
+    }
 
     @SneakyThrows
-    public List<Category> getCategories() {
+    public List<Category> getAdminCategories() {
         return paasApiRest.getForObject("/categories", List.class);
     }
 
-
-    private final RestTemplate paasApiRest;
-    public CustomPage<Software> getSoftwareList(String queryParamString) {
-        String url = UriComponentsBuilder.newInstance().path("/softwares/my/page" + queryParamString)
+    public CustomPage<Software> getAdminSoftwareList(String queryParamString) {
+        String url = UriComponentsBuilder.newInstance().path("/admin/softwares/page" + queryParamString)
                 .queryParam("size", PAGING_SIZE)
                 .queryParam("sort", SORT)
                 .build().encode()
@@ -46,14 +54,13 @@ public class SoftwareService {
         return customPage;
     }
 
-    /*
-    public Software getSoftware(Long id) {
-        String url = UriComponentsBuilder.newInstance().path("/softwares/{id}")
+    public Software getAdminSoftwares(Long id) {
+        String url = UriComponentsBuilder.newInstance().path("/admin/softwares/{id}")
                 .build()
                 .expand(id)
                 .toString();
 
         return paasApiRest.getForObject(url, Software.class);
     }
-     */
+
 }

@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 @Controller
-@RequestMapping(value = "/softwares")
+@RequestMapping(value = "/admin/softwares")
 @Slf4j
 @RequiredArgsConstructor
 public class SoftwareController {
@@ -26,35 +26,28 @@ public class SoftwareController {
     private final SoftwareService softwareService;
     private final CommonService commonService;
 
-    /**
-     * 상품 목록 조회
-     *
-     * @param httpServletRequest the httpServletRequest
-     * @return CustomPage<Software>
-     */
     @GetMapping
     @ResponseBody
-    public CustomPage<Software> getSoftwareList(HttpServletRequest httpServletRequest){
-        return softwareService.getSoftwareList(commonService.setParameters(httpServletRequest));
+    public CustomPage<Software> getAdminSoftwareList(HttpServletRequest httpServletRequest){
+        return softwareService.getAdminSoftwareList(commonService.setParameters(httpServletRequest));
     }
 
     @GetMapping(value = "/page")
-    public String getSoftwares(Model model, @AuthenticationPrincipal OAuth2User oauth2User, HttpSession httpSession, SoftwareSpecification spec, Authentication authentication) {
+    public String getAdminSoftwares(Model model, @AuthenticationPrincipal OAuth2User oauth2User, HttpSession httpSession, SoftwareSpecification spec, Authentication authentication) {
 //        httpSession.setAttribute("yourName", oauth2User.getAttributes().get("user_name"));
-        model.addAttribute("categories", softwareService.getCategories());
+        model.addAttribute("categories", softwareService.getAdminCategories());
         model.addAttribute("spec", new SoftwareSpecification());
         model.addAttribute("status", Software.Status.values());
-
         return "contents/software-list";
     }
 
-    /*
+
     @GetMapping(value = "/{id}")
     public String getSoftware(Model model, @PathVariable Long id) {
-        model.addAttribute("software", softwareService.getSoftware(id));
-        softwareService.getCategories();
+        model.addAttribute("software", softwareService.getAdminSoftwares(id));
+        softwareService.getAdminCategories();
         return "contents/software-detail";
     }
-    */
+
 
 }

@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-admin}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div class="rightCnt" layout:fragment="content">
+    <!-- title area -->
+    <div class="titWrap">
+        <h2 class="h2">카테고리</h2>
+    </div>
+    <!-- //title area -->
+
+    <!-- content -->
+    <div class="content">
+
+        <!-- cBox1 -->
+        <div class="cBox type2">
+            <div class="cBox-hd">
+                <h4 class="c-tit">카테고리 관리</h4>
+            </div>
+            <div class="cBox-cnt">
+                <div class="category_Box" id="categoryListArea">
+                    <ul id="totallll">
+                        <li class="test" th:each="category,index : ${categories}">
+                            <div class="cateWrap" th:id="${category.id}" th:onclick="'javascript:goCategoryDetail(\''+ ${category.id} +'\');'">
+                                <span th:text="${category.name}"></span>
+                                <div class="pull-right">
+                                    <div class="btn_seq">
+                                        <!--<button name="button" title="위로이동" class="btn ico-top only-ico" type="button" onclick="moveUpItem"><span class="ico_dtl">위로이동</span></button>-->
+                                        <button name="button" title="위로이동" class="btn ico-top only-ico" type="button" th:onclick="'javascript:moveUpItem(\''+ ${category.id} +'\');'"><span class="ico_dtl">위로이동</span></button>
+                                        <button name="button" title="아래로이동" class="btn ico-bottom only-ico" type="button" id="moveDownItem"><span class="ico_dtl">아래로이동</span></button>
+                                    </div>
+                                    <div class="btn_etc">
+                                        <button name="button" title="수정" class="btn ico-modi  only-ico" type="button"><span class="ico_dtl">수정</span></button>
+                                        <button name="button" title="삭제" class="btn ico-del only-ico" type="button"><span class="ico_dtl">삭제</span></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                    <div class="category_regi">
+                        <a class="cate_add" th:href="@{/categories/create}"><span>카테고리 추가</span></a>
+                        <!-- <p>현재 등록 된 카테고리가 없습니다. 카테고리를 추가하세요.</p> --><!-- 등록 된 카테고리 없을경우 노출 -->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //cBox1 -->
+        <div class="cont_btnBox">
+            <button name="button" class="btn btn-color1 btn-md" type="button" onclick="">변경사항 저장</button>
+        </div>
+    </div>
+    <!-- //content -->
+
+    <script type="text/javascript">
+
+        // var moveUpItem = function(count) {
+        //     alert("까꿍1" + count);
+        //     var srcDiv = $(".cateWrap");
+        //     var tgtDiv = srcDiv.prev();
+        //     if (tgtDiv[0]) {
+        //         tgtDiv.before(srcDiv);
+        //     }
+        //     var order = getOrder(".cateWrap", $(".tetest")[0]);
+        //     console.log(order);
+        // };
+
+
+        var goCategoryDetail = function (id) {
+            procMovePage("/categories/" + id);
+        };
+
+        var moveUpItem = function(count) {
+            var idStr = '#' + count;
+            var prevHtml = $(idStr).parent().prev().html(); //게임(4) 를 눌렀을 경우 <div class="cateWrap" id="1"><span>보안</span> ... </div>
+            if( prevHtml  ==  undefined) {
+                alert("최상위 리스트입니다!");
+                return;
+            }
+            var prevNum = $(idStr).parent().prev().children(".cateWrap").attr("id"); // 게임(4) 를 눌렀을 경우 이전 넘버는 1.
+            var currNum = $(idStr).attr("id"); // 게임(4) 를 눌렀을 경우 지금 넘버는 4.
+
+            var tmpHtml = prevHtml;
+            var currHtml = $(idStr).parent().html(); // 게임(4) 를 눌렀을 경우 <div class="cateWrap" id="4"><span>게임</span> ... </div>
+
+
+            var preStr = '#' + prevNum;
+            var currStr = '#' + currNum;
+
+            $(preStr).parent().html("'"+ currHtml + "'");
+            $(currStr).parent().html(tmpHtml);
+
+
+            $(idStr).parent().prev().html(currHtml);
+            $(idStr).parent().prev().children("div").attr("id","TEMP_TR");//id 값도 변경
+            $(idStr).attr("id",prevNum);
+            $("#TEMP_TR").attr("id",currNum);
+
+
+        };
+
+
+        $("#moveDownItem").on("click", function () {
+            alert("까꿍2");
+            var srcDiv = $(".cateWrap");
+            var tgtDiv = srcDiv.next();
+            if (tgtDiv[0]) {
+                tgtDiv.after(srcDiv);
+            }
+            var order = getOrder(".cateWrap", $(".tetest")[0]);
+            console.log(order);
+        });
+
+        function getOrder(selector, container) {
+            var order = [];
+            $(selector, container).each(function () {
+                order.push(this.id);
+            });
+            return order;
+        }
+
+        var getCategoryList = function() {
+            var reqUrl = "/categories";
+            procCallAjax(reqUrl, "GET", null, null, callbackGetCategoryList);
+        };
+
+        var callbackGetCategoryList = function(data) {
+            console.log("다타 ::: " + JSON.stringify(data));
+            // 상품 목록 조회
+            var categoryListArea = $("#categoryListArea");
+            var htmlString = [];
+            var categoryList = data;
+
+            var listLength = categoryList.length;
+
+            if(listLength > 0){
+                htmlString += "<ul>";
+
+                for(var i = 0; i < listLength; i++){
+                    //var goDetailUrl = "/softwares/{id}".replace("{id}", productList[i].id);
+                    htmlString.push(
+                        "<li>"
+                        + "<div class=\"cateWrap\"><span>" + categoryList[i].name +"</span>"
+                        + "<div class='pull-right'><div class='btn_seq'><button name='button' title='위로이동' class='btn ico-top only-ico' type='button'><span class='ico_dtl'>위로이동</span></button>"
+                        + "<button name='button' title='아래로이동' class='btn ico-bottom only-ico' type='button'><span class='ico_dtl'>아래로이동</span></button></div>"
+                        + "<div class='btn_etc'><button name='button' title='수정' class='btn ico-modi  only-ico' type='button'><span class='ico_dtl'>수정</span></button>"
+                        +"<button name='button' title='삭제' class='btn ico-del only-ico' type='button'><span class='ico_dtl'>삭제</span></button></div></div>"
+                        +"</li></ul>"
+                    )
+                }
+            }else{
+                htmlString = "<ul>"
+                    + "<li><p class='user_p'>상품이 존재하지 않습니다.</p></li>" + "</ul>"
+            }
+
+            categoryListArea.html(htmlString);
+
+        };
+
+
+        // ON LOAD
+        $(document.body).ready(function () {
+            console.log('::categories init::');
+            //getCategoryList();
+        });
+
+        /*]]>*/
+    </script>
+</div>
+</html>

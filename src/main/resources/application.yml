@@ -1,58 +1,47 @@
-spring:
-  application:
-    name: marketplace-web-admin
-
-logging:
-  level:
-    org.springframework.web: DEBUG
-    org.springframework.web.client.RestTemplate: TRACE
-    org.openpaas.paasta.marketplace.web.config.LoggingInterceptor: DEBUG
-
 server:
   port: 8778
 
+spring:
+  application:
+    name: marketplace-web-admin
+  servlet:
+    multipart:
+      #  최대 허용 파일 크기 세팅 Default값은 1MB이다.
+      max-file-size: 1024MB
+      max-request-size: 1024MB
+  session:
+    store-type: jdbc
+    jdbc:
+      # jpa의 ddl create와 동일, 한번 생성된 후에는 embedded로 바꿔주세옹
+      initialize-schema: always
+      # session table 생성 sql을 참조함 (실행시 테이블 생성됨)
+      schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+  mvc:
+    static-path-pattern: /static/**
+  datasource:
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://115.68.47.165:3306/marketplace?characterEncoding=utf8
+    username: root
+    password: Paasta@2019
+#    hikari:
+#      idle-timeout: 600000
+#      max-lifetime: 1800000
+#      connection-timeout: 30000
+  devtools:
+    restart:
+      enabled: false
 
-market:
-  place:
-    api:
-      uri: http://localhost:8777
-      authorization:
-        username: admin
-        password: xxxxxxxxx
-    org:
-      name: market-org
-    space:
-      name: market-space
-    quota:
-      name: market-quota
-    web:
-      seller:
-        uri: http://localhost:8780
-
-
-cf:
-  java:
-    client:
-      api:
-        uri: http://localhost:2222
-        authorization:
-          username: admin
-          password: xxxxxxxxx
-  uaa:
-    oauth:
-      info:
-        uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/userinfo
-      token:
-        check:
-          uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/check_token
-        access:
-          uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/oauth/token
-      logout:
-        uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/logout
-      authorization:
-        uri: https://uaa.XXX.XXX.XXX.XXX.xip.io/oauth/authorize
-      client:
-        id: marketclient
-        secret: clientsecret
+marketplace:
   api:
-    url: https://api.XXX.XXX.XXX.XXX.xip.io
+    url: http://localhost:8777
+    authorization:
+      username: admin
+      password: openpaasta
+  registration: cf
+  client-id: marketclient
+  client-secret: clientsecret
+  redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+  authorization-uri: https://uaa.101.55.50.208.xip.io/oauth/authorize
+  token-uri: https://uaa.101.55.50.208.xip.io/oauth/token
+  user-info-uri: https://uaa.101.55.50.208.xip.io/userinfo
+  jwk-set-uri: https://uaa.101.55.50.208.xip.io/token_keys

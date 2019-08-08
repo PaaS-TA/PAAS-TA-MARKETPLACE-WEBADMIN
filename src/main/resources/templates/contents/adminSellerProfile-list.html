@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-user}">
+
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div class="rightCnt" layout:fragment="content">
+    <!-- title area -->
+    <div class="titWrap">
+        <h2 class="h2">판매자 목록</h2>
+        <div class="breadWrap">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">판매자 관리</a></li>
+                <li class="active">판매자 목록</li><!-- 마지막 li -->
+            </ol>
+        </div>
+    </div>
+    <!-- //title area -->
+
+    <!-- content -->
+    <div class="content">
+        <!-- 검색 Form -->
+        <form th:action="@{/admin/profiles}" th:object="${spec}" action="#" id="ProfileForm" method="get">
+            <div class="searchWrap">
+                <div class="searchBox">
+                    <!-- Form 그룹 -->
+                    <div class="form-group">
+                        <div class="form-group-area">
+                            <div class="fm_label"><label for="" class="label">등록일자</label></div>
+                            <div class="fm_box w_auto">
+                                <div class="dateWrap">
+                                    <div class="date-inpt"><input type="text" class="datepicker" id="createdDateAfter" placeholder="YYYY-MM-DD"></div>
+                                    <span class="wave">~</span>
+                                    <div class="date-inpt"><input type="text" class="datepicker" id="createdDateBefore" placeholder="YYYY-MM-DD"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //Form 그룹 -->
+                    <!-- Form 그룹 -->
+                    <div class="form-group">
+                        <div class="form-group-area">
+                            <div class="fm_label"><label for="" class="label">판매자명</label></div>
+                            <div class="fm_box">
+                                <input type="text" placeholder="검색어를 입력해 주세요." th:field="*{nameLike}" onkeypress="if(event.keyCode==13) {search();}" id="nameLike" name="nameLike" style="width:400px;">
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //Form 그룹 -->
+                    <button type="button" name="button" class="btn btn-sch" title="검색" id="searchBtn"><span class="ico">검색</span></button>
+                </div>
+            </div>
+        </form>
+
+        <!-- //검색 Form -->
+
+        <div class="cont-titWrap mt30">
+            <h3 class="h-tit3">총 건수 <span class="point4" id="totalElements"></span></h3>
+        </div>
+
+        <!-- 테이블 -->
+        <div class="tbl type1 pt20">
+            <table class="table">
+                <colgroup>
+                    <col style="width:auto%;">
+                    <col style="width:auto%;">
+                    <col style="width:auto%;">
+                    <col style="width:auto%;">
+                    <col style="width:auto%;">
+                    <col style="width:auto%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">판매자명</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">유형</th>
+                    <th scope="col">담당자명</th>
+                    <th scope="col">등록일</th>
+                </tr>
+                </thead>
+                <tbody id="adminProfileArea">
+                </tbody>
+            </table>
+        </div>
+        <!-- //테이블 -->
+
+        <!-- page -->
+        <nav class="pagiWrap">
+            <ul class="pagination" id="pageNumberList">
+            </ul>
+        </nav>
+        <!-- //page -->
+
+    </div>
+    <!-- //content -->
+    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+    <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
+        // ON LOAD
+        $(document).ready(function() {
+            console.log('::Init::');
+            getProfileList();
+        });
+
+
+        var getProfileList = function () {
+            //TODO :: Add [createdDateAfter]
+            var reqUrl = "/admin/profiles";
+            procCallAjax(reqUrl, "GET", null, null, callbackProfileList);
+        };
+
+
+        var callbackProfileList = function(data){
+            //::totalElements::
+            $("#totalElements").text("(" + data.totalElements + ")");
+
+            var adminProfileList = $("#adminProfileArea");
+            var htmlString = [];
+            var content = data.content;
+
+            var listLength = content.length;
+
+            if(listLength > 0){
+                for(var i = 0; i < listLength; i++){
+                    htmlString.push(
+                        "<tr>"
+                        + "<td>" + i + "</td>"
+                        + "<td>" + content[i].name+ "</td>"
+                        + "<td onclick=moveProfileDetail('"+content[i].id+"')>" + content[i].id + "</td>"
+                        + "<td>" + content[i].type+ "</td>"
+                        + "<td>" + content[i].manager + "</td>"
+                        + "<td>" + content[i].createdBy + "</td>"
+                        + "</tr>"
+                    );
+                }
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='8'><p class='user_p'>판매자가 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+
+            adminProfileList.html(htmlString);
+
+            //::page::
+            var pageNumberList = $("#pageNumberList");
+            var htmlStringPage = "<li class='first disabled'><a href='#'>맨 처음</a></li>" + "<li class='prev'><a href='#'>이전</a></li>";
+            var pageTotalNumber = data.totalElements;
+            var pageSize = data.size;
+
+            var pageCount = Math.ceil(pageTotalNumber/pageSize);
+            console.log("::pageCount :: " + pageCount);
+
+            if(pageCount > 0){
+                for(var page = 0; page < pageCount; page++){
+                    htmlStringPage += "<li class='active'><a href='#'>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
+                }
+            }
+            htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
+            pageNumberList.html(htmlStringPage);
+
+        }
+
+
+        //eventBtn
+        $("#searchBtn").on("click", function () {
+            alert("Add search condition");
+            getProfileList();
+        });
+
+        //eventNameLike
+        var search = function() {
+            getProfileList();
+        };
+
+
+        //move Detail
+        var moveProfileDetail = function(id) {
+            console.log(id);
+            procMovePage("/admin/profiles/{id}".replace("{id}", id));
+        }
+
+
+        /*]]>*/
+    </script>
+</div>
+<!--</div>-->
+</html>

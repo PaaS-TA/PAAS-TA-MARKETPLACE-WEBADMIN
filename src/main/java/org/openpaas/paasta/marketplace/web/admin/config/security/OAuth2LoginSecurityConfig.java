@@ -37,12 +37,12 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
         turnOffSslChecking();
         http.antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/login/**", "/error/**", "/static/**")
-                .permitAll()
-                .antMatchers("/admin/**").hasRole("Admin")
-                .anyRequest().authenticated().and()
-                .oauth2Login().loginPage("/login").defaultSuccessUrl("/softwares", true).permitAll()
-                .and().logout().logoutSuccessUrl("/login");
+                .antMatchers("/**", "/login/**", "/error/**", "/static/**")
+                .permitAll();
+//                .antMatchers("/admin/**").hasRole("Admin")
+//                .anyRequest().authenticated().and()
+//                .oauth2Login().loginPage("/login").defaultSuccessUrl("/softwares", true).permitAll()
+//                .and().logout().logoutSuccessUrl("/login");
     }
 
 

@@ -49,6 +49,19 @@ public class CategoryController {
 
 
     /**
+     * 카테고리 등록
+     *
+     * @param category the category
+     * @return Category
+     */
+    @PostMapping
+    @ResponseBody
+    public Category createCategory(@RequestBody Category category){
+        return categoryService.createCategory(category);
+    }
+
+
+    /**
      * 카테고리 상세 조회
      *
      * @param model the model

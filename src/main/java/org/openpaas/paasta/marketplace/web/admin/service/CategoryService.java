@@ -37,4 +37,9 @@ public class CategoryService {
 
         return getCategory(id);
     }
+
+
+    public Category createCategory(Category category) {
+        return paasApiRest.postForObject("/admin/categories", category, Category.class);
+    }
 }

@@ -274,20 +274,15 @@
 
         }
 
-
         //move::SoftwareDetail
         var moveSoftwareDetail = function(id) {
-            console.log(id);
-            procMovePage("/admin/profiles/{id}".replace("{id}", id));
+            procMovePage("/admin/softwares/{id}".replace("{id}", id));
         }
-
 
         //eventBtn
         $("#searchBtn").on("click", function () {
             getSoftwareList();
         });
-
-
 
     </script>
 </div>

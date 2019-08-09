@@ -27,4 +27,14 @@ public class CategoryService {
 
         return paasApiRest.getForObject(url, Category.class);
     }
+
+    public Category modifyCategory(Long id, Category category) {
+        String url = UriComponentsBuilder.newInstance().path("/admin/categories/{id}")
+                .build()
+                .expand(id)
+                .toString();
+        paasApiRest.put(url, category);
+
+        return getCategory(id);
+    }
 }

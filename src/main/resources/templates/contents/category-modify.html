@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-admin}">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta th:name="_csrf" th:content="${_csrf.token}"/>
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<!-- rignt Cnt -->
+<div class="rightCnt" layout:fragment="content">
+    <!-- title area -->
+    <div class="titWrap">
+        <h2 class="h2">카테고리 수정</h2>
+        <div class="breadWrap">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">카테고리 관리</a></li>
+                <li><a href="#">카테고리 수정</a></li><!-- 마지막 li -->
+            </ol>
+        </div>
+    </div>
+    <!-- //title area -->
+
+    <!-- content -->
+    <div class="content">
+
+        <!-- cBox1 -->
+        <div class="cBox type1 appCnt-info">
+            <div class="cBox-hd">
+                <h4 class="c-tit">카테고리 수정</h4>
+            </div>
+            <div class="cBox-cnt">
+                <div class="appCategoryBox">
+                    <div class="cate_right">
+                        <h4 class="c-tit-in">카테고리 수정</h4>
+                        <!-- table -->
+                        <div class="tbw type1">
+                            <table class="table">
+                                <colgroup>
+                                    <col style="width:20%;">
+                                    <col style="width:auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">카테고리 명</th>
+                                    <td><input class="form-control" type="text" th:value="${category.name}" id="categoryName"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">설명</th>
+                                    <td>
+                                        <div class="tbw_inner_txt">
+                                            <textarea name="name" style="height:150px;" th:text="${category.description}" id="categoryDesc"></textarea>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- //table -->
+                        <div class="cont_btnBox">
+                            <button name="button" class="btn btn-color1 btn-md" id="saveBtn" type="button">저장</button>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <!-- //cBox1 -->
+    </div>
+    <!-- //content -->
+    <input type="hidden" id="categoryId" th:value="${category.id}" />
+
+    <script type="text/javascript">
+
+        $("#saveBtn").on("click", function () {
+           modifyCategory();
+        });
+
+        var modifyCategory = function() {
+            var categoryId = $("#categoryId").val();
+            var categoryName = $("#categoryName").val();
+            var categoryDesc = $("#categoryDesc").val();
+
+            var reqUrl = "/categories/" + categoryId;
+            var reqParam = {
+                "name": categoryName,
+                "description": categoryDesc
+            };
+
+            console.log("값 뭐 받아오니? 이름 :: " + categoryName + "& 설명 :: " + categoryDesc);
+
+            procCallAjax(reqUrl, "PUT", JSON.stringify(reqParam), null, callbackModifyCategory);
+        };
+
+        var callbackModifyCategory = function(data) {
+            console.log("데이타는??? " + JSON.stringify(data));
+            procMovePage("/categories");
+        };
+
+        // ON LOAD
+        $(document).ready(function () {
+
+        });
+    </script>
+</div>
+<!-- rignt Cnt -->
+</html>

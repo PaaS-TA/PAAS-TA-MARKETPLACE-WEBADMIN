@@ -27,7 +27,7 @@
             </div>
             <div class="cBox-cnt">
                 <div class="category_Box" id="categoryListArea">
-                    <ul id="categoryUl">
+                    <ul id="categoryUl" th:if="${!categories.isEmpty()}">
                         <li th:each="category,index : ${categories}">
                             <div class="cateWrap">
                                 <span th:text="${category.name}" th:onclick="'javascript:goCategoryDetail(\''+ ${category.id} +'\');'"></span>
@@ -37,8 +37,8 @@
                                         <button name="button" title="아래로이동" class="btn ico-bottom only-ico" type="button" th:onclick="'javascript:moveDownItem(\''+ ${category.id} +'\');'" th:id="'btn_down_' + ${category.id}"><span class="ico_dtl">아래로이동</span></button>
                                     </div>
                                     <div class="btn_etc">
-                                        <button name="button" title="수정" class="btn ico-modi  only-ico" type="button"><span class="ico_dtl">수정</span></button>
-                                        <button name="button" title="삭제" class="btn ico-del only-ico" type="button"><span class="ico_dtl">삭제</span></button>
+                                        <button name="button" title="수정" class="btn ico-modi  only-ico" type="button"><span class="ico_dtl" th:onclick="'javascript:updateCategoryBtn(\''+ ${category.id} +'\');'">수정</span></button>
+                                        <button name="button" title="삭제" class="btn ico-del only-ico" type="button"><span class="ico_dtl" th:onclick="'javascript:deleteCategoryBtn(\''+ ${category.id} +'\');'">삭제</span></button>
                                     </div>
                                 </div>
                             </div>
@@ -46,14 +46,10 @@
                     </ul>
                     <div class="category_regi">
                         <a class="cate_add" th:href="@{/admin/categories/create}"><span>카테고리 추가</span></a>
-                        <!-- <p>현재 등록 된 카테고리가 없습니다. 카테고리를 추가하세요.</p> --><!-- 등록 된 카테고리 없을경우 노출 -->
+                         <p th:if="${categories.isEmpty()}">현재 등록 된 카테고리가 없습니다. 카테고리를 추가하세요.</p> <!-- 등록 된 카테고리 없을경우 노출 -->
                     </div>
                 </div>
             </div>
-        </div>
-        <!-- //cBox1 -->
-        <div class="cont_btnBox">
-            <button name="button" class="btn btn-color1 btn-md" type="button" th:onclick="saveBtn()">변경사항 저장</button>
         </div>
     </div>
     <!-- //content -->
@@ -61,9 +57,6 @@
     <input type="hidden" id="directionDown" name="directionDown" th:value="${directionDown}">
 
     <script type="text/javascript">
-
-        var FINAL_DIRECTION;
-        var FINAL_ID;
 
         // 위로 이동 버튼 BIND
         var moveUpItem = function(count) {
@@ -78,8 +71,8 @@
                 alert("최상위 버튼");
             }
 
-            FINAL_DIRECTION = $("#directionUp").val();
-            FINAL_ID = count;
+            var reqUrl = "/admin/categories/" + count + "/" + $("#directionUp").val();
+            procCallAjax(reqUrl, "PUT", null, null, callbackUpdatedSeqCategory);
 
         };
 
@@ -96,19 +89,18 @@
             }else {
                 alert("최하위 버튼");
             }
-            //var order = getOrder(".listDiv", $("#wrap")[0]);
-            //console.log(order);
-            FINAL_DIRECTION = $("#directionDown").val();
-            FINAL_ID = count;
+
+            var reqUrl = "/admin/categories/" + count + "/" + $("#directionDown").val();
+            procCallAjax(reqUrl, "PUT", null, null, callbackUpdatedSeqCategory);
+
         };
 
-        function getOrder(selector, container) {
-            var order = [];
-            $(selector, container).each(function () {
-                order.push(this.id);
-            });
-            return order;
-        }
+        // update sequence callback function
+        var callbackUpdatedSeqCategory = function(data) {
+            console.log("data :::" + JSON.stringify(data));
+            procMovePage("/admin/categories");
+        };
+
 
 
         // 카테고리 상세 조회
@@ -116,19 +108,22 @@
             procMovePage("/admin/categories/" + id);
         };
 
-
-        // save update category's sequence
-        var saveBtn = function() {
-            console.log("마지막 춤은 나와 함께~~ " + FINAL_ID + "/" + FINAL_DIRECTION);
-
-            var reqUrl = "/admin/categories/" + FINAL_ID + "/" + FINAL_DIRECTION;
-            procCallAjax(reqUrl, "PUT", null, null, callbackUpdatedSeqCategory);
+        // update category page
+        var updateCategoryBtn = function(id) {
+            procMovePage("/admin/categories/" + id + "/modify");
         };
 
-        var callbackUpdatedSeqCategory = function(data) {
-            console.log("data :::" + JSON.stringify(data));
+
+        // delete category
+        var deleteCategoryBtn = function(id) {
+            procCallAjax("/admin/categories/" + id, "DELETE", null, null, callbackDeleteCategory);
+        };
+
+        // delete category callback
+        var callbackDeleteCategory = function(data) {
             procMovePage("/admin/categories");
         };
+
 
         // ON LOAD
         $(document.body).ready(function () {

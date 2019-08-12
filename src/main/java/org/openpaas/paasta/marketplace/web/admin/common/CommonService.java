@@ -139,17 +139,25 @@ public class CommonService {
          */
         PARAMETERS_NAME("nameLike"),
         /**
-         * Parameters page parameters list.
+         * Parameters status parameters list.
          */
-        PARAMETERS_PAGE("status"),
+        PARAMETERS_STATUS("status"),
         /**
-         * Parameters size parameters list.
+         * Parameters useYn parameters list.
          */
-        PARAMETERS_SIZE("inUse"),
+        PARAMETERS_INUSE("inUse"),
         /**
          * Parameters sort parameters list.
          */
-        PARAMETERS_SORT("createdBy");
+        PARAMETERS_CREATE_DATE("createdBy"),
+        /**
+         * Parameters size parameters list.
+         */
+        PARAMETERS_PAGING_SIZE("size"),
+        /**
+         * Parameters sort parameters list.
+         */
+        PARAMETERS_SORT("sort");
 
         private String actualValue;
 

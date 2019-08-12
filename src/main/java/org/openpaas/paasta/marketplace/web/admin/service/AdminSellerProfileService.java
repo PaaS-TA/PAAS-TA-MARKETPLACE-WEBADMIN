@@ -25,10 +25,6 @@ public class AdminSellerProfileService {
 
     @Autowired
     private final RestTemplate paasApiRest;
-    private static final Logger LOGGER = LoggerFactory.getLogger(AdminSellerProfileService.class);
-
-    private final int PAGING_SIZE = 10;
-    private final String SORT = "id,asc";
 
     @SneakyThrows
     public List getProfiles() {
@@ -39,16 +35,8 @@ public class AdminSellerProfileService {
 
     //Page::Profile
     public CustomPage<Profile> getProfileList(String queryParamString) {
-
-        String url = UriComponentsBuilder.newInstance().path("/admin/profiles/page" + queryParamString)
-                .queryParam("size", PAGING_SIZE)
-                .queryParam("sort", SORT)
-                .build().encode()
-                .toString();
-
-        ResponseEntity<CustomPage<Profile>> responseEntity = paasApiRest.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Profile>>() {});
+        ResponseEntity<CustomPage<Profile>> responseEntity = paasApiRest.exchange("/admin/profiles/page" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Profile>>() {});
         CustomPage<Profile> customPage = responseEntity.getBody();
-        Page<Profile> page = customPage.toPage();
         return customPage;
 
     }

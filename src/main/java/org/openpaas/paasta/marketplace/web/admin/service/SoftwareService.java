@@ -26,10 +26,6 @@ public class SoftwareService {
 
     @Autowired
     private final RestTemplate paasApiRest;
-    private static final Logger LOGGER = LoggerFactory.getLogger(SoftwareService.class);
-
-    private final int PAGING_SIZE = 10;
-    private final String SORT = "id,asc";
 
     @SneakyThrows
     public Software createSoftware(Software software) {
@@ -42,15 +38,8 @@ public class SoftwareService {
     }
 
     public CustomPage<Software> getAdminSoftwareList(String queryParamString) {
-        String url = UriComponentsBuilder.newInstance().path("/admin/softwares/page" + queryParamString)
-                .queryParam("size", PAGING_SIZE)
-                .queryParam("sort", SORT)
-                .build().encode()
-                .toString();
-
-        ResponseEntity<CustomPage<Software>> responseEntity = paasApiRest.exchange(url, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Software>>() {});
+        ResponseEntity<CustomPage<Software>> responseEntity = paasApiRest.exchange("/admin/softwares/page" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Software>>() {});
         CustomPage<Software> customPage = responseEntity.getBody();
-        Page<Software> page = customPage.toPage();
         return customPage;
     }
 

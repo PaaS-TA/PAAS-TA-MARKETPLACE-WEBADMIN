@@ -177,6 +177,9 @@
     <!-- //content -->
     <!-- //content -->
     <script type="text/javascript">
+        var PAGING_SIZE = 10;
+        var SORT = "id,asc";
+
         // ON LOAD
         $(document).ready(function() {
             console.log('::MarketPlace index Init::');
@@ -218,7 +221,7 @@
                 nameLike = '';
             }
 
-            var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&nameLike=" + nameLike + "&status=" + status + "&inUse=" + inUse + "&createdBy=" + createdBy;
+            var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&nameLike=" + nameLike + "&status=" + status + "&inUse=" + inUse + "&createdBy=" + createdBy + "&size=" + PAGING_SIZE + "&sort=" + SORT;
             procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
         };
 

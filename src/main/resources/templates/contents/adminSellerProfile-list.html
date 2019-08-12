@@ -101,8 +101,10 @@
 
     </div>
     <!-- //content -->
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <script th:inline="javascript" type="text/javascript">
+        var PAGING_SIZE = 10;
+        var SORT = "id,asc";
+
         /*<![CDATA[*/
         // ON LOAD
         $(document).ready(function() {
@@ -121,7 +123,7 @@
 
             console.log('::nameLike ::' + nameLike);
 
-            var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike;
+            var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike + "&size=" + PAGING_SIZE + "&sort=" + SORT;
             // var reqUrl = "/admin/profiles";
             procCallAjax(reqUrl, "GET", null, null, callbackProfileList);
         };
@@ -141,9 +143,9 @@
                 for(var i = 0; i < listLength; i++){
                     htmlString.push(
                         "<tr>"
-                        + "<td>" + i + "</td>"
+                        + "<td>" + (i+1) + "</td>"
                         + "<td>" + content[i].name+ "</td>"
-                        + "<td onclick=moveProfileDetail('"+content[i].id+"')>" + content[i].id + "</td>"
+                        + "<td><a href='javascript:void(0);' onclick=\"moveProfileDetail(\'"+content[i].id+"')\">" + content[i].id + "</a></td>"
                         + "<td>" + content[i].type+ "</td>"
                         + "<td>" + content[i].manager + "</td>"
                         + "<td>" + content[i].createdDate + "</td>"
@@ -174,7 +176,7 @@
             htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
             pageNumberList.html(htmlStringPage);
 
-        }
+        };
 
 
         //eventBtn

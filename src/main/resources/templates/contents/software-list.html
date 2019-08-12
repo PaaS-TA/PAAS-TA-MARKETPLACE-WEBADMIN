@@ -176,7 +176,6 @@
     </div>
     <!-- //content -->
     <!-- //content -->
-    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
     <script type="text/javascript">
         // ON LOAD
         $(document).ready(function() {
@@ -197,7 +196,7 @@
                 ":: inUse :: " + inUse +
                 ":: createdBy :: " + createdBy +
                 ":: nameLike :: " + nameLike
-            )
+            );
 
             if (categoryId === 'ALL' || categoryId === '') {
                 categoryId = '';
@@ -272,12 +271,12 @@
             htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
             pageNumberList.html(htmlStringPage);
 
-        }
+        };
 
         //move::SoftwareDetail
         var moveSoftwareDetail = function(id) {
             procMovePage("/admin/softwares/{id}".replace("{id}", id));
-        }
+        };
 
         //eventBtn
         $("#searchBtn").on("click", function () {

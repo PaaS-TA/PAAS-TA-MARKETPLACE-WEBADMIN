@@ -28,7 +28,7 @@ public class CategoryService {
         return paasApiRest.getForObject(url, Category.class);
     }
 
-    public Category modifyCategory(Long id, Category category) {
+    public Category updateCategory(Long id, Category category) {
         String url = UriComponentsBuilder.newInstance().path("/admin/categories/{id}")
                 .build()
                 .expand(id)
@@ -41,5 +41,19 @@ public class CategoryService {
 
     public Category createCategory(Category category) {
         return paasApiRest.postForObject("/admin/categories", category, Category.class);
+    }
+
+    public void deleteCategory(Long id) {
+        paasApiRest.delete("/admin/categories/" + id);
+    }
+
+    public Category updateSeq(Long id, Category.Direction direction) {
+        String url = UriComponentsBuilder.newInstance().path("/admin/categories/{id}/{direction}")
+                .build()
+                .expand(id, direction)
+                .toString();
+        paasApiRest.put(url, null);
+
+        return getCategory(id);
     }
 }

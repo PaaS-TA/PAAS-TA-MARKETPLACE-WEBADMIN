@@ -82,7 +82,7 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" name="button" class="btn btn-color1">확인</button>
+                                            <button type="submit" name="button" class="btn btn-color1" id="confirmBtn">확인</button>
                                             <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
                                         </div>
                                     </div>
@@ -100,11 +100,19 @@
     <!-- //content -->
     <input type="hidden" id="categoryId" th:value="${category.id}" />
     <script type="text/javascript">
-        $("#modifyCategory").on("click", function () {
-            var categoryId = $("#categoryId").val();
+        var categoryId = $("#categoryId").val();
 
-           procMovePage("/categories/" + categoryId + "/modify");
+        $("#modifyCategory").on("click", function () {
+           procMovePage("/admin/categories/" + categoryId + "/modify");
         });
+
+        $("#confirmBtn").on("click", function () {
+            procCallAjax("/admin/categories/" + categoryId, "DELETE", null, null, callbackDeleteCategory);
+        });
+
+        var callbackDeleteCategory = function(data) {
+            procMovePage("/admin/categories");
+        };
 
         // ON LOAD
         $(document).ready(function () {

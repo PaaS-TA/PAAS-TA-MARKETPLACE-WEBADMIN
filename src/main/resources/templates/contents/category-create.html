@@ -82,7 +82,7 @@
             var categoryName = $("#categoryName").val();
             var categoryDesc = $("#categoryDesc").val();
 
-            var reqUrl = "/categories";
+            var reqUrl = "/admin/categories";
             var reqParam = {
                 "name": categoryName,
                 "description": categoryDesc
@@ -92,7 +92,7 @@
         };
 
         var callbackCreateCategory = function(data) {
-            procMovePage("/categories");
+            procMovePage("/admin/categories");
         };
     </script>
 </div>

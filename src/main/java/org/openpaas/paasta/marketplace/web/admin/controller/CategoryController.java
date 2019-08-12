@@ -1,6 +1,5 @@
 package org.openpaas.paasta.marketplace.web.admin.controller;
 
-
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openpaas.paasta.marketplace.api.domain.Category;
@@ -10,9 +9,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @Slf4j
 @Controller
-@RequestMapping(value = "/categories")
+@RequestMapping(value = "/admin/categories")
 @RequiredArgsConstructor
 public class CategoryController {
 
@@ -20,12 +21,14 @@ public class CategoryController {
     public CategoryService categoryService;
 
     /**
-     * 카테고리 메인페이지로 이동
+     * 카테고리 메인 페이지로 이동 및 목록 조회
      *
      * @return ModelAndView(Spring 클래스)
      */
     @GetMapping
     public String getCategoryListMain(Model model) {
+        model.addAttribute("directionUp", Category.Direction.Up);
+        model.addAttribute("directionDown", Category.Direction.Down);
         model.addAttribute("categories", categoryService.getCategoryList());
         return "contents/category-list";
     }
@@ -98,8 +101,35 @@ public class CategoryController {
      */
     @PutMapping(value = "/{id}")
     @ResponseBody
-    public Category modifyCategory(@PathVariable Long id, @RequestBody Category category){
-        return categoryService.modifyCategory(id, category);
+    public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
+        return categoryService.updateCategory(id, category);
+    }
+
+    /**
+     * 카테고리 삭제
+     *
+     * @param id the id
+     */
+    @DeleteMapping("/{id}")
+    @ResponseBody
+    public List<Category> deleteCategory(@PathVariable Long id){
+        categoryService.deleteCategory(id);
+
+        return categoryService.getCategoryList();
+    }
+
+
+    /**
+     * 카테고리 방향 이동
+     *
+     * @param id the id
+     * @param direction the direction
+     * @return Category
+     */
+    @PutMapping("/{id}/{direction}")
+    @ResponseBody
+    public Category updateSeq(@PathVariable Long id, @PathVariable Category.Direction direction){
+        return categoryService.updateSeq(id, direction);
     }
 
 }

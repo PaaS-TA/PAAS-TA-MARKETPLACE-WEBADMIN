@@ -88,7 +88,7 @@
             var categoryName = $("#categoryName").val();
             var categoryDesc = $("#categoryDesc").val();
 
-            var reqUrl = "/categories/" + categoryId;
+            var reqUrl = "/admin/categories/" + categoryId;
             var reqParam = {
                 "name": categoryName,
                 "description": categoryDesc
@@ -101,7 +101,7 @@
 
         var callbackModifyCategory = function(data) {
             console.log("데이타는??? " + JSON.stringify(data));
-            procMovePage("/categories");
+            procMovePage("/admin/categories");
         };
 
         // ON LOAD

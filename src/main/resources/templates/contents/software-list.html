@@ -40,22 +40,22 @@
 
         <!-- 검색 Form -->
         <div class="searchWrap">
-            <form th:object="${spec}" action="#" id="searchSoftwaresForm" method="get">
+            <div th:object="${spec}" id="searchSoftwaresForm">
                 <div class="searchBox fm-row-2"><!--검색폼 두줄일 때 class="fm-row-2"-->
                     <!-- Form 그룹 -->
                     <div class="form-group">
                         <div class="form-group-area">
                             <div class="fm_box w_auto pr10">
-                                <select id="" name="">
-                                    <option value="">등록일</option>
-                                    <option value="">승인일</option>
+                                <select id="datePeriod" name="" th:onchange="selectDate()">
+                                    <option id="createdDateOpt" value="createdDateOpt" selected="selected">등록일</option>
+                                    <option id="approveDateOpt" value="approveDateOpt">승인일</option>
                                 </select>
                             </div>
                             <div class="fm_box w_auto">
                                 <div class="dateWrap">
-                                    <div class="date-inpt"><input type="text" class="datepicker" placeholder="YYYY-MM-DD"></div>
+                                    <div class="date-inpt"><input type="text" class="datepicker" placeholder="YYYY-MM-DD" id="startDatePicker" value=""></div>
                                     <span class="wave">~</span>
-                                    <div class="date-inpt"><input type="text" class="datepicker" placeholder="YYYY-MM-DD"></div>
+                                    <div class="date-inpt"><input type="text" class="datepicker" placeholder="YYYY-MM-DD" id="endDatePicker" value=""></div>
                                 </div>
                             </div>
                         </div>
@@ -128,7 +128,7 @@
                     <!-- //Form 그룹 -->
                     <button type="button" name="button" class="btn btn-sch" title="검색" id="searchBtn"><span class="ico">검색</span></button>
                 </div>
-            </form>
+            </div>
         </div>
         <!-- //검색 Form -->
 
@@ -166,19 +166,18 @@
             </table>
         </div>
         <!-- //테이블 -->
-
-        <!-- page -->
-        <nav class="pagiWrap" id="pageNumberList">
-            <ul class="pagination">
+        <nav class="pagiWrap">
+            <ul class="pagination" id="pageNumberList">
             </ul>
         </nav>
-        <!-- //page -->
+
     </div>
     <!-- //content -->
     <!-- //content -->
     <script type="text/javascript">
         var PAGING_SIZE = 10;
         var SORT = "id,asc";
+        var DATE_DIVISION = $("#datePeriod option:selected").val();       //등록일
 
         // ON LOAD
         $(document).ready(function() {
@@ -187,7 +186,7 @@
         });
 
         var getSoftwareList = function () {
-            //TODO :: Add [createdDateAfter]
+            var dateParameter;                                              //날짜
             var categoryId = $("#categoryId option:selected").val();        //카테고리
             var status = $("#status option:selected").val();                //전시여부
             var inUse = $("#inUse option:selected").val();                  //승인여부
@@ -221,7 +220,31 @@
                 nameLike = '';
             }
 
-            var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&nameLike=" + nameLike + "&status=" + status + "&inUse=" + inUse + "&createdBy=" + createdBy + "&size=" + PAGING_SIZE + "&sort=" + SORT;
+            // datepicker
+            var startDate = $("#startDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+            console.log("startDate : "  + startDate);
+
+            var endDate = $("#endDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+            console.log("endDate : "  + endDate);
+
+
+            if(DATE_DIVISION === $("#createdDateOpt").val()){
+                if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
+                    dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
+                }else{
+                    dateParameter = "&createdDateAfter=" + startDate + "T00:00:00.000Z" + "&createdDateBefore=" + endDate + "T23:59:59.000Z";
+                }
+            }else{
+                if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
+                    dateParameter = "&statusModifiedDateAfter=" + '' + "&statusModifiedDateBefore=" + '';
+                }else{
+                    dateParameter = "&statusModifiedDateAfter=" + startDate + "T00:00:00.000Z" + "&statusModifiedDateBefore=" + endDate + "T23:59:59.000Z";
+                }
+            }
+
+            var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&nameLike=" + nameLike + "&status=" + status + "&inUse=" + inUse
+                            + "&createdBy=" + createdBy + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
+
             procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
         };
 
@@ -239,9 +262,9 @@
                 for(var i = 0; i < listLength; i++){
                     htmlString.push(
                         "<tr>"
-                        + "<td>" + i + "</td>"
+                        + "<td>" + (i + 1)  + "</td>"
                         + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
-                        + "<td onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</td>"
+                        + "<td><a href='javascript:void(0);' onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].createdBy + "</td>"
                         + "<td>" + content[i].createdDate + "</td>"
                         + "<td>" + content[i].status + "</td>"
@@ -285,6 +308,21 @@
         $("#searchBtn").on("click", function () {
             getSoftwareList();
         });
+
+
+        // search enter
+        var search = function() {
+            getSoftwareList();
+        };
+
+
+        //selectDate(date range classification)
+        var selectDate = function() {
+            var selectedValue = $("#datePeriod option:selected").val();
+            console.log("CreateDate or ApprovalDate ::: " + selectedValue);
+            DATE_DIVISION = selectedValue;
+        };
+
 
     </script>
 </div>

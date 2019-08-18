@@ -3,8 +3,8 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-admin}">
 
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<meta th:name="_csrf" th:content="${_csrf.token}"/>
-<meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>
+<!--<meta th:name="_csrf" th:content="${_csrf.token}"/>
+<meta th:name="_csrf_header" th:content="${_csrf.headerName}"/>-->
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
 </th:block>
@@ -101,7 +101,7 @@
 
         var callbackModifyCategory = function(data) {
             console.log("데이타는??? " + JSON.stringify(data));
-            procMovePage("/admin/categories");
+            procMovePage("/admin/categories/" + $("#categoryId").val());
         };
 
         // ON LOAD

@@ -24,9 +24,9 @@ var procCallAjax = function(reqUrl, reqMethod, param, preFunc, callback) {
         contentType: "application/json",
         beforeSend: function(xhr){
             // preFunc
-            if(_csrf_header && _csrf_token) {
-                xhr.setRequestHeader(_csrf_header, _csrf_token);
-            }
+            // if(_csrf_header && _csrf_token) {
+            //     xhr.setRequestHeader(_csrf_header, _csrf_token);
+            // }
         },
         success: function(data) {
             callback(data);

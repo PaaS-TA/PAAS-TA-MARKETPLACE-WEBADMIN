@@ -39,12 +39,13 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
                 .csrf().disable()
                 .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/**", "/login/**", "/error/**", "/static/**")
-                .permitAll();
-//                .antMatchers("/admin/**").hasRole("Admin")
-//                .anyRequest().authenticated().and()
-//                .oauth2Login().loginPage("/login").defaultSuccessUrl("/softwares", true).permitAll()
-//                .and().logout().logoutSuccessUrl("/login");
+                .antMatchers("/", "/index", "/login/**", "/error/**", "/static/**")
+                .permitAll()
+                //.antMatchers("/**").hasRole("USER").anyRequest().permitAll()
+                //.antMatchers("/admin/**").hasRole("ADMIN")
+                .anyRequest().authenticated().and()
+                .oauth2Login().loginPage("/login").defaultSuccessUrl("/index", true).permitAll()
+                .and().logout().logoutSuccessUrl("/login");
     }
 
 

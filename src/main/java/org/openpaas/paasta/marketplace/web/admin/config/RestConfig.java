@@ -17,6 +17,7 @@ import org.springframework.web.util.DefaultUriBuilderFactory;
 @Configuration
 public class RestConfig {
     public static final String AUTH_TOKEN_HEADER_NAME = "Authorization";
+    private static final String CF_BEARER_TOKEN_NAME = "cf-Authorization";
 
     @Value("${marketplace.api.url}")
     private String marketplaceApi;
@@ -31,7 +32,7 @@ public class RestConfig {
 
     @Bean
     AuthUserTokenHeaderInterceptor paasUserInterceptor() {
-        AuthUserTokenHeaderInterceptor tokenHeaderInterceptor = new AuthUserTokenHeaderInterceptor(AUTH_TOKEN_HEADER_NAME);
+        AuthUserTokenHeaderInterceptor tokenHeaderInterceptor = new AuthUserTokenHeaderInterceptor(AUTH_TOKEN_HEADER_NAME, CF_BEARER_TOKEN_NAME);
         return tokenHeaderInterceptor;
     }
 

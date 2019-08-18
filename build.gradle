@@ -10,7 +10,6 @@ apply plugin: 'io.spring.dependency-management'
 apply plugin: 'war'
 
 group 'org.openpaas.paasta.marketplace.web.admin'
-version '1.0-SNAPSHOT'
 
 sourceCompatibility = 1.8
 

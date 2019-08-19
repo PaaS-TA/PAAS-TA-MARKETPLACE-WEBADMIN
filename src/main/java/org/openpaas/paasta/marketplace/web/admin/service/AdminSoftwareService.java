@@ -6,11 +6,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.openpaas.paasta.marketplace.api.domain.Category;
 import org.openpaas.paasta.marketplace.api.domain.CustomPage;
 import org.openpaas.paasta.marketplace.api.domain.Software;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -22,7 +19,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SoftwareService {
+public class AdminSoftwareService {
 
     @Autowired
     private final RestTemplate paasApiRest;
@@ -50,6 +47,17 @@ public class SoftwareService {
                 .toString();
 
         return paasApiRest.getForObject(url, Software.class);
+    }
+
+    public Software updateAdminSoftware(Software software) {
+        String url = UriComponentsBuilder.newInstance().path("/admin/softwares/{id}")
+                .build()
+                .expand(software.getId())
+                .toString();
+
+        paasApiRest.put(url, software);
+
+        return getAdminSoftwares(software.getId());
     }
 
 }

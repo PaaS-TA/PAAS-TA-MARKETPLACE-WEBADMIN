@@ -154,7 +154,7 @@
                 }
             }else{
                 htmlString = "<tr>"
-                    + "<td colspan='8'><p class='user_p'>판매자가 존재하지 않습니다.</p></td>" + "</tr>"
+                    + "<td colspan='6'><p class='user_p'>판매자가 존재하지 않습니다.</p></td>" + "</tr>"
             }
 
             adminProfileList.html(htmlString);
@@ -181,7 +181,6 @@
 
         //eventBtn
         $("#searchBtn").on("click", function () {
-            alert("Add search condition");
             getProfileList();
         });
 

@@ -24,110 +24,218 @@
         </div>
     </div>
     <!-- //title area -->
-
     <!-- content -->
     <div class="content">
-
         <!-- cBox1 -->
         <div class="cBox type1 appCnt-info">
-            <div class="cBox-hd">
-                <h4 class="c-tit">상품 상세정보</h4>
+                <div class="cBox-hd">
+                    <h4 class="c-tit">상품 상세</h4>
+                </div>
+                <div class="cBox-cnt">
+                    <!-- inner -->
+                    <div class="in d_block">
+                        <!-- table -->
+                        <div class="tbw type1">
+                            <table class="table">
+                                <colgroup>
+                                    <col style="width:15%;">
+                                    <col style="width:auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">상품명</th>
+                                    <td th:text="${software.name}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">카테고리</th>
+                                    <td th:text="${software.category.name}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">간단설명</th>
+                                    <td>
+                                        <div class="tbw_inner_txt">
+                                            <pre th:text="${software.summary}"></pre>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">아이콘<i class="i_star">필수입력</i></th>
+                                    <td>
+                                        <!-- 첨부파일 -->
+                                        <div class="fileUploadWrap selected_ico" style="width:50%;">
+                                            <input tabindex="-1" class="form-control" id="iconFileInput" style="position: absolute; clip: rect(0px 0px 0px 0px);" type="file" name="iconFile" data-icon-name="fa fa-upload" data-button-text="" data-class-input="form-control" data-class-button="btn btn-default" filestyle="">
+                                            <div class="bootstrap-filestyle input-group">
+                                                    <span tabindex="0" class="group-span-filestyle input-group-btn">
+                                                        <label class="btn btn-default">
+                                                             <img src="/static/images/thum_ico06.png">
+                                                        </label>
+                                                    </span>
+                                            </div>
+                                        </div>
+                                        <!-- //첨부파일 -->
+                                    </td>
+                                <tr>
+                                <tr>
+                                    <th scope="row">스크린샷</th>
+                                    <td>
+                                        <div class="slideWrap">
+                                            <div class="slide_list">
+                                                <ul class="nav nav-tabs">
+                                                    <li><a href=""><img src="/static/images/thum_test01.png" alt="" /></a></li>
+                                                    <li><a href=""><img src="/static/images/thum_test02.png" alt="" /></a></li>
+                                                    <li><a href=""><img src="/static/images/thum_test04.png" alt="" /></a></li>
+                                                    <li><a href=""><img src="/static/images/thum_test05.png" alt="" /></a></li>
+                                                    <li><a href=""><img src="/static/images/thum_test03.png" alt="" /></a></li>
+                                                    <li><a href=""><img src="/static/images/thum_test01.png" alt="" /></a></li>
+                                                    <li><a href=""><img src="/static/images/thum_test02.png" alt="" /></a></li>
+                                                    <li><a href=""><img src="/static/images/thum_test03.png" alt="" /></a></li>
+                                                    <li><a href=""><img src="/static/images/thum_test04.png" alt="" /></a></li>
+                                                </ul>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">상세설명</th>
+                                    <td>
+                                        <div class="tbw_inner_txt">
+                                            <pre th:text="${software.description}"></pre>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">파일유형</th>
+                                    <td th:text="${software.type}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">상품파일</th>
+                                    <td th:text="${software.app}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">환경파일</th>
+                                    <td th:text="${software.manifest}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">판매가격</th>
+                                    <td><span class="price" th:text="${software.pricePerDay}"></span> 원
+<!--                                        /<span class="month"></span>일</td>-->
+                                </tr>
+                                <tr>
+                                    <th scope="row">전시여부</th>
+                                    <td th:text="${software.inUse}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">버전</th>
+                                    <td th:text="${software.version}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">등록일자</th>
+                                    <td th:text="${software.createdDate}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- //table -->
+
+                        <h4 class="c-tit-in">승인정보</h4>
+                        <!-- table -->
+                        <div class="tbw type1">
+                            <table class="table">
+                                <colgroup>
+                                    <col style="width:15%;">
+                                    <col style="width:auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">상태</th>
+                                    <td th:text="${software.status}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">반려사유</th>
+                                    <td>
+                                        <div class="tbw_inner_txt">
+                                            <pre th:text="${software.confirmComment}"></pre>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">처리일자</th>
+                                    <td th:text="${software.statusModifiedDate}"></td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- //table -->
+                    </div>
+                    <!-- //inner -->
+                </div>
             </div>
-            <div class="cBox-cnt">
-                <!-- inner -->
-                <div class="in pb10">
-
-                    <div class="l_box type1">
-                        <div class="pn_thumBox">
-                            <div class="pn_thum">
-                                <div class="thum_img">
-                                    <img src="/static/images/thum_ico01.png" alt="" />
-                                </div>
-                                <!-- <div class="package_bg"></div> -->
-                            </div>
-                        </div>
-                        <button name="button" class="btn btn-color6 btn-sm" type="button" data-toggle="modal" data-target="#myModal">구매하기</button>
-
-                        <!-- 팝업 Modal -->
-                        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-                            <div class="modal-dialog">
-                                <div class="modal-content modal-sm"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
-                                    <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                                        <h4 class="modal-title" id="myModalLabel">상품 구매</h4>
-                                    </div>
-                                    <div class="modal-body">
-                                        <p class="popTxt">선택한 상품을 구매하시겠습니까?</p>
-                                    </div>
-                                    <div class="modal-footer">
-                                        <button type="button" name="button" class="btn btn-color1">확인</button>
-                                        <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!-- //팝업 Modal -->
-
-                    </div>
-                    <div class="r_box">
-                        <div class="cnt_titBox">
-                            <span class="cnt_tit" th:text="${software.name}"></span>
-                            <span class="pn_cate type4" th:text="${software.category.name}"></span>
-                        </div>
-                        <div class="cnt_infoBox">
-                            <ul>
-                                <li><div class="tit_area"><span class="ico ico01"></span><span class="tit">버전 :</span><span class="txt" th:text="${software.version}"></span></div></li>
-                                <li><div class="tit_area"><span class="ico ico04"></span><span class="tit">개요 :</span><span class="txt m_line" th:text="${software.summary}"></span></div></li>
-                                <li><div class="tit_area"><span class="ico ico05"></span><span class="tit">가격 :</span><span class="txt" th:text="${software.pricePerDay} +' 원/일'"></span></div></li>
-                                <li><div class="tit_area"><span class="ico ico02"></span><span class="tit">판매자 :</span><span class="txt" th:text="${software.createdBy}"></span></div></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="cnt_infoBox outer pb40">
-                    <ul>
-                        <li>
-                            <div class="tit_area"><span class="ico ico03"></span><span class="tit">상품 상세 정보</span></div>
-                            <div class="info_inner_txt">
-                                <pre th:text="${software.description}">
-                                </pre>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-                <!-- //inner -->
-
-                <!-- 미리보기 -->
-                <div class="slideBox">
-                    <h4>미리보기</h4>
-                    <div class="slideWrap">
-                        <div class="slide_list">
-                            <ul class="nav nav-tabs">
-                                <li><a href=""><img src="/static/images/thum_test01.png" alt="" /></a></li>
-                                <li><a href=""><img src="/static/images/thum_test02.png" alt="" /></a></li>
-                                <li><a href="" class="video"><img src="/static/images/thum_test05.png" alt="" /></a></li>
-                                <li><a href=""><img src="/static/images/thum_test03.png" alt="" /></a></li>
-                                <li><a href=""><img src="/static/images/thum_test04.png" alt="" /></a></li>
-                                <li><a href=""><img src="/static/images/thum_test05.png" alt="" /></a></li>
-                                <li><a href=""><img src="/static/images/thum_test01.png" alt="" /></a></li>
-                                <li><a href=""><img src="/static/images/thum_test02.png" alt="" /></a></li>
-                                <li><a href=""><img src="/static/images/thum_test03.png" alt="" /></a></li>
-                                <li><a href=""><img src="/static/images/thum_test04.png" alt="" /></a></li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <!-- //미리보기 -->
-            </div>
-        </div>
         <!-- //cBox1 -->
-
         <div class="cont_btnBox">
-            <button name="button" class="btn btn-color1 btn-md" type="button" onclick="moveSoftwaresPage()">목록</button>
-        </div>
+            <div class="pull-left">
+                    <button name="button" class="btn btn-color1 btn-md" type="button" data-toggle="modal" data-target="#myModal">수정이력</button>
 
+                    <!-- Modal -->
+                    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                                    <h4 class="modal-title" id="myModalLabel">상품 수정 이력</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- table -->
+                                    <div class="tbl type1">
+                                        <table class="table">
+                                            <colgroup>
+                                                <col style="width:15%;">
+                                                <col style="width:30%;">
+                                                <col style="width:55%;">
+                                            </colgroup>
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">No.</th>
+                                                <th scope="col">수정일자</th>
+                                                <th scope="col">처리자</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td>3</td>
+                                                <td>2019-03-30</td>
+                                                <td>관리자</td>
+                                            </tr>
+                                            <tr>
+                                                <td>2</td>
+                                                <td>2019-01-15</td>
+                                                <td>홍길동</td>
+                                            </tr>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>2018-11-21</td>
+                                                <td>홍길동</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <!-- //table -->
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- //Modal -->
+                </div>
+            <div class="pull-right">
+                <button name="button" class="btn btn-color7 btn-md" type="button" th:onclick="'location.href = \'' + @{/admin/softwares/{id}(id=${software.id})} + '/update\''">수정</button>
+                <button name="button" class="btn btn-color1 btn-md" type="button" onclick="moveSoftwaresPage()">목록</button>
+            </div>
+        </div>
     </div>
-    <!-- //content -->
+<!-- //content -->
+
     <script th:inline="javascript" type="text/javascript" layout:fragment="custom-script">
         /*<![CDATA[*/
 
@@ -135,6 +243,7 @@
         $(document.body).ready(function () {
             console.log('::softwares/{id} init::');
         });
+
 
         var moveSoftwaresPage = function() {
             procMovePage("/admin/softwares/page");

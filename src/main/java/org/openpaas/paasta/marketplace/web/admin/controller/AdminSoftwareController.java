@@ -66,8 +66,10 @@ public class AdminSoftwareController {
 
 
     @PutMapping(value = "/{id}")
-    public Software updateAdminSoftware(@PathVariable Long id, @Valid Software software) {
-        return adminSoftwareService.updateAdminSoftware(software);
+    @ResponseBody
+    public Software updateAdminSoftware(@PathVariable Long id, @Valid @RequestBody Software software) {
+        log.info(">> updateAdminSoftware " + software.toString());
+        return adminSoftwareService.updateAdminSoftware(id, software);
     }
 
 

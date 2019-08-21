@@ -49,15 +49,15 @@ public class AdminSoftwareService {
         return paasApiRest.getForObject(url, Software.class);
     }
 
-    public Software updateAdminSoftware(Software software) {
+    public Software updateAdminSoftware(Long id, Software software) {
         String url = UriComponentsBuilder.newInstance().path("/admin/softwares/{id}")
                 .build()
-                .expand(software.getId())
+                .expand(id)
                 .toString();
 
+        log.info("updateAdminSoftwared url :: " + url + " Software " + software.toString());
         paasApiRest.put(url, software);
-
-        return getAdminSoftwares(software.getId());
+        return getAdminSoftwares(id);
     }
 
 }

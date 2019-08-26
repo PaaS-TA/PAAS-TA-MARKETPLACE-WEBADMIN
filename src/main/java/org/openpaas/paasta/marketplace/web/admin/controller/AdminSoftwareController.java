@@ -69,7 +69,13 @@ public class AdminSoftwareController {
     @ResponseBody
     public Software updateAdminSoftware(@PathVariable Long id, @Valid @RequestBody Software software) {
         log.info(">> updateAdminSoftware " + software.toString());
-        return adminSoftwareService.updateAdminSoftware(id, software);
+        Software updateSoftware = adminSoftwareService.getAdminSoftwares(id);
+        updateSoftware.setCategory(software.getCategory());
+        updateSoftware.setInUse(software.getInUse());
+        updateSoftware.setStatus(software.getStatus());
+        updateSoftware.setConfirmComment(software.getConfirmComment());
+
+        return adminSoftwareService.updateAdminSoftware(id, updateSoftware);
     }
 
 

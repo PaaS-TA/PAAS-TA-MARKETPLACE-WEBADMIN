@@ -46,17 +46,17 @@
                             <tr>
 <!--                                <i class="i_star">필수입력</i>-->
                                 <th scope="row">상품명</th>
-                                <td><input class="form-control" type="text" th:value="${software.name}" id="softwareName"></td>
+                                <td><input class="form-control" type="text" th:value="${software.name}" id="softwareName" readonly></td>
                             </tr>
                             <tr>
                                 <th scope="row">카테고리<i class="i_star">필수입력</i></th>
                                 <td>
-                                    <select th:field="*{categories}" id="softwareCategory">
+                                    <select id="softwareCategory">
 <!--                                        <option value="">전체</option>-->
                                         <option th:each="category : ${categories}"
                                                 th:value="${category.id}"
                                                 th:utext="${category.name}"
-                                                th:selected="${category.id.equals(software.category.id)}">
+                                                th:selected="${category.id} == ${software.category.id}">
                                         </option>
                                     </select>
                                 </td>
@@ -166,7 +166,7 @@
                                 <th scope="row">전시여부</th>
                                 <td>
                                     <div class="radio radio-inline" th:each="yn : ${yns}">
-                                        <input name="softwareInUse" th:id="'radio1-' + ${yn}" type="radio" th:value="${yn}" th:checked="${yn}">
+                                        <input name="softwareInUse" th:id="'radio1-' + ${yn}" type="radio" th:value="${yn}" th:checked="${software.inUse} == ${yn}">
                                         <label class="label" th:for="'radio1-' + ${yn}" th:text="${yn}"></label>
                                     </div>
                                 </td>
@@ -312,16 +312,8 @@
 
             var reqParam = {
                 "inUse" : softwareInUse,
-                "id" : id,
-                "name" : softwareName,
                 "category" : {
-                    "createdBy" : "admin",
-                    "createdDate" : softwareCreatedDate,
-                    "lastModifiedBy" : "admin",
-                    "lastModifiedDate" : softwareStatusModifiedDate,
-                    "id" : id,
-                    "name" : softwareInUse,
-                    "seq" : 1
+                    "id" : softwareCategory
                 },
                 "status" : softwareStatus,
                 "confirmComment" : softwareConfirmComment
@@ -333,12 +325,13 @@
             console.log(JSON.stringify(reqParam));
             console.log("REST_URL " + reqUrl);
 
-            procCallAjax(reqUrl, "PUT",JSON.stringify(reqParam), null, callbackModifyAdminSoftware(id));
+            procCallAjax(reqUrl, "PUT",JSON.stringify(reqParam), null, callbackModifyAdminSoftware);
         };
 
-        var callbackModifyAdminSoftware = function (id) {
-            console.log("::callbackModifyAdminSoftware id.val() " + id);
-            procMovePage("/admin/softwares/{id}".replace("{id}", id));
+        var callbackModifyAdminSoftware = function (data) {
+            console.log("modify data ::: " + JSON.stringify(data));
+
+            procMovePage("/admin/softwares/{id}".replace("{id}", data.id));
 
         };
 

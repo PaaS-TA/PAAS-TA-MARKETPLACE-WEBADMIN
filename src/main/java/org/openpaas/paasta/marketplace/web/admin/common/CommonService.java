@@ -157,9 +157,26 @@ public class CommonService {
         /**
          * Parameters sort parameters list.
          */
-        PARAMETERS_SORT("sort");
+        PARAMETERS_SORT("sort"),
+        /**
+         * Parameters start date parameters list.
+         */
+        PARAMETERS_START_DATE("createdDateAfter"),
+        /**
+         * Parameters end date parameters list.
+         */
+        PARAMETERS_END_DATE("createdDateBefore"),
+        /**
+         * Parameters start date parameters list.
+         */
+        PARAMETERS_APPROVAL_START_DATE("statusModifiedDateAfter"),
+        /**
+         * Parameters end date parameters list.
+         */
+        PARAMETERS_APPROVAL_END_DATE("statusModifiedDateBefore");
 
         private String actualValue;
+
 
         ParametersList(String actualValue) {
             this.actualValue = actualValue;

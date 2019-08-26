@@ -36,9 +36,9 @@
                             <div class="fm_label"><label for="" class="label">등록일자</label></div>
                             <div class="fm_box w_auto">
                                 <div class="dateWrap">
-                                    <div class="date-inpt"><input type="text" class="datepicker" id="createdDateAfter" placeholder="YYYY-MM-DD"></div>
+                                    <div class="date-inpt"><input type="text" class="datepicker" placeholder="YYYY-MM-DD" th:field="*{createdDateAfter}" id="createdDateAfter"></div>
                                     <span class="wave">~</span>
-                                    <div class="date-inpt"><input type="text" class="datepicker" id="createdDateBefore" placeholder="YYYY-MM-DD"></div>
+                                    <div class="date-inpt"><input type="text" class="datepicker" placeholder="YYYY-MM-DD" th:field="*{createdDateBefore}" id="createdDateBefore"></div>
                                 </div>
                             </div>
                         </div>
@@ -49,7 +49,7 @@
                         <div class="form-group-area">
                             <div class="fm_label"><label for="" class="label">판매자명</label></div>
                             <div class="fm_box">
-                                <input type="text" placeholder="검색어를 입력해 주세요."  th:field="*{nameLike}" onkeypress="if(event.keyCode==13) {search();}" id="nameLike" name="nameLike"style="width:400px;">
+                                <input type="text" placeholder="검색어를 입력해 주세요." th:field="*{nameLike}" onkeypress="if(event.keyCode==13) {search();}" id="nameLike" name="nameLike"style="width:400px;">
                             </div>
                         </div>
                     </div>
@@ -102,10 +102,10 @@
     </div>
     <!-- //content -->
     <script th:inline="javascript" type="text/javascript">
+        /*<![CDATA[*/
         var PAGING_SIZE = 10;
         var SORT = "id,asc";
 
-        /*<![CDATA[*/
         // ON LOAD
         $(document).ready(function() {
             console.log('::Init::');
@@ -114,17 +114,30 @@
 
 
         var getProfileList = function () {
-            //TODO :: Add [createdDateAfter]
             var nameLike = $("#nameLike").val();
 
             if(nameLike === null || nameLike === '') {
                 nameLike = '';
             }
 
-            console.log('::nameLike ::' + nameLike);
+            var dateParameter;
+            var createdDateAfter = $("#createdDateAfter").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+            var createdDateBefore = $("#createdDateBefore").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
 
-            var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike + "&size=" + PAGING_SIZE + "&sort=" + SORT;
-            // var reqUrl = "/admin/profiles";
+            if((createdDateAfter === "" || createdDateAfter === undefined) && (createdDateBefore === "" || createdDateBefore === undefined)) {
+                dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
+            }else{
+                dateParameter = "&createdDateAfter=" + createdDateAfter + "T00:00:00.000Z" + "&createdDateBefore=" + createdDateBefore + "T23:59:59.000Z";
+            }
+
+            console.log("시작 날짜 ::: "  + createdDateAfter);
+            console.log("종료 날짜 ::: "  + createdDateBefore);
+
+            var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
+
+            console.log("전체 경로 ::: "  + reqUrl);
+            console.log("dateParameter ::: "  + dateParameter);
+
             procCallAjax(reqUrl, "GET", null, null, callbackProfileList);
         };
 
@@ -133,6 +146,7 @@
             //::totalElements::
             $("#totalElements").text("(" + data.totalElements + ")");
 
+            //::adminProfileList::
             var adminProfileList = $("#adminProfileArea");
             var htmlString = [];
             var content = data.content;
@@ -166,7 +180,7 @@
             var pageSize = data.size;
 
             var pageCount = Math.ceil(pageTotalNumber/pageSize);
-            console.log("::pageCount :: " + pageCount);
+            console.log("pageCount :: " + pageCount);
 
             if(pageCount > 0){
                 for(var page = 0; page < pageCount; page++){
@@ -189,10 +203,8 @@
             getProfileList();
         };
 
-
         //move Detail
         var moveProfileDetail = function(id) {
-            console.log(id);
             procMovePage("/admin/profiles/{id}".replace("{id}", id));
         }
 

@@ -6,6 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.openpaas.paasta.marketplace.api.domain.Category;
 import org.openpaas.paasta.marketplace.api.domain.CustomPage;
 import org.openpaas.paasta.marketplace.api.domain.Software;
+import org.openpaas.paasta.marketplace.api.domain.SoftwareHistory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -60,4 +61,7 @@ public class AdminSoftwareService {
         return getAdminSoftwares(id);
     }
 
+    public List<SoftwareHistory> getHistoryList(Long id, String queryParamString) {
+        return paasApiRest.getForObject("/admin/softwares/" + id + "/histories" + queryParamString, List.class);
+    }
 }

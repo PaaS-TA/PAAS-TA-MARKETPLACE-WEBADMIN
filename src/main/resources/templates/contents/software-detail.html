@@ -173,7 +173,7 @@
         <!-- //cBox1 -->
         <div class="cont_btnBox">
             <div class="pull-left">
-                    <button name="button" class="btn btn-color1 btn-md" type="button" data-toggle="modal" data-target="#myModal">수정이력</button>
+                    <button name="button" class="btn btn-color1 btn-md" type="button" data-toggle="modal" data-target="#myModal" id="historyBtn">수정이력</button>
 
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
@@ -199,8 +199,8 @@
                                                 <th scope="col">처리자</th>
                                             </tr>
                                             </thead>
-                                            <tbody>
-                                            <tr>
+                                            <tbody id="historyArea">
+                                            <!--<tr>
                                                 <td>3</td>
                                                 <td>2019-03-30</td>
                                                 <td>관리자</td>
@@ -214,7 +214,7 @@
                                                 <td>1</td>
                                                 <td>2018-11-21</td>
                                                 <td>홍길동</td>
-                                            </tr>
+                                            </tr>-->
                                             </tbody>
                                         </table>
                                     </div>
@@ -247,8 +247,32 @@
 
         var moveSoftwaresPage = function() {
             procMovePage("/admin/softwares/page");
-        }
+        };
 
+        $("#historyBtn").on("click", function () {
+           var softwareId = "[[${software.id}]]";
+
+           var reqUrl = "/admin/softwares/" + softwareId + "/histories" + "?sort=lastModifiedDate,desc";
+           procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwareHistoryList)
+        });
+
+        var callbackGetSoftwareHistoryList = function (data) {
+            var historyArea = $("#historyArea");
+            var htmlString = [];
+
+            if(data.length > 0){
+                for(var i = 0; i < data.length; i++){
+                    htmlString.push(
+                        '<tr>'
+                        + '<td>' + (i+1) + '</td>'
+                        + '<td>' + data[i].lastModifiedDate + '</td>'
+                        + '<td>' + data[i].lastModifiedBy + '</td>'
+                        + '</tr>'
+                    );
+                }
+                historyArea.html(htmlString);
+            }
+        };
 
         /*]]>*/
     </script>

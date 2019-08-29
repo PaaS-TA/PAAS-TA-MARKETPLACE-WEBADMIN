@@ -185,7 +185,7 @@
             getSoftwareList();
         });
 
-        var getSoftwareList = function () {
+        var getSoftwareList = function (pageNum) {
             var dateParameter;                                              //날짜
             var categoryId = $("#categoryId option:selected").val();        //카테고리
             var status = $("#status option:selected").val();                //전시여부
@@ -197,7 +197,8 @@
                 ":: status :: " + status +
                 ":: inUse :: " + inUse +
                 ":: createdBy :: " + createdBy +
-                ":: nameLike :: " + nameLike
+                ":: nameLike :: " + nameLike +
+                ":: page :: " + pageNum
             );
 
             if (categoryId === 'ALL' || categoryId === '') {
@@ -243,7 +244,7 @@
             }
 
             var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&nameLike=" + nameLike + "&status=" + status + "&inUse=" + inUse
-                            + "&createdBy=" + createdBy + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
+                            + "&createdBy=" + createdBy + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
 
             procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
         };
@@ -291,7 +292,7 @@
 
             if(pageCount > 0){
                 for(var page = 0; page < pageCount; page++){
-                    htmlStringPage += "<li class='active'><a href='#'>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
+                    htmlStringPage += "<li class='active'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ page +"')>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
                 }
             }
             htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
@@ -302,6 +303,10 @@
         //move::SoftwareDetail
         var moveSoftwareDetail = function(id) {
             procMovePage("/admin/softwares/{id}".replace("{id}", id));
+        };
+
+        var moveSoftwareListPage = function(page) {
+            getSoftwareList(page);
         };
 
         //eventBtn

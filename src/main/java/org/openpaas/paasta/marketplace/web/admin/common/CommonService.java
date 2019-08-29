@@ -151,6 +151,10 @@ public class CommonService {
          */
         PARAMETERS_CREATE_DATE("createdBy"),
         /**
+         * Parameters page parameters list.
+         */
+        PARAMETERS_PAGING_PAGE("page"),
+        /**
          * Parameters size parameters list.
          */
         PARAMETERS_PAGING_SIZE("size"),

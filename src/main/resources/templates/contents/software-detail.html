@@ -67,7 +67,7 @@
                                             <div class="bootstrap-filestyle input-group">
                                                     <span tabindex="0" class="group-span-filestyle input-group-btn">
                                                         <label class="btn btn-default">
-                                                             <img src="/static/images/thum_ico06.png">
+                                                             <img th:src="${software.iconPath}" alt="" />
                                                         </label>
                                                     </span>
                                             </div>
@@ -81,15 +81,9 @@
                                         <div class="slideWrap">
                                             <div class="slide_list">
                                                 <ul class="nav nav-tabs">
-                                                    <li><a href=""><img src="/static/images/thum_test01.png" alt="" /></a></li>
-                                                    <li><a href=""><img src="/static/images/thum_test02.png" alt="" /></a></li>
-                                                    <li><a href=""><img src="/static/images/thum_test04.png" alt="" /></a></li>
-                                                    <li><a href=""><img src="/static/images/thum_test05.png" alt="" /></a></li>
-                                                    <li><a href=""><img src="/static/images/thum_test03.png" alt="" /></a></li>
-                                                    <li><a href=""><img src="/static/images/thum_test01.png" alt="" /></a></li>
-                                                    <li><a href=""><img src="/static/images/thum_test02.png" alt="" /></a></li>
-                                                    <li><a href=""><img src="/static/images/thum_test03.png" alt="" /></a></li>
-                                                    <li><a href=""><img src="/static/images/thum_test04.png" alt="" /></a></li>
+                                                    <li th:each="screenshot : ${software.screenshotList}">
+                                                        <a href=""><img th:src="${screenshot}" alt="" /></a>
+                                                    </li>
                                                 </ul>
                                             </div>
                                         </div>

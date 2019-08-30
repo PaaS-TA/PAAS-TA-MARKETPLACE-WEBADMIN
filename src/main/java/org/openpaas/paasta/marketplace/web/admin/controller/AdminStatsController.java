@@ -76,6 +76,8 @@ public class AdminStatsController {
         }
 
         model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
+        model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
+        model.addAttribute("instanceUsingUserSum", adminStatsService.getCountOfUsersUsing());
         return "contents/useStatusSoftware";
     }
 

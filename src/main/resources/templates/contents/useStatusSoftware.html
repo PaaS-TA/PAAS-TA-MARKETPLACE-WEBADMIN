@@ -36,7 +36,7 @@
                     <div class="inWrap bg01">
                         <span class="tit">전체 상품 수</span>
                         <div class="in_txtBox">
-                            <span class="count">1,000</span>
+                            <span class="count">삭제 예정</span>
                             <p class="txt">Total number of registered products</p>
                         </div>
                     </div>
@@ -45,7 +45,7 @@
                     <div class="inWrap bg02">
                         <span class="tit">사용 상품 수</span>
                         <div class="in_txtBox">
-                            <span class="count">800</span>
+                            <span class="count">삭제 예정</span>
                             <p class="txt">Actual Usage products</p>
                         </div>
                     </div>
@@ -56,16 +56,7 @@
                         <span class="today_txt">2019-05-10 현재기준</span>
                         <ul>
                             <li>
-                                <div class="ta_l"><span class="num_txt">1</span><span class="txt">스마트 닥터</span></div>
-                                <div class="ta_r"><span class="ico_user">사용자</span><span class="count">35</span></div>
-                            </li>
-                            <li>
-                                <div class="ta_l"><span class="num_txt">2</span><span class="txt">Zimbra</span></div>
-                                <div class="ta_r"><span class="ico_user">사용자</span><span class="count">21</span></div>
-                            </li>
-                            <li>
-                                <div class="ta_l"><span class="num_txt">3</span><span class="txt">우유니</span></div>
-                                <div class="ta_r"><span class="ico_user">사용자</span><span class="count">15</span></div>
+                                <div class="ta_l"><span class="num_txt">삭제 예정</span></div>
                             </li>
                         </ul>
                     </div>
@@ -107,7 +98,7 @@
                     </div>
                 </div>
                 <!-- //Form 그룹 -->
-                <button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+                <button type="button" name="button" class="btn btn-sch" title="검색" id="searchBtn"><span class="ico">검색</span></button>
             </div>
         </div>
         <!-- //검색 Form -->
@@ -158,8 +149,15 @@
     <script type="text/javascript">
         var PAGING_SIZE = 10;
         var SORT = "id,asc";
+
+        // 상품별 사용자 수
         var userCountPerSoftware = "[[${instanceUserCount}]]";
         var resultCountList = JSON.parse(userCountPerSoftware.replace(/&quot;/g,'"'));
+
+        // 판매 상품 총 개수
+        var soldSoftwareTotal = "[[${instanceCountSum}]]";
+
+        var usingSWUserTotal = "[[${instanceUsingUserSum}]]";
 
         var getSoftwareList = function (pageNum) {
             var dateParameter;                                              //날짜
@@ -191,8 +189,7 @@
         };
 
         var callbackSoftwareList = function(data) {
-            //::totalElements::
-            $("#totalElements").text("(" + data.totalElements + ")");
+            $("#totalCount").text(" (" + data.totalElements + " / " + soldSoftwareTotal + " / " + usingSWUserTotal +")");
 
             var softwareList = $("#softwareArea");
             var htmlString = [];
@@ -247,6 +244,15 @@
 
         };
 
+        // 페이지 이동
+        var moveSoftwareListPage = function(page) {
+            getSoftwareList(page);
+        };
+
+        //eventBtn
+        $("#searchBtn").on("click", function () {
+            getSoftwareList();
+        });
 
         // ON LOAD
         $(document).ready(function() {

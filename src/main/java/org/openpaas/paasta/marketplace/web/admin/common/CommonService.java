@@ -200,7 +200,7 @@ public class CommonService {
      * @param map Map<String, Object>.
      * @return JSONObject.
      */
-    public static JSONObject getJsonStringFromMap(Map<String, Object> map)
+    public JSONObject getJsonStringFromMap(Map<String, Object> map)
     {
         JSONObject jsonObject = new JSONObject();
         for( Map.Entry<String, Object> entry : map.entrySet() ) {

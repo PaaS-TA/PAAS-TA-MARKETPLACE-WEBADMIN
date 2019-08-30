@@ -32,7 +32,7 @@ public class AdminSoftwareService {
 
     @SneakyThrows
     public List<Category> getAdminCategories() {
-        return paasApiRest.getForObject("/categories", List.class);
+        return paasApiRest.getForObject("/admin/categories", List.class);
     }
 
     public CustomPage<Software> getAdminSoftwareList(String queryParamString) {

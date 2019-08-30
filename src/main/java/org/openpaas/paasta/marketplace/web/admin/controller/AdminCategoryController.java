@@ -3,7 +3,7 @@ package org.openpaas.paasta.marketplace.web.admin.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openpaas.paasta.marketplace.api.domain.Category;
-import org.openpaas.paasta.marketplace.web.admin.service.CategoryService;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,10 +15,10 @@ import java.util.List;
 @Controller
 @RequestMapping(value = "/admin/categories")
 @RequiredArgsConstructor
-public class CategoryController {
+public class AdminCategoryController {
 
     @Autowired
-    public CategoryService categoryService;
+    public AdminCategoryService adminCategoryService;
 
     /**
      * 카테고리 메인 페이지로 이동 및 목록 조회
@@ -29,7 +29,7 @@ public class CategoryController {
     public String getCategoryListMain(Model model) {
         model.addAttribute("directionUp", Category.Direction.Up);
         model.addAttribute("directionDown", Category.Direction.Down);
-        model.addAttribute("categories", categoryService.getCategoryList());
+        model.addAttribute("categories", adminCategoryService.getCategoryList());
         return "contents/category-list";
     }
 
@@ -60,7 +60,7 @@ public class CategoryController {
     @PostMapping
     @ResponseBody
     public Category createCategory(@RequestBody Category category){
-        return categoryService.createCategory(category);
+        return adminCategoryService.createCategory(category);
     }
 
 
@@ -73,7 +73,7 @@ public class CategoryController {
      */
     @GetMapping(value = "/{id}")
     public String getCategoryMain(Model model, @PathVariable Long id){
-        model.addAttribute("category", categoryService.getCategory(id));
+        model.addAttribute("category", adminCategoryService.getCategory(id));
         return "contents/category-detail";
     }
 
@@ -87,7 +87,7 @@ public class CategoryController {
      */
     @GetMapping(value = "/{id}/modify")
     public String modifyCategoryMain(Model model, @PathVariable Long id){
-        model.addAttribute("category", categoryService.getCategory(id));
+        model.addAttribute("category", adminCategoryService.getCategory(id));
         return "contents/category-modify";
     }
 
@@ -102,7 +102,7 @@ public class CategoryController {
     @PutMapping(value = "/{id}")
     @ResponseBody
     public Category updateCategory(@PathVariable Long id, @RequestBody Category category){
-        return categoryService.updateCategory(id, category);
+        return adminCategoryService.updateCategory(id, category);
     }
 
     /**
@@ -113,9 +113,9 @@ public class CategoryController {
     @DeleteMapping("/{id}")
     @ResponseBody
     public List<Category> deleteCategory(@PathVariable Long id){
-        categoryService.deleteCategory(id);
+        adminCategoryService.deleteCategory(id);
 
-        return categoryService.getCategoryList();
+        return adminCategoryService.getCategoryList();
     }
 
 
@@ -129,7 +129,7 @@ public class CategoryController {
     @PutMapping("/{id}/{direction}")
     @ResponseBody
     public Category updateSeq(@PathVariable Long id, @PathVariable Category.Direction direction){
-        return categoryService.updateSeq(id, direction);
+        return adminCategoryService.updateSeq(id, direction);
     }
 
 }

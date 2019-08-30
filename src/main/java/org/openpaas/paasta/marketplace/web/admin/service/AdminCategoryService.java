@@ -12,7 +12,7 @@ import java.util.List;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class CategoryService {
+public class AdminCategoryService {
     private final RestTemplate paasApiRest;
 
     public List<Category> getCategoryList() {

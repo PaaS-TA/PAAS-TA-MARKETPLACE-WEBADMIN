@@ -11,6 +11,7 @@ import org.openpaas.paasta.marketplace.web.admin.service.AdminStatsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -81,6 +82,19 @@ public class AdminStatsController {
         return "contents/useStatusSoftware";
     }
 
+
+    /**
+     * 상품별 현황 상세 페이지
+     *
+     * @param model
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/softwares/{id}")
+    public String getSoftwareStats(Model model, @PathVariable Long id) {
+        model.addAttribute("softwareStat", adminSoftwareService.getAdminSoftwares(id));
+        return "contents/useStatusSoftwareDetail";
+    }
 
     /**
      * 사용자별 현황메인페이지로 이동한다.

@@ -210,7 +210,7 @@
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
-                        + "<td><a href='javascript:void(0);' onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
+                        + "<td><a href='javascript:void(0);' onclick=moveSoftwareStatsDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].version + "</td>"
                         + "<td>" + content[i].createdDate + "</td>"
                         + "<td>" + content[i].statusModifiedDate + "</td>"
@@ -242,6 +242,10 @@
             htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
             pageNumberList.html(htmlStringPage);
 
+        };
+
+        var moveSoftwareStatsDetail = function(id) {
+            procMovePage("/admin/stats/softwares/{id}".replace("{id}", id));
         };
 
         // 페이지 이동

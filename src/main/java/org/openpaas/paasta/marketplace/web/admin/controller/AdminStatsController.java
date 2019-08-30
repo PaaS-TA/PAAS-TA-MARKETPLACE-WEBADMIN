@@ -2,9 +2,22 @@ package org.openpaas.paasta.marketplace.web.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.openpaas.paasta.marketplace.api.domain.CustomPage;
+import org.openpaas.paasta.marketplace.api.domain.Software;
+import org.openpaas.paasta.marketplace.api.domain.SoftwareSpecification;
+import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareService;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminStatsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * @author hrjin
@@ -16,6 +29,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping(value = "/admin/stats")
 @RequiredArgsConstructor
 public class AdminStatsController {
+
+    private final AdminSoftwareService adminSoftwareService;
+    private final AdminStatsService adminStatsService;
+    private final CommonService commonService;
 
     /**
      * 판매자별 현황 메인페이지로 이동한다.
@@ -34,7 +51,31 @@ public class AdminStatsController {
      * @return ModelAndView(Spring 클래스)
      */
     @GetMapping(value = "/softwares")
-    public String getSoftwareStatsMain() {
+    public String getSoftwareStatsMain(Model model, HttpServletRequest httpServletRequest) {
+        CustomPage<Software> software = adminSoftwareService.getAdminSoftwareList(commonService.setParameters(httpServletRequest));
+
+        List<Long> idIn = new ArrayList<>();
+
+        for (Software s:software.getContent()) {
+            idIn.add(s.getId());
+        }
+
+        model.addAttribute("categories", adminSoftwareService.getAdminCategories());
+        model.addAttribute("spec", new SoftwareSpecification());
+
+        Map<Long, Long> result = adminStatsService.getCountsOfInsts(idIn);
+        Map newResult = new HashMap();
+
+        for (Long id:idIn) {
+            String mapId = "" + id;
+            if(result.get(mapId) != null){
+                newResult.put(mapId, result.get(mapId));
+            }else{
+                newResult.put(mapId, 0);
+            }
+        }
+
+        model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
         return "contents/useStatusSoftware";
     }
 

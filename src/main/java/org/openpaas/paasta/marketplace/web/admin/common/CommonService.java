@@ -1,5 +1,6 @@
 package org.openpaas.paasta.marketplace.web.admin.common;
 
+import net.minidev.json.JSONObject;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -130,6 +131,7 @@ public class CommonService {
      * The enum Parameters list.
      */
     enum ParametersList {
+        PARAMETERS_ID_IN("idIn"),
         /**
          * Parameters id parameters list.
          */
@@ -191,4 +193,22 @@ public class CommonService {
         }
     }
 
+
+    /**
+     * Map 을 json 으로 변환한다.
+     *
+     * @param map Map<String, Object>.
+     * @return JSONObject.
+     */
+    public static JSONObject getJsonStringFromMap(Map<String, Object> map)
+    {
+        JSONObject jsonObject = new JSONObject();
+        for( Map.Entry<String, Object> entry : map.entrySet() ) {
+            String key = entry.getKey();
+            Object value = entry.getValue();
+            jsonObject.put(key, value);
+        }
+
+        return jsonObject;
+    }
 }

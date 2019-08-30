@@ -80,23 +80,13 @@
                 <!-- Form 그룹 -->
                 <div class="form-group">
                     <div class="form-group-area">
-                        <div class="fm_label"><label for="" class="label">사용연월</label></div>
-                        <div class="fm_box w_auto pr10">
-                            <select id="" name="">
-                                <option value="">2019</option>
-                                <option value="">2018</option>
-                                <option value="">2017</option>
-                                <option value="">2016</option>
-                            </select>
-                        </div>
+                        <div class="fm_label"><label for="" class="label">등록일</label></div>
                         <div class="fm_box w_auto">
-                            <select id="" name="">
-                                <option value="">05</option>
-                                <option value="">04</option>
-                                <option value="">03</option>
-                                <option value="">02</option>
-                                <option value="">01</option>
-                            </select>
+                            <div class="dateWrap">
+                                <div class="date-inpt"><input type="text" class="datepicker" placeholder="YYYY-MM-DD" id="startDatePicker" value=""></div>
+                                <span class="wave">~</span>
+                                <div class="date-inpt"><input type="text" class="datepicker" placeholder="YYYY-MM-DD" id="endDatePicker" value=""></div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -106,11 +96,12 @@
                     <div class="form-group-area">
                         <div class="fm_label"><label for="" class="label">카테고리</label></div>
                         <div class="fm_box">
-                            <select id="" name="">
-                                <option value="">전체</option>
-                                <option value="">보안</option>
-                                <option value="">ERP</option>
-                                <option value="">게임</option>
+                            <select id="categoryId">
+                                <option value="">선택</option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.id}"
+                                        th:utext="${category.name}">
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -122,7 +113,7 @@
         <!-- //검색 Form -->
 
         <div class="cont-titWrap mt30">
-            <h3 class="h-tit3">전체 상품 수 <span class="point4">(50)</span></h3>
+            <h3 class="h-tit3">전체 상품 / 판매 상품 / 사용자<span class="point4" id="totalCount"></span></h3>
         </div>
 
         <!-- 테이블 -->
@@ -130,127 +121,25 @@
             <table class="table">
                 <colgroup>
                     <col style="width:8%;">
-                    <col style="width:15%;">
+                    <col style="width:9%;">
                     <col style="width:auto;">
+                    <col style="width:10%;">
                     <col style="width:18%;">
-                    <col style="width:10%;">
-                    <col style="width:10%;">
-                    <col style="width:10%;">
-                    <col style="width:10%;">
+                    <col style="width:18%;">
+                    <col style="width:8%;">
                 </colgroup>
                 <thead>
                 <tr>
                     <th scope="col">No.</th>
                     <th scope="col">카테고리</th>
-                    <th scope="col">상품 명</th>
-                    <th scope="col">판매자명</th>
+                    <th scope="col">상품명</th>
+                    <th scope="col">버전</th>
                     <th scope="col">등록일</th>
-                    <th scope="col">전시</th>
-                    <th scope="col">승인여부</th>
                     <th scope="col">승인일</th>
+                    <th scope="col">사용자 수</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>10</td>
-                    <td><span class="pn_cate type5">보안</span></td>
-                    <td>Magic FIDO</td>
-                    <td>전능아이티</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>승인</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td><span class="pn_cate type5">보안</span></td>
-                    <td>테드폴허브</td>
-                    <td>드림시큐리티</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>승인</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td><span class="pn_cate type3">의료</span></td>
-                    <td>스마트닥터</td>
-                    <td>테드폴허브</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>반려</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td><span class="pn_cate type4">커머스</span></td>
-                    <td>영카트</td>
-                    <td>에스아이알소프트</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>대기</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td><span class="pn_cate type4">커머스</span></td>
-                    <td>마젠토</td>
-                    <td>이구아나커머스</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>승인</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td><span class="pn_cate type1">CRM</span></td>
-                    <td>세일즈포인트</td>
-                    <td>세일즈인사이트</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>반려</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td><span class="pn_cate type1">CRM</span></td>
-                    <td>알림톡,친구톡</td>
-                    <td>컴홈</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>승인</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td><span class="pn_cate type1">CRM</span></td>
-                    <td>핑거세일즈</td>
-                    <td>카이젠플랫폼</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>승인</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td><span class="pn_cate type4">마케팅</span></td>
-                    <td>마케팅크래프트 리포트</td>
-                    <td>테드폴허브</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>대기</td>
-                    <td>2019-04-02</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td><span class="pn_cate type4">방송</span></td>
-                    <td>PalyCon</td>
-                    <td>드림시큐리티</td>
-                    <td>2019-04-01</td>
-                    <td>Y</td>
-                    <td>승인</td>
-                    <td>2019-04-02</td>
-                </tr>
+                <tbody id="softwareArea">
                 </tbody>
             </table>
         </div>
@@ -258,20 +147,7 @@
 
         <!-- page -->
         <nav class="pagiWrap">
-            <ul class="pagination">
-                <li class="first disabled"><a href="#">맨 처음</a></li>
-                <li class="prev"><a href="#">이전</a></li>
-                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                <li class=" disabled"><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-                <li><a href="#">7</a></li>
-                <li><a href="#">8</a></li>
-                <li><a href="#">9</a></li>
-                <li class="next"><a href="#">다음</a></li>
-                <li class="end"><a href="#">맨 끝</a></li>
+            <ul class="pagination" id="pageNumberList">
             </ul>
         </nav>
         <!-- //page -->
@@ -280,7 +156,102 @@
     <!-- //content -->
 
     <script type="text/javascript">
-        console.log('::MarketPlace index Init::');
+        var PAGING_SIZE = 10;
+        var SORT = "id,asc";
+        var userCountPerSoftware = "[[${instanceUserCount}]]";
+        var resultCountList = JSON.parse(userCountPerSoftware.replace(/&quot;/g,'"'));
+
+        var getSoftwareList = function (pageNum) {
+            var dateParameter;                                              //날짜
+            var categoryId = $("#categoryId option:selected").val();        //카테고리
+
+
+            if (categoryId === 'ALL' || categoryId === '') {
+                categoryId = '';
+            }
+
+            // datepicker
+            var startDate = $("#startDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+            console.log("startDate : "  + startDate);
+
+            var endDate = $("#endDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+            console.log("endDate : "  + endDate);
+
+
+            if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
+                dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
+            }else{
+                dateParameter = "&createdDateAfter=" + startDate + "T00:00:00.000Z" + "&createdDateBefore=" + endDate + "T23:59:59.000Z";
+            }
+
+
+            var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
+
+            procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
+        };
+
+        var callbackSoftwareList = function(data) {
+            //::totalElements::
+            $("#totalElements").text("(" + data.totalElements + ")");
+
+            var softwareList = $("#softwareArea");
+            var htmlString = [];
+            var content = data.content;
+
+            var listLength = content.length;
+
+            if(listLength > 0){
+                var userCount;
+
+                for(var i = 0; i < listLength; i++){
+                    for(key in resultCountList) {
+                        if(content[i].id == key){
+                            userCount = resultCountList[key];
+                        }
+                    }
+                    htmlString.push(
+                        "<tr>"
+                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
+                        + "<td><a href='javascript:void(0);' onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
+                        + "<td>" + content[i].version + "</td>"
+                        + "<td>" + content[i].createdDate + "</td>"
+                        + "<td>" + content[i].statusModifiedDate + "</td>"
+                        + "<td>" + userCount + "</td>"
+                        + "</tr>"
+                    );
+                }
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='8'><p class='user_p'>상품이 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+
+            softwareList.html(htmlString);
+
+            //::page::
+            var pageNumberList = $("#pageNumberList");
+            var htmlStringPage = "<li class='first disabled'><a href='#'>맨 처음</a></li>" + "<li class='prev'><a href='#'>이전</a></li>";
+            var pageTotalNumber = data.totalElements;
+            var pageSize = data.size;
+
+            var pageCount = Math.ceil(pageTotalNumber/pageSize);
+            console.log("::pageCount :: " + pageCount);
+
+            if(pageCount > 0){
+                for(var page = 0; page < pageCount; page++){
+                    htmlStringPage += "<li class='active'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ page +"')>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
+                }
+            }
+            htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
+            pageNumberList.html(htmlStringPage);
+
+        };
+
+
+        // ON LOAD
+        $(document).ready(function() {
+            getSoftwareList();
+        });
     </script>
 </div>
 

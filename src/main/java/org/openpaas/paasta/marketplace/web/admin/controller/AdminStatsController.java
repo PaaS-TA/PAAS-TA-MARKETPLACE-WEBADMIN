@@ -93,6 +93,11 @@ public class AdminStatsController {
     @GetMapping(value = "/softwares/{id}")
     public String getSoftwareStats(Model model, @PathVariable Long id) {
         model.addAttribute("softwareStat", adminSoftwareService.getAdminSoftwares(id));
+        // TODO ::: 상품에 대한 총 사용자 수
+
+        // TODO ::: 사용자들 목록 조회
+
+
         return "contents/useStatusSoftwareDetail";
     }
 

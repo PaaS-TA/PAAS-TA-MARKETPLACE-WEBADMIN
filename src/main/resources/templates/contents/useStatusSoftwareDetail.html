@@ -50,55 +50,78 @@
                             <tbody>
                                 <tr>
                                     <td>상품명</td>
-                                    <td colspan="3">a</td>
+                                    <td colspan="3" th:text="${softwareStat.name}"></td>
                                 </tr>
                                 <tr>
                                     <td>버전</td>
-                                    <td>b</td>
+                                    <td th:text="${softwareStat.version}"></td>
                                     <td>카테고리</td>
-                                    <td>d</td>
+                                    <td th:text="${softwareStat.category.name}"></td>
                                 </tr>
                                 <tr>
                                     <td>가격</td>
-                                    <td>b</td>
+                                    <td th:text="${softwareStat.pricePerDay}">원/월</td>
                                     <td>판매자</td>
-                                    <td>d</td>
+                                    <td th:text="${softwareStat.createdBy}"></td>
                                 </tr>
                                 <tr>
                                     <td>등록일</td>
-                                    <td>b</td>
+                                    <td th:text="${softwareStat.createdDate}"></td>
                                     <td>승인일</td>
-                                    <td>d</td>
+                                    <td th:text="${softwareStat.statusModifiedDate}"></td>
                                 </tr>
                                 <tr>
                                     <td>개요</td>
-                                    <td colspan="3">a</td>
+                                    <td colspan="3" th:text="${softwareStat.description}"></td>
                                 </tr>
                                 <tr>
                                     <td>사용자 수</td>
-                                    <td colspan="3">a</td>
+                                    <td colspan="3"></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <!-- //table -->
 
-                    <!--사용추이 차트-->
-                    <div class="cht_area_wrap">
-                        <span class="cht_tit text-left mt50">사용자 추이<span class="s_txt">(2019년도 기준)</span></span>
-                        <div id="useStatusProdDetail" class="cht_area"></div>
+                <div class="cht_area_wrap">
+                    <span class="cht_tit text-left mt50">판매 현황<span class="point4" id="totalCount"></span></span>
+                    <!-- 테이블 -->
+                    <div class="tbl type1 pt20">
+                        <table class="table">
+                            <colgroup>
+                                <col style="width:10%;">
+                                <col style="width:20%;">
+                                <col style="width:auto;">
+                                <col style="width:18%;">
+                                <col style="width:18%;">
+                            </colgroup>
+                            <thead>
+                            <tr>
+                                <th scope="col">No.</th>
+                                <th scope="col">사용자 이름</th>
+                                <th scope="col">ID</th>
+                                <th scope="col">구매일</th>
+                                <th scope="col">사용연월</th>
+                            </tr>
+                            </thead>
+                            <tbody id="softwareArea">
+                            </tbody>
+                        </table>
                     </div>
-                    <!--//사용추이 차트-->
+                    <!-- //테이블 -->
+                    <!-- page -->
+                    <nav class="pagiWrap">
+                        <ul class="pagination" id="pageNumberList">
+                        </ul>
+                    </nav>
+                    <!-- //page -->
+                </div>
 
                 </div>
                 <!-- //inner -->
             </div>
         </div>
         <!-- //cBox1 -->
-
-        <div class="cont_btnBox">
-            <button name="button" class="btn btn-color1 btn-md" type="button">수정</button>
-        </div>
     </div>
     <!-- //content -->
 

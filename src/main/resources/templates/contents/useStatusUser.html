@@ -7,12 +7,6 @@
 </th:block>
 
 <!-- index.html 고유 스크립트 추가 -->
-<th:block layout:fragment="script">
-    <!-- // script 방법 2 -->
-<!--    <script type="text/javascript">-->
-<!--        console.log('::MarketPlace index text/javascript::');-->
-<!--    </script>-->
-</th:block>
 <div class="rightCnt" layout:fragment="content">
     <!-- title area -->
     <div class="titWrap">
@@ -36,29 +30,14 @@
                     <div class="inWrap bg01">
                         <span class="tit">전체 사용자 수</span>
                         <div class="in_txtBox">
-                            <span class="count">1,000</span>
+                            <span class="count">삭제 예정</span>
                             <p class="txt">Total number of registered users</p>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="inWrap bg04">
-                        <span class="tit">사용자 TOP 3</span>
-                        <span class="today_txt">2019-04-02 현재기준</span>
-                        <ul>
-                            <li>
-                                <div class="ta_l"><span class="num_txt">1</span><span class="txt">홍길동<em class="s_txt">(hongil98@email.com)</em></span></div>
-                                <div class="ta_r"><span class="ico_apps">사용자</span><span class="count">10</span></div>
-                            </li>
-                            <li>
-                                <div class="ta_l"><span class="num_txt">2</span><span class="txt">장동건<em class="s_txt">(Smilekang_1@email.com)</em></span></div>
-                                <div class="ta_r"><span class="ico_apps">사용자</span><span class="count">9</span></div>
-                            </li>
-                            <li>
-                                <div class="ta_l"><span class="num_txt">3</span><span class="txt">김전력<em class="s_txt">(mk_lee@email.com)</em></span></div>
-                                <div class="ta_r"><span class="ico_apps">사용자</span><span class="count">8</span></div>
-                            </li>
-                        </ul>
+                        <span class="tit">삭제 예정</span>
                     </div>
                 </li>
             </ul>
@@ -126,6 +105,10 @@
         var PAGING_SIZE = 5;
         var SORT = "id,asc";
 
+        // 사용자별 구매한 상품 수
+        var userCountPerInstance = "[[${instancesCount}]]";
+        var resultCountList = JSON.parse(userCountPerInstance.replace(/&quot;/g,'"'));
+
         var getUserList = function (pageNum) {
             var dateParameter;                                              //날짜
             var categoryId = $("#categoryId option:selected").val();        //카테고리
@@ -160,7 +143,6 @@
         };
         
         var callbackUserList = function(data) {
-            console.log("data ::: " + JSON.stringify(data));
             $("#totalCount").text(" (" + data.totalElements +")");
 
             var userList = $("#userListArea");
@@ -169,16 +151,26 @@
             var listLength = content.length;
 
             if(listLength > 0){
-                var userCount;
 
                 for(var i = 0; i < listLength; i++){
+                    var instanceCount;
+
+                    for(key in resultCountList) {
+                        if(content[i].id == key){
+                            instanceCount = resultCountList[key];
+                            break;
+                        } else {
+                            instanceCount = 0;
+                        }
+                    }
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><a href='javascript:void(0);' onclick=moveUserStatsDetail('"+content[i].id+"')>" + content[i].name + "</a></td>"
                         + "<td>" + content[i].id+ "</td>"
                         + "<td>" + "이용 기간" + "</td>"
-                        + "<td>" + "구매상품 수" + "</td>"
+                        + "<td>" + instanceCount + "</td>"
                         + "</tr>"
                     );
                 }
@@ -196,7 +188,6 @@
             var pageSize = data.size;
 
             var pageCount = Math.ceil(pageTotalNumber/pageSize);
-            console.log("::pageCount :: " + pageCount);
 
             if(pageCount > 0){
                 for(var page = 0; page < pageCount; page++){

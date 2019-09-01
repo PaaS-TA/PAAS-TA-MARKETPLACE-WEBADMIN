@@ -95,4 +95,14 @@ public class AdminStatsService {
                 .toString();
         return paasApiRest.getForObject(url, Object.class);
     }
+
+
+    /**
+     * 사용자별 구매 상품 수
+     *
+     * @return
+     */
+    public Map<String, Object> countsOfInstsUser() {
+        return paasApiRest.getForObject("/admin/stats/users/instances/counts", Map.class);
+    }
 }

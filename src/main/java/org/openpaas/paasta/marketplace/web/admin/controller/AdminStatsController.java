@@ -6,6 +6,7 @@ import org.openpaas.paasta.marketplace.api.domain.CustomPage;
 import org.openpaas.paasta.marketplace.api.domain.Software;
 import org.openpaas.paasta.marketplace.api.domain.SoftwareSpecification;
 import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminStatsService;
 import org.springframework.stereotype.Controller;
@@ -31,6 +32,7 @@ public class AdminStatsController {
 
     private final AdminSoftwareService adminSoftwareService;
     private final AdminStatsService adminStatsService;
+    private final AdminCategoryService adminCategoryService;
     private final CommonService commonService;
 
     /**
@@ -100,7 +102,9 @@ public class AdminStatsController {
      * @return ModelAndView(Spring 클래스)
      */
     @GetMapping(value = "/users/list")
-    public String getUserStatsMain() {
+    public String getUserStatsMain(Model model) {
+        // 사용자별 구매 상품 수
+        model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
         return "contents/useStatusUser";
     }
 
@@ -145,6 +149,7 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/users/{id}")
     public String getUserStats(Model model, @PathVariable String id) {
+        model.addAttribute("categories", adminCategoryService.getCategoryList());
         model.addAttribute("userStat", adminStatsService.getUser(id));
         return "contents/useStatusUserDetail";
     }

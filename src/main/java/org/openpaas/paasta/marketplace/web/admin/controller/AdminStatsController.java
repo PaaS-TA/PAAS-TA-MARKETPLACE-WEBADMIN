@@ -123,7 +123,26 @@ public class AdminStatsController {
     @GetMapping(value = "/softwares/{id}")
     public String getSoftwareStats(Model model, @PathVariable Long id) {
         model.addAttribute("softwareStat", adminSoftwareService.getAdminSoftwares(id));
-        // TODO ::: 상품에 대한 총 사용자 수
+
+        // 단일 상품에 대한 총 사용자 수
+        List<Long> idIn = new ArrayList<>();
+        idIn.add(id);
+
+        Map<Long, Long> result = adminStatsService.getCountsOfInsts(idIn);
+        Iterator iter = result.keySet().iterator();
+        Object usedSwCount = null;
+
+        if(result.size() > 0) {
+            while(iter.hasNext()){
+                Object key = iter.next();
+                usedSwCount = result.get(key);
+            }
+        }else {
+            usedSwCount = 0;
+        }
+
+        model.addAttribute("usedSwCountSum", usedSwCount);
+
 
         // TODO ::: 사용자들 목록 조회
 

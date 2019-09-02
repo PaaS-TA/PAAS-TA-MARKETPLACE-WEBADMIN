@@ -36,7 +36,7 @@
                     <div class="inWrap bg01">
                         <span class="tit">전체 판매자 수</span>
                         <div class="in_txtBox">
-                            <span class="count">1,000</span>
+                            <span class="count">삭제 예정</span>
                             <p class="txt">Total number of registered products</p>
                         </div>
                     </div>
@@ -45,27 +45,16 @@
                     <div class="inWrap bg02">
                         <span class="tit">사용 상품 수</span>
                         <div class="in_txtBox">
-                            <span class="count">800</span>
+                            <span class="count">삭제 예정</span>
                             <p class="txt">Actual Usage products</p>
                         </div>
                     </div>
                 </li>
                 <li>
                     <div class="inWrap bg04">
-                        <span class="tit">판매자 TOP 3</span>
-                        <span class="today_txt">2019-05-10 현재기준</span>
                         <ul>
                             <li>
-                                <div class="ta_l"><span class="num_txt">1</span><span class="txt">(주)씨이랩</span></div>
-                                <div class="ta_r"><span class="ico_user">사용자</span><span class="count">35</span></div>
-                            </li>
-                            <li>
-                                <div class="ta_l"><span class="num_txt">2</span><span class="txt">수요자원시장 컨설팅</span></div>
-                                <div class="ta_r"><span class="ico_user">사용자</span><span class="count">21</span></div>
-                            </li>
-                            <li>
-                                <div class="ta_l"><span class="num_txt">3</span><span class="txt">우유니</span></div>
-                                <div class="ta_r"><span class="ico_user">사용자</span><span class="count">15</span></div>
+                                <div class="ta_l"><span class="num_txt">삭제 예정</span></div>
                             </li>
                         </ul>
                     </div>
@@ -82,7 +71,7 @@
                     <div class="form-group-area">
                         <div class="fm_label"><label for="" class="label">판매자명</label></div>
                         <div class="fm_box">
-                            <input type="text" placeholder="검색어를 입력해 주세요." style="width:400px;">
+                            <input type="text" placeholder="검색어를 입력해 주세요." onkeypress="if(event.keyCode==13) {search();}" id="nameLike" name="nameLike"style="width:400px;">
                         </div>
                     </div>
                 </div>
@@ -93,7 +82,7 @@
         <!-- //검색 Form -->
 
         <div class="cont-titWrap mt30">
-            <h3 class="h-tit3">전체 상품 수 <span class="point4">(50)</span></h3>
+            <h3 class="h-tit3">총 건수 <span class="point4" id="totalCount"></span></h3>
         </div>
 
         <!-- 테이블 -->
@@ -113,7 +102,7 @@
                 <tr>
                     <th scope="col">No.</th>
                     <th scope="col">판매자</th>
-                    <th scope="col">아이디</th>
+                    <th scope="col">ID</th>
                     <th scope="col">유형</th>
                     <th scope="col">프로필 등록일</th>
                     <th scope="col">승인상품 수</th>
@@ -121,107 +110,7 @@
                     <th scope="col">사용자 수</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>10</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
+                <tbody id="profileArea">
                 </tbody>
             </table>
         </div>
@@ -229,20 +118,7 @@
 
         <!-- page -->
         <nav class="pagiWrap">
-            <ul class="pagination">
-                <li class="first disabled"><a href="#">맨 처음</a></li>
-                <li class="prev"><a href="#">이전</a></li>
-                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                <li class=" disabled"><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-                <li><a href="#">7</a></li>
-                <li><a href="#">8</a></li>
-                <li><a href="#">9</a></li>
-                <li class="next"><a href="#">다음</a></li>
-                <li class="end"><a href="#">맨 끝</a></li>
+            <ul class="pagination" id="pageNumberList">
             </ul>
         </nav>
         <!-- //page -->
@@ -251,7 +127,101 @@
     <!-- //content -->
 
     <script type="text/javascript">
-        console.log('::MarketPlace index Init::');
+        var PAGING_SIZE = 10;
+        var SORT = "id,asc";
+
+        // 판매자별 승인 상품 수
+        //var approvalSoftwareCount = "[[${approvalSoftwareCount}]]";
+        var approvalSoftwareCount = JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
+
+        var getProfileStatsList = function () {
+            var nameLike = $("#nameLike").val();
+
+            if(nameLike === null || nameLike === '') {
+                nameLike = '';
+            }
+
+            var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike + "&size=" + PAGING_SIZE + "&sort=" + SORT;
+
+            console.log("전체 경로 ::: "  + reqUrl);
+
+            procCallAjax(reqUrl, "GET", null, null, callbackProfileStatsList);
+        };
+
+        var callbackProfileStatsList = function(data){
+            console.log("dddd ::: " + JSON.stringify(data));
+            $("#totalCount").text("(" + data.totalElements + ")");
+
+            //::adminProfileList::
+            var adminProfileList = $("#profileArea");
+            var htmlString = [];
+            var content = data.content;
+
+            var listLength = content.length;
+
+            if(listLength > 0){
+                var approvalSWCount;
+
+                for(var i = 0; i < listLength; i++){
+                    for(key in approvalSoftwareCount) {
+                        if(content[i].id == key){
+                            approvalSWCount = approvalSoftwareCount[key];
+                        }
+                    }
+                    htmlString.push(
+                        "<tr>"
+                        + "<td>" + (i+1) + "</td>"
+                        + "<td><a href='javascript:void(0);' onclick=\"moveProfileStatsDetail(\'"+content[i].id+"')\">" + content[i].name+ "</td>"
+                        + "<td>" + content[i].id + "</a></td>"
+                        + "<td>" + content[i].type+ "</td>"
+                        + "<td>" + content[i].createdDate + "</td>"
+                        + "<td>" + approvalSWCount + "</td>"
+                        + "<td>" + "판매상품 수" + "</td>"
+                        + "<td>" + "사용자 수" + "</td>"
+                        + "</tr>"
+                    );
+                }
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='6'><p class='user_p'>판매자가 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+
+            adminProfileList.html(htmlString);
+
+            //::page::
+            var pageNumberList = $("#pageNumberList");
+            var htmlStringPage = "<li class='first disabled'><a href='#'>맨 처음</a></li>" + "<li class='prev'><a href='#'>이전</a></li>";
+            var pageTotalNumber = data.totalElements;
+            var pageSize = data.size;
+
+            var pageCount = Math.ceil(pageTotalNumber/pageSize);
+            console.log("pageCount :: " + pageCount);
+
+            if(pageCount > 0){
+                for(var page = 0; page < pageCount; page++){
+                    htmlStringPage += "<li class='active'><a href='#'>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
+                }
+            }
+            htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
+            pageNumberList.html(htmlStringPage);
+
+        };
+
+        //eventNameLike
+        var search = function() {
+            getProfileStatsList();
+        };
+
+        //move Detail
+        var moveProfileStatsDetail = function(id) {
+            procMovePage("/admin/stats/sellers/{id}".replace("{id}", id));
+        };
+
+
+        // ON LOAD
+        $(document).ready(function() {
+            getProfileStatsList();
+        });
     </script>
 </div>
 

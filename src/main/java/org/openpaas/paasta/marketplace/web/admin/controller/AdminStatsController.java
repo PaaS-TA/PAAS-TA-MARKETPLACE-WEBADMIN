@@ -3,9 +3,11 @@ package org.openpaas.paasta.marketplace.web.admin.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openpaas.paasta.marketplace.api.domain.CustomPage;
+import org.openpaas.paasta.marketplace.api.domain.Profile;
 import org.openpaas.paasta.marketplace.api.domain.Software;
 import org.openpaas.paasta.marketplace.api.domain.SoftwareSpecification;
 import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminSellerProfileService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminStatsService;
@@ -31,6 +33,7 @@ import java.util.*;
 public class AdminStatsController {
 
     private final AdminSoftwareService adminSoftwareService;
+    private final AdminSellerProfileService adminSellerProfileService;
     private final AdminStatsService adminStatsService;
     private final AdminCategoryService adminCategoryService;
     private final CommonService commonService;
@@ -41,10 +44,37 @@ public class AdminStatsController {
      * @return ModelAndView(Spring 클래스)
      */
     @GetMapping(value = "/sellers")
-    public String getSellerStatsMain() {
+    public String getSellerStatsMain(Model model, HttpServletRequest httpServletRequest) {
+        //model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
+        //model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
+        CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
+
+        List<String> idIn = new ArrayList<>();
+        for (Profile f:profileList.getContent()) {
+            idIn.add(f.getId());
+        }
+        Map<String, Long> result = adminStatsService.getCountsOfSwsProvider();
+        Map newResult = new HashMap();
+
+        for (String id:idIn) {
+            if(result.get(id) != null){
+                newResult.put(id, result.get(id));
+            }else{
+                newResult.put(id, 0);
+            }
+        }
+        // 승인 상품 수
+        model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(newResult));
         return "contents/useStatusSeller";
     }
 
+    @GetMapping(value = "/sellers/{id}")
+    public String getSellerStats(Model model, @PathVariable String id) {
+        model.addAttribute("categories", adminSoftwareService.getAdminCategories());
+        model.addAttribute("sellerStat", adminSellerProfileService.getProfiles(id));
+
+        return "contents/useStatusSellerDetail";
+    }
 
     /**
      * 상품별 현황 메인페이지로 이동한다.

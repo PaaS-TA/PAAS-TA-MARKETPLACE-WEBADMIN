@@ -49,79 +49,80 @@
                             </colgroup>
                             <tbody>
                                 <tr>
-                                    <td>상품명</td>
+                                    <th scope="row">상품명</th>
                                     <td colspan="3" th:text="${softwareStat.name}"></td>
                                 </tr>
                                 <tr>
-                                    <td>버전</td>
+                                    <th scope="row">버전</th>
                                     <td th:text="${softwareStat.version}"></td>
-                                    <td>카테고리</td>
+                                    <th scope="row">카테고리</th>
                                     <td th:text="${softwareStat.category.name}"></td>
                                 </tr>
                                 <tr>
-                                    <td>가격</td>
+                                    <th scope="row">가격</th>
                                     <td th:text="${softwareStat.pricePerDay}">원/월</td>
-                                    <td>판매자</td>
+                                    <th scope="row">판매자</th>
                                     <td th:text="${softwareStat.createdBy}"></td>
                                 </tr>
                                 <tr>
-                                    <td>등록일</td>
+                                    <th scope="row">등록일</th>
                                     <td th:text="${softwareStat.createdDate}"></td>
-                                    <td>승인일</td>
+                                    <th scope="row">승인일</th>
                                     <td th:text="${softwareStat.statusModifiedDate}"></td>
                                 </tr>
                                 <tr>
-                                    <td>개요</td>
+                                    <th scope="row">개요</th>
                                     <td colspan="3" th:text="${softwareStat.description}"></td>
                                 </tr>
                                 <tr>
-                                    <td>사용자 수</td>
+                                    <th scope="row">사용자 수</th>
                                     <td colspan="3"></td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
                     <!-- //table -->
-
-                <div class="cht_area_wrap">
-                    <span class="cht_tit text-left mt50">판매 현황<span class="point4" id="totalCount"></span></span>
-                    <!-- 테이블 -->
-                    <div class="tbl type1 pt20">
-                        <table class="table">
-                            <colgroup>
-                                <col style="width:10%;">
-                                <col style="width:20%;">
-                                <col style="width:auto;">
-                                <col style="width:18%;">
-                                <col style="width:18%;">
-                            </colgroup>
-                            <thead>
-                            <tr>
-                                <th scope="col">No.</th>
-                                <th scope="col">사용자 이름</th>
-                                <th scope="col">ID</th>
-                                <th scope="col">구매일</th>
-                                <th scope="col">사용연월</th>
-                            </tr>
-                            </thead>
-                            <tbody id="softwareArea">
-                            </tbody>
-                        </table>
-                    </div>
-                    <!-- //테이블 -->
-                    <!-- page -->
-                    <nav class="pagiWrap">
-                        <ul class="pagination" id="pageNumberList">
-                        </ul>
-                    </nav>
-                    <!-- //page -->
-                </div>
-
                 </div>
                 <!-- //inner -->
             </div>
         </div>
         <!-- //cBox1 -->
+
+        <div class="cont-titWrap mt30">
+            <h3 class="h-tit3">판매 현황 <span class="point4" id="totalCount">(50)</span></h3>
+        </div>
+
+
+        <!-- 테이블 -->
+        <div class="tbl type1 pt20">
+            <table class="table">
+                <colgroup>
+                    <col style="width:10%;">
+                    <col style="width:20%;">
+                    <col style="width:auto;">
+                    <col style="width:18%;">
+                    <col style="width:18%;">
+                </colgroup>
+                <thead>
+                <tr>
+                    <th scope="col">No.</th>
+                    <th scope="col">사용자 이름</th>
+                    <th scope="col">ID</th>
+                    <th scope="col">구매일</th>
+                    <th scope="col">사용연월</th>
+                </tr>
+                </thead>
+                <tbody id="softwareArea">
+                </tbody>
+            </table>
+        </div>
+        <!-- //테이블 -->
+        <!-- page -->
+        <nav class="pagiWrap">
+            <ul class="pagination" id="pageNumberList">
+            </ul>
+        </nav>
+        <!-- //page -->
     </div>
     <!-- //content -->
 

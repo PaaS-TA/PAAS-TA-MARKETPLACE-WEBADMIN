@@ -26,6 +26,15 @@ public class AdminStatsService {
     private final RestTemplate paasApiRest;
 
     /**
+     * 판매자별 승인 상품 수 조회
+     *
+     * @return
+     */
+    public Map<String, Long> getCountsOfSwsProvider() {
+        return paasApiRest.getForObject("/admin/stats/providers/softwares/counts", Map.class);
+    }
+
+    /**
      * 상품별 사용자 수 목록 조회
      *
      * @param idIn

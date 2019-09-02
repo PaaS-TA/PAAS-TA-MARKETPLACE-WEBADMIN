@@ -53,12 +53,12 @@
                             <tbody>
                             <tr>
                                 <th scope="row">판매자</th>
-                                <td>(주)씨이랩</td>
-                                <th scope="row">승인상품수</th>
+                                <td th:text="${sellerStat.name}"></td>
+                                <th scope="row">승인상품 수</th>
                                 <td>5</td>
-                                <th scope="row">판매상품수</th>
+                                <th scope="row">판매상품 수</th>
                                 <td>5</td>
-                                <th scope="row">사용자수</th>
+                                <th scope="row">사용자 수</th>
                                 <td>27</td>
                             </tr>
                             </tbody>
@@ -77,9 +77,15 @@
                 <!-- Form 그룹 -->
                 <div class="form-group">
                     <div class="form-group-area">
-                        <div class="fm_label"><label for="" class="label">판매자명</label></div>
+                        <div class="fm_label"><label for="" class="label">카테고리</label></div>
                         <div class="fm_box">
-                            <input type="text" placeholder="검색어를 입력해 주세요." style="width:400px;">
+                            <select id="categoryId">
+                                <option value="">선택</option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.id}"
+                                        th:utext="${category.name}">
+                                </option>
+                            </select>
                         </div>
                     </div>
                 </div>
@@ -98,9 +104,8 @@
             <table class="table">
                 <colgroup>
                     <col style="width:8%;">
+                    <col style="width:10%;">
                     <col style="width:auto;">
-                    <col style="width:10%;">
-                    <col style="width:10%;">
                     <col style="width:10%;">
                     <col style="width:10%;">
                     <col style="width:10%;">
@@ -109,12 +114,11 @@
                 <thead>
                 <tr>
                     <th scope="col">No.</th>
-                    <th scope="col">판매자</th>
-                    <th scope="col">아이디</th>
-                    <th scope="col">유형</th>
-                    <th scope="col">프로필 등록일</th>
-                    <th scope="col">승인상품 수</th>
-                    <th scope="col">판매상품 수</th>
+                    <th scope="col">카테고리</th>
+                    <th scope="col">상품명</th>
+                    <th scope="col">버전</th>
+                    <th scope="col">등록일</th>
+                    <th scope="col">승인일</th>
                     <th scope="col">사용자 수</th>
                 </tr>
                 </thead>
@@ -127,97 +131,6 @@
                     <td>2019-04-01</td>
                     <td>5</td>
                     <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>9</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                    <td>27</td>
                 </tr>
                 </tbody>
             </table>

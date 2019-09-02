@@ -6,6 +6,7 @@ import org.openpaas.paasta.marketplace.api.domain.CustomPage;
 import org.openpaas.paasta.marketplace.api.domain.Software;
 import org.openpaas.paasta.marketplace.api.domain.SoftwareSpecification;
 import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminStatsService;
 import org.springframework.stereotype.Controller;
@@ -13,12 +14,10 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author hrjin
@@ -33,6 +32,7 @@ public class AdminStatsController {
 
     private final AdminSoftwareService adminSoftwareService;
     private final AdminStatsService adminStatsService;
+    private final AdminCategoryService adminCategoryService;
     private final CommonService commonService;
 
     /**
@@ -106,8 +106,57 @@ public class AdminStatsController {
      *
      * @return ModelAndView(Spring 클래스)
      */
-    @GetMapping(value = "/users")
-    public String getUserStatsMain() {
+    @GetMapping(value = "/users/list")
+    public String getUserStatsMain(Model model) {
+        // 사용자별 구매 상품 수
+        model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
         return "contents/useStatusUser";
     }
+
+    /**
+     * 마켓플레이스 전체 사용자 목록 조회
+     *
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/users")
+    @ResponseBody
+    public CustomPage<Object> getUserStatList(HttpServletRequest httpServletRequest) {
+
+        // 전체 사용자 조회
+//        List<String> idIn = new ArrayList<>();
+//        idIn.add("");
+//
+//        Map aaa = adminStatsService.getUserStatList(idIn);
+//
+//        Set<String> set = aaa.keySet();
+//        Iterator<String> iter = set.iterator();
+//
+//        List userAllList = new ArrayList();
+//        ObjectMapper objectMapper = new ObjectMapper();
+//
+//        while (iter.hasNext()) {
+//            String key = iter.next();
+//            Object user = objectMapper.convertValue(aaa.get(key), Object.class);
+//            userAllList.add(user);
+//        }
+
+        return adminStatsService.getUserList(commonService.setParameters(httpServletRequest));
+    }
+
+
+    /**
+     * 사용자별 상세 페이지 이동 및 조회
+     *
+     * @param model
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/users/{id}")
+    public String getUserStats(Model model, @PathVariable String id) {
+        model.addAttribute("categories", adminCategoryService.getCategoryList());
+        model.addAttribute("userStat", adminStatsService.getUser(id));
+        return "contents/useStatusUserDetail";
+    }
+
 }

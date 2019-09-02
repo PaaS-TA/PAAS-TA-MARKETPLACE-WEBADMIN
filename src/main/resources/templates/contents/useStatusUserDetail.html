@@ -49,9 +49,9 @@
                             <tbody>
                             <tr>
                                 <th scope="row">사용자명</th>
-                                <td>한세계</td>
+                                <td th:text="${userStat.name}">한세계</td>
                                 <th scope="row">ID</th>
-                                <td> segae11@email.com</td>
+                                <td th:text="${userStat.id}"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -69,7 +69,25 @@
                 <!-- Form 그룹 -->
                 <div class="form-group">
                     <div class="form-group-area">
-                        <div class="fm_label"><label for="" class="label">사용연월</label></div>
+                        <div class="fm_label"><label for="" class="label">이용기간</label></div>
+                        <div class="fm_box w_auto pr10">
+                            <select id="" name="">
+                                <option value="">2019</option>
+                                <option value="">2018</option>
+                                <option value="">2017</option>
+                                <option value="">2016</option>
+                            </select>
+                        </div>
+                        <div class="fm_box w_auto">
+                            <select id="" name="">
+                                <option value="">05</option>
+                                <option value="">04</option>
+                                <option value="">03</option>
+                                <option value="">02</option>
+                                <option value="">01</option>
+                            </select>
+                        </div>
+                        ~
                         <div class="fm_box w_auto pr10">
                             <select id="" name="">
                                 <option value="">2019</option>
@@ -95,11 +113,12 @@
                     <div class="form-group-area">
                         <div class="fm_label"><label for="" class="label">카테고리</label></div>
                         <div class="fm_box">
-                            <select id="" name="">
-                                <option value="">전체</option>
-                                <option value="">보안</option>
-                                <option value="">ERP</option>
-                                <option value="">게임</option>
+                            <select id="categoryId">
+                                <option value="">선택</option>
+                                <option th:each="category : ${categories}"
+                                        th:value="${category.id}"
+                                        th:utext="${category.name}">
+                                </option>
                             </select>
                         </div>
                     </div>
@@ -269,7 +288,7 @@
     <!-- //content -->
 
     <script type="text/javascript">
-        console.log('::MarketPlace index Init::');
+        console.log('::MarketPlace index Init::' + "[[${userStat}]]");
     </script>
 </div>
 

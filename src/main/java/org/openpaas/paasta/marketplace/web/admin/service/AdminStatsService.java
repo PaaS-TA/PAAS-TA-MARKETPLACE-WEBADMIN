@@ -3,6 +3,7 @@ package org.openpaas.paasta.marketplace.web.admin.service;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openpaas.paasta.marketplace.api.domain.CustomPage;
+import org.openpaas.paasta.marketplace.api.domain.Instance;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -113,5 +114,21 @@ public class AdminStatsService {
      */
     public Map<String, Object> countsOfInstsUser() {
         return paasApiRest.getForObject("/admin/stats/users/instances/counts", Map.class);
+    }
+
+
+    /**
+     * 상품 판매 현황 목록 조회
+     *
+     * @param queryString
+     * @return
+     */
+    public CustomPage<Instance> getInstanceListBySwId(String queryString) {
+        ResponseEntity<CustomPage<Instance>> responseEntity = paasApiRest.exchange("/instances/page" + queryString, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Instance>>() {});
+        CustomPage<Instance> customPage = responseEntity.getBody();
+
+        System.out.println("getContent ::: " + customPage.getContent());
+        System.out.println("getTotalElements ::: " + customPage.getTotalElements());
+        return customPage;
     }
 }

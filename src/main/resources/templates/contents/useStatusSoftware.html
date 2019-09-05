@@ -127,7 +127,7 @@
                     <th scope="col">버전</th>
                     <th scope="col">등록일</th>
                     <th scope="col">승인일</th>
-                    <th scope="col">사용자 수</th>
+                    <th scope="col">판매량</th>
                 </tr>
                 </thead>
                 <tbody id="softwareArea">
@@ -206,6 +206,14 @@
                             userCount = resultCountList[key];
                         }
                     }
+
+                    var statusModifiedDate = '';
+                    if(content[i].statusModifiedDate == null){
+                        statusModifiedDate = '';
+                    }else{
+                        statusModifiedDate = content[i].statusModifiedDate;
+                    }
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
@@ -213,7 +221,7 @@
                         + "<td><a href='javascript:void(0);' onclick=moveSoftwareStatsDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].version + "</td>"
                         + "<td>" + content[i].createdDate + "</td>"
-                        + "<td>" + content[i].statusModifiedDate + "</td>"
+                        + "<td>" + statusModifiedDate + "</td>"
                         + "<td>" + userCount + "</td>"
                         + "</tr>"
                     );

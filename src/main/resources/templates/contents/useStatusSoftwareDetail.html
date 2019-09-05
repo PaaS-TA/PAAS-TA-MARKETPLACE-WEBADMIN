@@ -54,13 +54,13 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">버전</th>
-                                    <td th:text="${softwareStat.version}"></td>
+                                    <td th:text="'v' + ${softwareStat.version}"></td>
                                     <th scope="row">카테고리</th>
                                     <td th:text="${softwareStat.category.name}"></td>
                                 </tr>
                                 <tr>
                                     <th scope="row">가격</th>
-                                    <td th:text="${softwareStat.pricePerDay}">원/월</td>
+                                    <td th:text="${softwareStat.pricePerDay} + ' 원/월'"></td>
                                     <th scope="row">판매자</th>
                                     <td th:text="${softwareStat.createdBy}"></td>
                                 </tr>
@@ -75,8 +75,8 @@
                                     <td colspan="3" th:text="${softwareStat.description}"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">사용자 수</th>
-                                    <td colspan="3" th:text="${usedSwCountSum}"></td>
+                                    <th scope="row">판매량</th>
+                                    <td colspan="3" th:text="${usedSwCountSum} + '개'"></td>
                                 </tr>
                             </tbody>
                         </table>
@@ -106,13 +106,14 @@
                 <thead>
                 <tr>
                     <th scope="col">No.</th>
+                    <th scope="col">인스턴스 ID</th>
                     <th scope="col">사용자 이름</th>
-                    <th scope="col">ID</th>
+                    <th scope="col">사용자 ID</th>
                     <th scope="col">구매일</th>
-                    <th scope="col">사용연월</th>
+                    <th scope="col">종료일</th>
                 </tr>
                 </thead>
-                <tbody id="softwareArea">
+                <tbody id="instanceListArea">
                 </tbody>
             </table>
         </div>
@@ -126,8 +127,75 @@
     </div>
     <!-- //content -->
 
+    <input type="hidden" id="softwareId" th:value="${softwareStat.id}">
+
     <script type="text/javascript">
-        console.log('::MarketPlace index Init::');
+        var PAGING_SIZE = 5;
+        var SORT = "id,asc";
+
+        var getInstanceList = function(pageNum) {
+          var reqUrl = "/admin/stats/instances" + "?softwareId=" + $("#softwareId").val() + "&size=" + PAGING_SIZE + "&sort=" + SORT + "&page=" + pageNum;
+          procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
+        };
+
+        var callbackGetInstanceList = function(data) {
+            $("#totalCount").text("(" + data.totalElements + ")");
+
+            var instanceListArea = $("#instanceListArea");
+            var htmlString = [];
+            var content = data.content;
+
+            var listLength = content.length;
+
+            if(listLength > 0){
+                for(var i = 0; i < listLength; i++){
+                    htmlString.push(
+                        "<tr>"
+                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td>" + content[i].appName + "</td>"
+                        + "<td>" + content[i].createdBy + "</td>"
+                        + "<td>" + content[i].createdBy + "</td>"
+                        + "<td>" + content[i].createdDate + "</td>"
+                        + "<td>" + content[i].provisionEndDate + "</td>"
+                        + "</tr>"
+                    );
+                }
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='6'><p class='user_p'>결과가 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+
+            instanceListArea.html(htmlString);
+
+            //::page::
+            var pageNumberList = $("#pageNumberList");
+            var htmlStringPage = "<li class='first disabled'><a href='#'>맨 처음</a></li>" + "<li class='prev'><a href='#'>이전</a></li>";
+            var pageTotalNumber = data.totalElements;
+            var pageSize = data.size;
+
+            var pageCount = Math.ceil(pageTotalNumber/pageSize);
+            console.log("::pageCount :: " + pageCount);
+
+            if(pageCount > 0){
+                for(var page = 0; page < pageCount; page++){
+                    htmlStringPage += "<li class='active'><a href='javascript:void(0);' onclick=moveInstanceListPage('"+ page +"')>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
+                }
+            }
+            htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
+            pageNumberList.html(htmlStringPage);
+        };
+
+        // 페이지 이동
+        var moveInstanceListPage = function(page) {
+            getInstanceList(page);
+        };
+
+        $(document).ready(function () {
+            console.log('software id ::: ' + $("#softwareId").val());
+            getInstanceList();
+        });
+
+
     </script>
 </div>
 

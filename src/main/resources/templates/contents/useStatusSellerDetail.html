@@ -55,7 +55,7 @@
                                 <th scope="row">판매자</th>
                                 <td th:text="${sellerStat.name}"></td>
                                 <th scope="row">승인상품 수</th>
-                                <td>5</td>
+                                <td>111</td>
                                 <th scope="row">판매상품 수</th>
                                 <td>5</td>
                                 <th scope="row">사용자 수</th>
@@ -119,7 +119,7 @@
                     <th scope="col">버전</th>
                     <th scope="col">등록일</th>
                     <th scope="col">승인일</th>
-                    <th scope="col">사용자 수</th>
+                    <th scope="col">사용 수</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -139,20 +139,7 @@
 
         <!-- page -->
         <nav class="pagiWrap">
-            <ul class="pagination">
-                <li class="first disabled"><a href="#">맨 처음</a></li>
-                <li class="prev"><a href="#">이전</a></li>
-                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                <li class=" disabled"><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-                <li><a href="#">7</a></li>
-                <li><a href="#">8</a></li>
-                <li><a href="#">9</a></li>
-                <li class="next"><a href="#">다음</a></li>
-                <li class="end"><a href="#">맨 끝</a></li>
+            <ul class="pagination" id="pageNumberList">
             </ul>
         </nav>
         <!-- //page -->
@@ -161,7 +148,79 @@
     <!-- //content -->
 
     <script type="text/javascript">
+
+        var getSoftwaresPerSellerList = function() {
+            var categoryId = $("#categoryId option:selected").val();
+            var createdById = "[[${sellerStat.id}]]";
+
+            if (categoryId === 'ALL' || categoryId === '') {
+                categoryId = '';
+            }
+
+            var reqUrl = "/admin/stats/sellers/registSwList" + "?createdBy=" + createdById + "&categoryId=" + categoryId;
+
+            console.log("호호호 ::: " + reqUrl);
+
+            procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwaresPerSellerList);
+        };
+
+        var callbackGetSoftwaresPerSellerList = function(data) {
+            console.log("aaa"  + JSON.stringify(data));
+            //::totalElements::
+            $("#totalElements").text("(" + data.totalElements + ")");
+
+            var softwareList = $("#softwareArea");
+            var htmlString = [];
+            var content = data.content;
+
+            var listLength = content.length;
+
+            if(listLength > 0){
+                for(var i = 0; i < listLength; i++){
+                    htmlString.push(
+                        "<tr>"
+                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
+                        + "<td><a href='javascript:void(0);' onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
+                        + "<td>" + content[i].version + "</td>"
+                        + "<td>" + content[i].createdDate + "</td>"
+                        + "<td>" + content[i].statusModifiedDate + "</td>"
+                        + "<td>" + "사용 수" + "</td>"
+                        + "</tr>"
+                    );
+                }
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='7'><p class='user_p'>상품이 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+
+            softwareList.html(htmlString);
+
+            //::page::
+            var pageNumberList = $("#pageNumberList");
+            var htmlStringPage = "<li class='first disabled'><a href='#'>맨 처음</a></li>" + "<li class='prev'><a href='#'>이전</a></li>";
+            var pageTotalNumber = data.totalElements;
+            var pageSize = data.size;
+
+            var pageCount = Math.ceil(pageTotalNumber/pageSize);
+            console.log("::pageCount :: " + pageCount);
+
+            if(pageCount > 0){
+                for(var page = 0; page < pageCount; page++){
+                    htmlStringPage += "<li class='active'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ page +"')>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
+                }
+            }
+            htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
+            pageNumberList.html(htmlStringPage);
+        };
+
+
+        $(document).ready(function () {
+            getSoftwaresPerSellerList();
+        });
         console.log('::MarketPlace index Init::');
+
+
     </script>
 </div>
 

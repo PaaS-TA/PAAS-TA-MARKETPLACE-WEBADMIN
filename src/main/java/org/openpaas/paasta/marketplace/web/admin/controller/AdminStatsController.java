@@ -2,13 +2,10 @@ package org.openpaas.paasta.marketplace.web.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.openpaas.paasta.marketplace.api.domain.CustomPage;
-import org.openpaas.paasta.marketplace.api.domain.Profile;
-import org.openpaas.paasta.marketplace.api.domain.Software;
-import org.openpaas.paasta.marketplace.api.domain.SoftwareSpecification;
+import org.openpaas.paasta.marketplace.api.domain.*;
 import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
-import org.openpaas.paasta.marketplace.web.admin.service.AdminSellerProfileService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryService;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminSellerProfileService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminStatsService;
 import org.springframework.stereotype.Controller;
@@ -69,11 +66,23 @@ public class AdminStatsController {
     }
 
     @GetMapping(value = "/sellers/{id}")
-    public String getSellerStats(Model model, @PathVariable String id) {
+    public String getSellerStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
         model.addAttribute("categories", adminSoftwareService.getAdminCategories());
         model.addAttribute("sellerStat", adminSellerProfileService.getProfiles(id));
 
         return "contents/useStatusSellerDetail";
+    }
+
+    /**
+     * Admin 상품 목록 조회
+     *
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/sellers/registSwList")
+    @ResponseBody
+    public CustomPage<Software> getSoftwaresPerSellerList(HttpServletRequest httpServletRequest){
+        return adminSoftwareService.getAdminSoftwareList(commonService.setParameters(httpServletRequest));
     }
 
     /**
@@ -143,11 +152,19 @@ public class AdminStatsController {
 
         model.addAttribute("usedSwCountSum", usedSwCount);
 
-
-        // TODO ::: 사용자들 목록 조회
-
-
         return "contents/useStatusSoftwareDetail";
+    }
+
+    /**
+     * 상품별 현황 상세 페이지 - 판매 현황 목록 조회
+     *
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/instances")
+    @ResponseBody
+    public CustomPage<Instance> getInstanceListBySwId(HttpServletRequest httpServletRequest) {
+        return adminStatsService.getInstanceListBySwId(commonService.setParameters(httpServletRequest));
     }
 
     /**

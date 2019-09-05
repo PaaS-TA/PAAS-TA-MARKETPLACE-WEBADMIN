@@ -14,84 +14,19 @@
                                 <p class="name" th:text="${session.yourName}"></p>
                                 <span class="ico arr"></span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-right" role="btn-my" aria-labelledby="btn-my">
+                            <ul class="dropdown-menu dropdown-menu-right" role="btn-my" aria-labelledby="btn-my" th:if="${not #strings.isEmpty(session.yourName)}">
                                 <!--                            <li><a href="#"><span class="ico ico1"></span>개인정보 수정</a></li>-->
                                 <!--                            <li><a href="#"><span class="ico ico3"></span>공지사항</a></li>-->
                                 <li><a href="#" th:onclick="document.getElementById('frm').submit()"><span class="ico ico4"></span>로그아웃</a></li>
-                                <!--<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}">-->
-                                <!--<input type="hidden" th:name="" th:value="">-->
+                            </ul>
+                            <ul class="dropdown-menu dropdown-menu-right" role="btn-my" aria-labelledby="btn-my" th:if="${#strings.isEmpty(session.yourName)}">
+                                <!--                            <li><a href="#"><span class="ico ico1"></span>개인정보 수정</a></li>-->
+                                <!--                            <li><a href="#"><span class="ico ico3"></span>공지사항</a></li>-->
+                                <li><a href="#" onclick="location.href='/login'"><span class="ico ico4"></span>로그인</a></li>
                             </ul>
                         </div>
                     </div>
                 </form>
-
-                <!-- 반응형 메뉴버튼 -->
-                <!--<div class="m_btn_wrap">
-                    <button id="addClassBtn" type="button"></button>
-                </div>-->
-                <!-- //반응형 메뉴버튼 -->
-
-                <!-- 반응형 메뉴영역 -->
-                <!--<div class="m_menu_wrap">
-                    <div class="m_menu_area">
-                        <div class="m_menu_top">
-                            <h1 class="logo"><a href="#"><img src="/images/top_logo.png" alt="HUB POP"></a></h1>
-                            <button class="closed" type="button">
-                            </button></div>
-                        <div class="m_memu_btn">
-                            <div class="move_app">
-                                <a href="">HOME</a>
-                            </div>
-                            <div class="col col-my">
-                                <div class="dropdown">
-                                    <button id="btn-my" type="button" class="btn" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                        <p class="name">홍길동님</p>
-                                        <span class="ico arr"></span>
-                                    </button>
-                                    <ul class="dropdown-menu dropdown-menu-right" role="btn-my" aria-labelledby="btn-my">
-                                        <li><a href="#"><span class="ico ico1"></span>개인정보 수정</a></li>
-                                        <li><a href="#"><span class="ico ico3"></span>공지사항</a></li>
-                                        <li><a href="#"><span class="ico ico4"></span>로그아웃</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="gnbMenu_m">
-                            <div class="gnb-in" id="mobileMenu">
-                                &lt;!&ndash; depth1 START &ndash;&gt;
-                                <ul class="gnb-menu-m dept1 depth1">
-                                    <li class="dept1">
-                                        <a class="dept1 on" onclick="depth1Click_m(event);">상품 관리</a>
-                                    </li>
-                                    <li class="dept1">
-                                        <a class="dept1" onclick="depth1Click_m(event);">카테고리 관리</a>
-                                    </li>
-                                    <li class="dept1">
-                                        <a class="dept1" href="javascript:void(0);" onclick="depth1Click_m(event);">사용 현황<span class="ico ico-arr"></span></a>
-                                        <ul class="dept2" style="display:none;">
-                                            <li class="dept2">
-                                                <a class="dept2">상품별 현황</a>
-                                            </li>
-                                            <li class="dept2">
-                                                <a class="dept2">판매자별 현황</a>
-                                            </li>
-                                            <li class="dept2">
-                                                <a class="dept2">사용자별 현황</a>
-                                            </li>
-                                        </ul>
-                                        &lt;!&ndash; dept2 END &ndash;&gt;
-                                    </li>
-                                    <li class="dept1">
-                                        <a class="dept1" href="javascript:void(0);" onclick="depth1Click_m(event);">판매자 관리</a>
-                                    </li>
-                                </ul>
-                                &lt;!&ndash; depth1 END &ndash;&gt;
-                            </div>
-                        </div>
-                    </div>
-                </div>-->
-                <!-- //반응형 메뉴영역 -->
             </div>
         </div>
     </div>

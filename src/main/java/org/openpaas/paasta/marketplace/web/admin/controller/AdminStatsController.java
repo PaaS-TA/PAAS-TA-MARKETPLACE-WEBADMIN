@@ -50,18 +50,23 @@ public class AdminStatsController {
         for (Profile f:profileList.getContent()) {
             idIn.add(f.getId());
         }
-        Map<String, Long> result = adminStatsService.getCountsOfSwsProvider();
-        Map newResult = new HashMap();
 
-        for (String id:idIn) {
-            if(result.get(id) != null){
-                newResult.put(id, result.get(id));
-            }else{
-                newResult.put(id, 0);
-            }
-        }
         // 승인 상품 수
-        model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(newResult));
+        Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
+        //model.addAttribute("__profileList", profileList);
+        //model.addAttribute("approvalSoftwareCount", totalApprovalSwCount);
+        model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
+
+        // 판매 상품 수
+
+
+
+        // 총 판매량
+        Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
+        //model.addAttribute("soldSoftwareCount", totalSoldResult);
+        model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
+
+
         return "contents/useStatusSeller";
     }
 

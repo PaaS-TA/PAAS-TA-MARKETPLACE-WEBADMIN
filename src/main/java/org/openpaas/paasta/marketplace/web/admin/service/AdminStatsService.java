@@ -35,6 +35,17 @@ public class AdminStatsService {
         return paasApiRest.getForObject("/admin/stats/providers/softwares/counts", Map.class);
     }
 
+
+    /**
+     * 판매자별 총 판매량 수 조회
+     *
+     * @return
+     */
+    public Map<String, Long> getCountsOfInstanceProvider() {
+        return paasApiRest.getForObject("/admin/stats/providers/instances/counts", Map.class);
+    }
+
+
     /**
      * 상품별 사용자 수 목록 조회
      *

@@ -149,14 +149,21 @@
 
             if(listLength > 0){
                 for(var i = 0; i < listLength; i++){
+                    var usageEndDate = '';
+                    if(content[i].usageEndDate == null){
+                        usageEndDate = '';
+                    }else{
+                        usageEndDate = content[i].usageEndDate;
+                    }
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td>" + content[i].appName + "</td>"
                         + "<td>" + content[i].createdBy + "</td>"
                         + "<td>" + content[i].createdBy + "</td>"
-                        + "<td>" + content[i].createdDate + "</td>"
-                        + "<td>" + content[i].provisionEndDate + "</td>"
+                        + "<td>" + content[i].usageStartDate + "</td>"
+                        + "<td>" + usageEndDate + "</td>"
                         + "</tr>"
                     );
                 }

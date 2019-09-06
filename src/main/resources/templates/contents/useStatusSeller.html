@@ -107,7 +107,7 @@
                     <th scope="col">프로필 등록일</th>
                     <th scope="col">승인상품 수</th>
                     <th scope="col">판매상품 수</th>
-                    <th scope="col">사용자 수</th>
+                    <th scope="col">총 판매량</th>
                 </tr>
                 </thead>
                 <tbody id="profileArea">
@@ -131,8 +131,10 @@
         var SORT = "id,asc";
 
         // 판매자별 승인 상품 수
-        //var approvalSoftwareCount = "[[${approvalSoftwareCount}]]";
         var approvalSoftwareCount = JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
+
+        // 판매자별 총 판매량 수
+        var soldSoftwareCount = JSON.parse("[[${soldSoftwareCount}]]".replace(/&quot;/g,'"'));
 
         var getProfileStatsList = function () {
             var nameLike = $("#nameLike").val();
@@ -161,13 +163,21 @@
 
             if(listLength > 0){
                 var approvalSWCount;
+                var soldSWCount;
 
-                for(var i = 0; i < listLength; i++){
-                    for(key in approvalSoftwareCount) {
+                    for(var i = 0; i < listLength; i++){
+                        for(key in approvalSoftwareCount) {
+                            if(content[i].id == key){
+                                approvalSWCount = approvalSoftwareCount[key];
+                            }
+                        }
+
+                    for(key in soldSoftwareCount) {
                         if(content[i].id == key){
-                            approvalSWCount = approvalSoftwareCount[key];
+                            soldSWCount = soldSoftwareCount[key];
                         }
                     }
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i+1) + "</td>"
@@ -177,13 +187,13 @@
                         + "<td>" + content[i].createdDate + "</td>"
                         + "<td>" + approvalSWCount + "</td>"
                         + "<td>" + "판매상품 수" + "</td>"
-                        + "<td>" + "사용자 수" + "</td>"
+                        + "<td>" + soldSWCount + "</td>"
                         + "</tr>"
                     );
                 }
             }else{
                 htmlString = "<tr>"
-                    + "<td colspan='6'><p class='user_p'>판매자가 존재하지 않습니다.</p></td>" + "</tr>"
+                    + "<td colspan='8'><p class='user_p'>판매자가 존재하지 않습니다.</p></td>" + "</tr>"
             }
 
             adminProfileList.html(htmlString);

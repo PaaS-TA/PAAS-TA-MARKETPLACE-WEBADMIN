@@ -6,6 +6,8 @@ import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -214,5 +216,19 @@ public class CommonService {
         }
 
         return jsonObject;
+    }
+    
+    public Map getResultMap(List<String> idIn, Map<String, Long> result) {
+        Map finalResultMap = new HashMap();
+
+        for (String id:idIn) {
+            if(result.get(id) != null){
+                finalResultMap.put(id, result.get(id));
+            }else{
+                finalResultMap.put(id, 0);
+            }
+        }
+        
+        return finalResultMap;
     }
 }

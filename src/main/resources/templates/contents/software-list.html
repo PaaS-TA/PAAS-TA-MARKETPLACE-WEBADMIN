@@ -261,6 +261,13 @@
 
             if(listLength > 0){
                 for(var i = 0; i < listLength; i++){
+                    var statusModifiedDate = '';
+                    if(content[i].statusModifiedDate == null){
+                        statusModifiedDate = '';
+                    }else{
+                        statusModifiedDate = content[i].statusModifiedDate;
+                    }
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
@@ -270,7 +277,7 @@
                         + "<td>" + content[i].createdDate + "</td>"
                         + "<td>" + content[i].inUse + "</td>"
                         + "<td>" + content[i].status + "</td>"
-                        + "<td>" + content[i].statusModifiedDate + "</td>"
+                        + "<td>" + statusModifiedDate + "</td>"
                         + "</tr>"
                     );
                 }

@@ -179,7 +179,7 @@
             if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
                 dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
             }else{
-                dateParameter = "&createdDateAfter=" + startDate + "T00:00:00.000Z" + "&createdDateBefore=" + endDate + "T23:59:59.000Z";
+                dateParameter = "&createdDateAfter=" + startDate + "T00:00:00" + "&createdDateBefore=" + endDate + "T23:59:59";
             }
 
 

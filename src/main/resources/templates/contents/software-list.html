@@ -233,13 +233,14 @@
                 if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
                     dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
                 }else{
-                    dateParameter = "&createdDateAfter=" + startDate + "T00:00:00.000Z" + "&createdDateBefore=" + endDate + "T23:59:59.000Z";
+                    dateParameter = "&createdDateAfter=" + startDate + "T00:00:00" + "&createdDateBefore=" + endDate + "T23:59:59";
                 }
             }else{
+                status = "[[${statusApprove}]]";
                 if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
                     dateParameter = "&statusModifiedDateAfter=" + '' + "&statusModifiedDateBefore=" + '';
                 }else{
-                    dateParameter = "&statusModifiedDateAfter=" + startDate + "T00:00:00.000Z" + "&statusModifiedDateBefore=" + endDate + "T23:59:59.000Z";
+                    dateParameter = "&statusModifiedDateAfter=" + startDate + "T00:00:00" + "&statusModifiedDateBefore=" + endDate + "T23:59:59";
                 }
             }
 

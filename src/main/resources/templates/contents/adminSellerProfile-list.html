@@ -127,7 +127,7 @@
             if((createdDateAfter === "" || createdDateAfter === undefined) && (createdDateBefore === "" || createdDateBefore === undefined)) {
                 dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
             }else{
-                dateParameter = "&createdDateAfter=" + createdDateAfter + "T00:00:00.000Z" + "&createdDateBefore=" + createdDateBefore + "T23:59:59.000Z";
+                dateParameter = "&createdDateAfter=" + createdDateAfter + "T00:00:00" + "&createdDateBefore=" + createdDateBefore + "T23:59:59";
             }
 
             console.log("시작 날짜 ::: "  + createdDateAfter);

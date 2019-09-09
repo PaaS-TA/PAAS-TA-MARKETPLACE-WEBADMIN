@@ -129,7 +129,7 @@
             if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
                 dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
             }else{
-                dateParameter = "&createdDateAfter=" + startDate + "T00:00:00.000Z" + "&createdDateBefore=" + endDate + "T23:59:59.000Z";
+                dateParameter = "&createdDateAfter=" + startDate + "T00:00:00" + "&createdDateBefore=" + endDate + "T23:59:59";
             }
 
             if(nameLike === null || nameLike === '') {
@@ -168,8 +168,8 @@
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><a href='javascript:void(0);' onclick=moveUserStatsDetail('"+content[i].id+"')>" + content[i].name + "</a></td>"
-                        + "<td>" + content[i].id+ "</td>"
-                        + "<td>" + "이용 기간" + "</td>"
+                        + "<td>" + content[i].id + "</td>"
+                        + "<td>" + content[i]. + "</td>"
                         + "<td>" + instanceCount + "</td>"
                         + "</tr>"
                     );

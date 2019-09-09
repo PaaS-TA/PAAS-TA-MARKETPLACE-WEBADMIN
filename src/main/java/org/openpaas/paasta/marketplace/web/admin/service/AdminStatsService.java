@@ -63,6 +63,22 @@ public class AdminStatsService {
     }
 
     /**
+     * 상품 총 팔린 개수
+     *
+     * @param idIn
+     * @return
+     */
+    public Map<Long, Long> getSoldInstanceCount(List<Long> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/totalSold/counts/ids");
+        for (Long id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
+    /**
      * 판매된 상품 총 개수 조회
      *
      * @return

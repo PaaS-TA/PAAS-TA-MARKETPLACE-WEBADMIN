@@ -119,6 +119,10 @@ public class AdminStatsController {
                 newResult.put(mapId, 0);
             }
         }
+        //사용량 추이
+        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
+        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
         model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
         model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());

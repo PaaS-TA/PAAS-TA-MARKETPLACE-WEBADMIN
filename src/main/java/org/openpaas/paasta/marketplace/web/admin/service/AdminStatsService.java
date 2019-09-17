@@ -89,6 +89,15 @@ public class AdminStatsService {
 
 
     /**
+     * 과거 사용량 추이 조회
+     *
+     * @return
+     */
+    public Map<String, Object> countsOfInstsProviderMonthly() {
+        return paasApiRest.getForObject("/admin/stats/instances/sum/months", Map.class);
+    }
+
+    /**
      * 총 사용자 수 조회
      *
      * @return

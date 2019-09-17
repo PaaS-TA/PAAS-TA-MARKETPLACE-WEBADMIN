@@ -4,15 +4,21 @@
 
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/tui-chart.css"/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/codemirror.css'/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/addon/lint/lint.css'/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/theme/neo.css'/>
+    <link rel='stylesheet' type='text/css' href='../../static/css/example.css'/>
 </th:block>
 
 <!-- index.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
-    <!-- // script 방법 2 -->
-<!--    <script type="text/javascript">-->
-<!--        console.log('::MarketPlace index text/javascript::');-->
-<!--    </script>-->
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.chart/latest/raphael.js'></script>
+    <script src='../../static/js/tui-chart.js'></script>
 </th:block>
+
 <div class="rightCnt" layout:fragment="content">
     <!-- title area -->
     <div class="titWrap">
@@ -30,36 +36,24 @@
     <!-- content -->
     <div class="content">
         <!-- 사용현황 -->
-        <div class="statusBox type2">
+        <div class="statusBox">
             <ul>
                 <li>
+                    <!-- pieChart -->
+                    <div class="inWrap bg01" id ='inWrap_bg04'>
+                        <span class="tit">사용 앱</span>
+                        <div class="in_txtBox" id='pieChartArea'>
+                        </div>
+                    </div>
+                    <!-- pieChart -->
+                </li>
+                <li>
+                    <!-- lineChart -->
                     <div class="inWrap bg01">
-                        <span class="tit">전체 상품 수</span>
-                        <div class="in_txtBox">
-                            <span class="count">삭제 예정</span>
-                            <p class="txt">Total number of registered products</p>
-                        </div>
+                        <span class="tit">사용 추이</span>
+                        <div class="in_txtBox" id='lineChartArea'></div>
                     </div>
-                </li>
-                <li>
-                    <div class="inWrap bg02">
-                        <span class="tit">사용 상품 수</span>
-                        <div class="in_txtBox">
-                            <span class="count">삭제 예정</span>
-                            <p class="txt">Actual Usage products</p>
-                        </div>
-                    </div>
-                </li>
-                <li>
-                    <div class="inWrap bg04">
-                        <span class="tit">상품 TOP 3</span>
-                        <span class="today_txt">2019-05-10 현재기준</span>
-                        <ul>
-                            <li>
-                                <div class="ta_l"><span class="num_txt">삭제 예정</span></div>
-                            </li>
-                        </ul>
-                    </div>
+                    <!-- lineChart -->
                 </li>
             </ul>
         </div>
@@ -159,6 +153,159 @@
 
         var usingSWUserTotal = "[[${instanceUsingUserSum}]]";
 
+        //사용량 추이(terms,counts)
+        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
+        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
+
+        //chart
+        var getSoftwareStatsChart = function(contentData) {
+            console.log(">> Chart init");
+
+            // Chart [pieChart]
+            var pieChartData = contentData.content;
+
+            console.log(pieChartData);
+
+            if(pieChartData.length == 0){
+                console.log(pieChartData.length);
+                return;
+            }else{
+                var seriesData = [];
+                var item = [];
+                var userCount;
+
+                for (var i = 0; i < pieChartData.length; i++) {
+
+                    var map = pieChartData[i];
+
+                    for (key in resultCountList) {
+                        if (pieChartData[i].id == key) {
+                            userCount = resultCountList[key];
+                        }
+                    }
+
+                    if(userCount == "" || userCount == undefined){
+                        userCount = 0;
+                    }
+
+                    //dataJson(softwareName,userCount)
+                    item = {name: map.name , data: userCount};
+                    seriesData.push(item);
+                }
+                console.log(seriesData);
+            }
+
+            var container = document.getElementById('pieChartArea');
+
+            var data = {
+                series: seriesData
+            };
+
+            var options = {
+                chart: {
+                    width : 450,
+                    height : 250,
+                    format: function(value, chartType, areaType, valuetype, legendName) {
+                        if (areaType === 'makingSeriesLabel') { // formatting at series area
+                            value = value;
+                        }
+                        return value;
+                    }
+                },
+                series: {
+                    radiusRange: ['40%', '100%'],
+                    showLabel: true
+                }
+                ,
+                tooltip: {
+                    suffix: '%'
+                }
+            };
+            var theme = {
+                series: {
+                    series: {
+                        colors: [
+                            '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399',
+                            '#289399', '#617178', '#8a9a9a', '#516f7d', '#dddddd'
+                        ]
+                    },
+                    label: {
+                        color: '#fff',
+                        fontFamily: 'sans-serif'
+                    }
+                }
+            };
+            tui.chart.pieChart(container, data, options);
+
+            //css 이미지 대체
+            $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
+
+            // Chart [lineChart]
+            var lineChartData = contentData.content;
+            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+
+            console.log(countsData);
+            var container = document.getElementById('lineChartArea');
+
+            if (lineChartData.length == 0) {
+                return;
+            }else{
+                var lineSeriesData = [];
+                var lineItem = [];
+
+                for (var i = 0; i < lineChartData.length; i++) {
+                    var nameMap = lineChartData[i];
+                    console.log(nameMap);
+
+                    //dataJson(softwareName,series)
+                    lineItem = {name: nameMap.name , data: countsData};
+                    lineSeriesData.push(lineItem);
+                }
+                console.log(lineSeriesData);
+            }
+
+
+            var data = {
+                categories: categoriesData,
+                series: lineSeriesData
+            };
+
+            var options = {
+                chart: {
+                    width: 700,
+                    height: 250,
+                },
+                yAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto'
+                },
+                xAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto',
+                    type: 'datetime',
+                    dateFormat: 'yyyy-MMM'
+                },
+                series: {
+                    showDot: false,
+                    zoomable: true,
+                    pointWidth: 2
+                },
+                legend : {
+                    visible : true,
+                    showCheckbox : false
+                },
+                chartExportMenu : {
+                    visible : false
+                }
+            };
+
+            tui.chart.lineChart(container, data, options);
+            $(".tui-chart-series-custom-event-area").hide();
+            $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
+
+        };
+
         var getSoftwareList = function (pageNum) {
             var dateParameter;                                              //날짜
             var categoryId = $("#categoryId option:selected").val();        //카테고리
@@ -189,6 +336,8 @@
         };
 
         var callbackSoftwareList = function(data) {
+            getSoftwareStatsChart(data);
+
             $("#totalCount").text(" (" + data.totalElements + " / " + soldSoftwareTotal + " / " + usingSWUserTotal +")");
 
             var softwareList = $("#softwareArea");

@@ -57,15 +57,16 @@ public class AdminStatsController {
         //model.addAttribute("approvalSoftwareCount", totalApprovalSwCount);
         model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
 
-        // 판매 상품 수
-
-
 
         // 총 판매량
         Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
         //model.addAttribute("soldSoftwareCount", totalSoldResult);
         model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
 
+        //사용량 추이
+        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
+        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
         return "contents/useStatusSeller";
     }
@@ -158,6 +159,11 @@ public class AdminStatsController {
         }else {
             usedSwCount = 0;
         }
+
+        //사용량 추이
+        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
+        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
         model.addAttribute("usedSwCountSum", usedSwCount);
 

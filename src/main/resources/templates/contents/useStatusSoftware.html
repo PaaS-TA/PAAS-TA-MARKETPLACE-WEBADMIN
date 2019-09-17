@@ -160,14 +160,10 @@
         //chart
         var getSoftwareStatsChart = function(contentData) {
             console.log(">> Chart init");
-
             // Chart [pieChart]
             var pieChartData = contentData.content;
 
-            console.log(pieChartData);
-
             if(pieChartData.length == 0){
-                console.log(pieChartData.length);
                 return;
             }else{
                 var seriesData = [];
@@ -192,7 +188,6 @@
                     item = {name: map.name , data: userCount};
                     seriesData.push(item);
                 }
-                console.log(seriesData);
             }
 
             var container = document.getElementById('pieChartArea');
@@ -245,7 +240,6 @@
             var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
             var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
 
-            console.log(countsData);
             var container = document.getElementById('lineChartArea');
 
             if (lineChartData.length == 0) {
@@ -256,15 +250,12 @@
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var nameMap = lineChartData[i];
-                    console.log(nameMap);
 
                     //dataJson(softwareName,series)
                     lineItem = {name: nameMap.name , data: countsData};
                     lineSeriesData.push(lineItem);
                 }
-                console.log(lineSeriesData);
             }
-
 
             var data = {
                 categories: categoriesData,

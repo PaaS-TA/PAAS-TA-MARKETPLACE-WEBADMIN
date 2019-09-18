@@ -36,16 +36,16 @@
     <div class="content">
         <!-- 사용현황 -->
         <!-- 사용현황 -->
-        <div class="statusBox type2">
+        <div class="statusBox">
             <ul>
                 <li>
                     <!-- pieChart -->
                     <div class="inWrap bg01">
                         <span class="tit">사용 앱</span>
-                        <div class="in_txtBox" id='pieChartArea'></div>
+                        <div class="in_txtBox" id='pieChartArea'>
+                        </div>
                     </div>
                     <!-- pieChart -->
-                </li>
                 <li>
                     <!-- lineChart -->
                     <div class="inWrap bg01">
@@ -102,7 +102,7 @@
                     <th scope="col">프로필 등록일</th>
                     <th scope="col">승인상품 수</th>
                     <th scope="col">판매상품 수</th>
-                    <th scope="col">총 판매량</th>
+                    <th scope="col">판매량</th>
                 </tr>
                 </thead>
                 <tbody id="profileArea">
@@ -137,11 +137,13 @@
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
 
         //chart
-        var getSoftwareStatsChart = function(contentData) {
-            console.log(">> Chart init");
-            // Chart [pieChart]
+        var getSoftwareStatsChart = function(data) {
+            pieChart(data);
+            lineChart(data);
+        };
+
+        var pieChart = function(contentData) {
             var pieChartData = contentData.content;
-            console.log(pieChartData);
 
             if(pieChartData.length == 0){
                 return;
@@ -174,7 +176,7 @@
 
             var options = {
                 chart: {
-                    width : 450,
+                    width : 500,
                     height : 250,
                     format: function(value, chartType, areaType, valuetype, legendName) {
                         if (areaType === 'makingSeriesLabel') { // formatting at series area
@@ -210,10 +212,71 @@
 
             //css 이미지 대체
             $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
-
         };
 
+        var lineChart = function (contentData) {
+            console.log(">> lineChart init");
+            var lineChartData = contentData.content;
 
+            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+
+            var container = document.getElementById('lineChartArea');
+
+            if (lineChartData.length == 0) {
+                return;
+            }else{
+                var lineSeriesData = [];
+                var lineItem = [];
+
+                for (var i = 0; i < lineChartData.length; i++) {
+                    var nameMap = lineChartData[i];
+
+                    //dataJson(softwareName,series)
+                    lineItem = {name: nameMap.name , data: countsData};
+                    lineSeriesData.push(lineItem);
+                }
+                console.log(lineSeriesData);
+            }
+
+            var data = {
+                categories: categoriesData,
+                series: lineSeriesData
+            };
+
+            var options = {
+                chart: {
+                    width: 700,
+                    height: 250,
+                },
+                yAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto'
+                },
+                xAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto',
+                    type: 'datetime',
+                    dateFormat: 'yyyy-MMM'
+                },
+                series: {
+                    showDot: false,
+                    zoomable: true,
+                    pointWidth: 2
+                },
+                legend : {
+                    visible : true,
+                    showCheckbox : false
+                },
+                chartExportMenu : {
+                    visible : false
+                }
+            };
+
+            tui.chart.lineChart(container, data, options);
+            $(".tui-chart-series-custom-event-area").hide();
+            $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
+        };
 
         var getProfileStatsList = function () {
             var nameLike = $("#nameLike").val();
@@ -311,6 +374,7 @@
         $(document).ready(function() {
             getProfileStatsList();
         });
+
     </script>
 </div>
 

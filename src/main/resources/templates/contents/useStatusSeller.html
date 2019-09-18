@@ -166,11 +166,11 @@
                     for(key in soldSoftwareCount) {
                         if(pieChartData[i].id == key){
                             soldSWCount = soldSoftwareCount[key];
-                            soldSWCountPercent = soldSWCount/soldSoftwareTotal*100 + '%';
+                            soldSWCountPercent = soldSWCount/soldSoftwareTotal*100
                         }
                     }
                     //dataJson(softwareName,userCount)
-                    item = {name: map.name , data: soldSWCountPercent};
+                    item = {name: map.name + '(' + soldSWCountPercent + '%)'   , data: soldSWCountPercent};
                     seriesData.push(item);
                 }
                 console.log(seriesData);
@@ -184,8 +184,14 @@
 
             var options = {
                 chart: {
-                    width : 500,
-                    height : 250
+                    width : 450,
+                    height : 250,
+                    format: function(value, chartType, areaType) {
+                        if (areaType === 'makingSeriesLabel') { // formatting at series area
+                            value = value + '%';
+                        }
+                        return value;
+                    }
                 },
                 series: {
                     radiusRange : [ '40%', '100%' ],
@@ -215,17 +221,27 @@
 
             var container = document.getElementById('lineChartArea');
 
+
             if (lineChartData.length == 0) {
                 return;
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
+                var soldSWCount;
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var nameMap = lineChartData[i];
 
+                    for(key in soldSoftwareCount) {
+                        if(lineChartData[i].id == key){
+                            console.log(lineChartData[i]);
+                            soldSWCount = soldSoftwareCount[key];
+                            console.log("[soldSWCount] :"+ soldSWCount);
+                        }
+                    }
+
                     //dataJson(softwareName,series)
-                    lineItem = {name: nameMap.name , data: countsData};
+                    lineItem = {name: nameMap.name, data: countsData};
                     lineSeriesData.push(lineItem);
                 }
                 console.log(lineSeriesData);

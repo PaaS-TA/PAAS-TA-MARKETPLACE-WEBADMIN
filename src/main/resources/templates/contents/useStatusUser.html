@@ -137,8 +137,8 @@
 
         var pieChart = function(contentData) {
             console.log(">> Chart init");
-            // Chart [pieChart]
             var pieChartData = contentData.content;
+            var userCountTotal = contentData.totalElements;
 
             if(pieChartData.length == 0){
                 return;
@@ -146,6 +146,7 @@
                 var seriesData = [];
                 var item = [];
                 var userCount;
+                var userCountPercent;
 
                 for (var i = 0; i < pieChartData.length; i++) {
 
@@ -154,15 +155,13 @@
                     for (key in resultCountList) {
                         if (pieChartData[i].id == key) {
                             userCount = resultCountList[key];
+                            userCountPercent = userCount/userCountTotal*100;
                         }
                     }
 
-                    if(userCount == "" || userCount == undefined){
-                        userCount = 0;
-                    }
-
                     //dataJson(softwareName,userCount)
-                    item = {name: map.name , data: userCount};
+                    // item = {name: map.name , data: userCount};
+                    item = {name: map.name + '(' + userCountPercent + '%)'   , data: userCount};
                     seriesData.push(item);
                 }
             }
@@ -177,34 +176,10 @@
                 chart: {
                     width : 450,
                     height : 250,
-                    format: function(value, chartType, areaType, valuetype, legendName) {
-                        if (areaType === 'makingSeriesLabel') { // formatting at series area
-                            value = value;
-                        }
-                        return value;
-                    }
                 },
                 series: {
-                    radiusRange: ['40%', '100%'],
+                    radiusRange : ['40%', '100%' ],
                     showLabel: true
-                }
-                ,
-                tooltip: {
-                    suffix: '%'
-                }
-            };
-            var theme = {
-                series: {
-                    series: {
-                        colors: [
-                            '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399',
-                            '#289399', '#617178', '#8a9a9a', '#516f7d', '#dddddd'
-                        ]
-                    },
-                    label: {
-                        color: '#fff',
-                        fontFamily: 'sans-serif'
-                    }
                 }
             };
             tui.chart.pieChart(container, data, options);
@@ -274,7 +249,7 @@
 
             tui.chart.lineChart(container, data, options);
             $(".tui-chart-series-custom-event-area").hide();
-            $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
+            $(".statusBox .inWrap.bg01").css('background-image', 'url("/static/images/icon_backgroud_white.png")');
         };
         var getUserList = function (pageNum) {
             var dateParameter;                                              //날짜

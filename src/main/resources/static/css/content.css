@@ -1332,7 +1332,7 @@ input[name='renameSev']{position:relative;width:100%;}
 .statusBox.type2 .inWrap.bg04 > ul > li > div span.ico_apps {display:inline-block; width:23px; height:25px; font-size:0; background: url("../images/bg_ico_app06.png") no-repeat left top;}
 .statusBox.type2 .inWrap.bg04 > ul > li > div span.count {display:inline-block; font-family: 'Montserrat'; font-size:25px; font-weight:500; color:#fff; text-align:left; padding-left:10px;}
 
-.statusBox .inWrap .in_txtBox {font-family: 'Montserrat'; text-align:right; padding-top:70px;}
+.statusBox .inWrap .in_txtBox {font-family: 'Montserrat'; text-align:right; padding-top:30px;}
 .statusBox .inWrap .in_txtBox .count {display:inline-block; font-size:50px; font-weight:500; color:#fff; line-height:60px;}
 .statusBox .inWrap .in_txtBox .txt {font-size:13px; font-weight:500; color:#fff; line-height:1.3; letter-spacing:-1px;}
 .statusBox .inWrap.bg01 .in_txtBox .count {color:#333;}

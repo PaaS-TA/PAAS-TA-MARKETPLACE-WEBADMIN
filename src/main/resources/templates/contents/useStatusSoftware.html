@@ -157,8 +157,14 @@
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
 
+
         //chart
-        var getSoftwareStatsChart = function(contentData) {
+        var getSoftwareStatsChart = function(data) {
+            pieChart(data);
+            lineChart(data);
+        };
+
+        var pieChart = function(contentData) {
             console.log(">> Chart init");
             // Chart [pieChart]
             var pieChartData = contentData.content;
@@ -234,8 +240,9 @@
 
             //css 이미지 대체
             $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
+        };
 
-            // Chart [lineChart]
+        var lineChart = function(contentData) {
             var lineChartData = contentData.content;
             var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
             var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
@@ -294,7 +301,6 @@
             tui.chart.lineChart(container, data, options);
             $(".tui-chart-series-custom-event-area").hide();
             $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
-
         };
 
         var getSoftwareList = function (pageNum) {

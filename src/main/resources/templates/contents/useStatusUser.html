@@ -4,9 +4,22 @@
 
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" href="../dist/tui-chart.css" />
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/codemirror.css'/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/addon/lint/lint.css'/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/theme/neo.css'/>
+    <link rel='stylesheet' type='text/css' href='./css/example.css'/>
+</th:block>
+<th:block layout:fragment="script">
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.chart/latest/raphael.js'></script>
+    <script src='/static/js/tui-chart.js'></script>
 </th:block>
 
+
 <!-- index.html 고유 스크립트 추가 -->
+
 <div class="rightCnt" layout:fragment="content">
     <!-- title area -->
     <div class="titWrap">
@@ -24,21 +37,24 @@
     <!-- content -->
     <div class="content">
         <!-- 사용현황 -->
-        <div class="statusBox type2 box-two">
+        <div class="statusBox">
             <ul>
                 <li>
-                    <div class="inWrap bg01">
-                        <span class="tit">전체 사용자 수</span>
-                        <div class="in_txtBox">
-                            <span class="count">삭제 예정</span>
-                            <p class="txt">Total number of registered users</p>
+                    <!-- pieChart -->
+                    <div class="inWrap bg01" id ='inWrap_bg04'>
+                        <span class="tit">사용 앱</span>
+                        <div class="in_txtBox" id='pieChartArea'>
                         </div>
                     </div>
+                    <!-- pieChart -->
                 </li>
                 <li>
-                    <div class="inWrap bg04">
-                        <span class="tit">삭제 예정</span>
+                    <!-- lineChart -->
+                    <div class="inWrap bg01">
+                        <span class="tit">사용 추이</span>
+                        <div class="in_txtBox" id='lineChartArea'></div>
                     </div>
+                    <!-- lineChart -->
                 </li>
             </ul>
         </div>
@@ -109,6 +125,157 @@
         var userCountPerInstance = "[[${instancesCount}]]";
         var resultCountList = JSON.parse(userCountPerInstance.replace(/&quot;/g,'"'));
 
+        //사용량 추이(terms,counts)
+        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
+        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
+
+        //차트(pie.line)
+        var getSoftwareStatsChart = function(data) {
+            pieChart(data);
+            lineChart(data);
+        };
+
+        var pieChart = function(contentData) {
+            console.log(">> Chart init");
+            // Chart [pieChart]
+            var pieChartData = contentData.content;
+
+            if(pieChartData.length == 0){
+                return;
+            }else{
+                var seriesData = [];
+                var item = [];
+                var userCount;
+
+                for (var i = 0; i < pieChartData.length; i++) {
+
+                    var map = pieChartData[i];
+
+                    for (key in resultCountList) {
+                        if (pieChartData[i].id == key) {
+                            userCount = resultCountList[key];
+                        }
+                    }
+
+                    if(userCount == "" || userCount == undefined){
+                        userCount = 0;
+                    }
+
+                    //dataJson(softwareName,userCount)
+                    item = {name: map.name , data: userCount};
+                    seriesData.push(item);
+                }
+            }
+
+            var container = document.getElementById('pieChartArea');
+
+            var data = {
+                series: seriesData
+            };
+
+            var options = {
+                chart: {
+                    width : 450,
+                    height : 250,
+                    format: function(value, chartType, areaType, valuetype, legendName) {
+                        if (areaType === 'makingSeriesLabel') { // formatting at series area
+                            value = value;
+                        }
+                        return value;
+                    }
+                },
+                series: {
+                    radiusRange: ['40%', '100%'],
+                    showLabel: true
+                }
+                ,
+                tooltip: {
+                    suffix: '%'
+                }
+            };
+            var theme = {
+                series: {
+                    series: {
+                        colors: [
+                            '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399',
+                            '#289399', '#617178', '#8a9a9a', '#516f7d', '#dddddd'
+                        ]
+                    },
+                    label: {
+                        color: '#fff',
+                        fontFamily: 'sans-serif'
+                    }
+                }
+            };
+            tui.chart.pieChart(container, data, options);
+
+            //css 이미지 대체
+            $(".statusBox .inWrap.bg01").css('background-image', 'url("/static/images/icon_backgroud_white.png")');
+        };
+
+        var lineChart = function (contentData) {
+            console.log(">> lineChart init");
+            var lineChartData = contentData.content;
+
+            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+
+            var container = document.getElementById('lineChartArea');
+
+            if (lineChartData.length == 0) {
+                return;
+            }else{
+                var lineSeriesData = [];
+                var lineItem = [];
+
+                for (var i = 0; i < lineChartData.length; i++) {
+                    var nameMap = lineChartData[i];
+
+                    //dataJson(softwareName,series)
+                    lineItem = {name: nameMap.name , data: countsData};
+                    lineSeriesData.push(lineItem);
+                }
+                console.log(lineSeriesData);
+            }
+
+            var data = {
+                categories: categoriesData,
+                series: lineSeriesData
+            };
+
+            var options = {
+                chart: {
+                    width: 700,
+                    height: 250,
+                },
+                yAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto'
+                },
+                xAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto',
+                    type: 'datetime',
+                    dateFormat: 'yyyy-MMM'
+                },
+                series: {
+                    showDot: false,
+                    zoomable: true,
+                    pointWidth: 2
+                },
+                legend : {
+                    visible : true,
+                    showCheckbox : false
+                },
+                chartExportMenu : {
+                    visible : false
+                }
+            };
+
+            tui.chart.lineChart(container, data, options);
+            $(".tui-chart-series-custom-event-area").hide();
+            $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
+        };
         var getUserList = function (pageNum) {
             var dateParameter;                                              //날짜
             var categoryId = $("#categoryId option:selected").val();        //카테고리
@@ -141,8 +308,9 @@
 
             procCallAjax(reqUrl, "GET", null, null, callbackUserList);
         };
-        
+
         var callbackUserList = function(data) {
+            getSoftwareStatsChart(data);
             $("#totalCount").text(" (" + data.totalElements +")");
 
             var userList = $("#userListArea");
@@ -169,7 +337,7 @@
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><a href='javascript:void(0);' onclick=moveUserStatsDetail('"+content[i].id+"')>" + content[i].name + "</a></td>"
                         + "<td>" + content[i].id + "</td>"
-                        + "<td>" + content[i]. + "</td>"
+                        + "<td>" + content[i] + "</td>"
                         + "<td>" + instanceCount + "</td>"
                         + "</tr>"
                     );
@@ -197,7 +365,7 @@
             htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
             pageNumberList.html(htmlStringPage);
         };
-        
+
         var moveUserStatsDetail = function(id) {
             procMovePage("/admin/stats/users/{id}".replace("{id}", id));
         };
@@ -216,7 +384,7 @@
         $("#searchBtn").on("click", function () {
             getUserList();
         });
-        
+
         // ON LOAD
         $(document).ready(function() {
             getUserList();

@@ -178,7 +178,12 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/instances")
     @ResponseBody
-    public CustomPage<Instance> getInstanceListBySwId(HttpServletRequest httpServletRequest) {
+    public CustomPage<Instance> getInstanceListBySwId(Model model, HttpServletRequest httpServletRequest) {
+        //사용량 추이
+        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
+        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
+
         return adminStatsService.getInstanceListBySwId(commonService.setParameters(httpServletRequest));
     }
 
@@ -191,6 +196,12 @@ public class AdminStatsController {
     public String getUserStatsMain(Model model) {
         // 사용자별 구매 상품 수
         model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
+
+        //사용량 추이
+        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
+        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
+
         return "contents/useStatusUser";
     }
 

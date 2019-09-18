@@ -18,6 +18,7 @@
     <script type='text/javascript' src='https://uicdn.toast.com/tui.chart/latest/raphael.js'></script>
     <script src='../../static/js/tui-chart.js'></script>
 </th:block>
+
 <div class="rightCnt" layout:fragment="content">
     <!-- title area -->
     <div class="titWrap">
@@ -131,12 +132,11 @@
         // 판매자별 총 판매량 수
         var soldSoftwareCount = JSON.parse("[[${soldSoftwareCount}]]".replace(/&quot;/g,'"'));
 
-
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
 
-        //chart
+        //차트(pie.line)
         var getSoftwareStatsChart = function(data) {
             pieChart(data);
             lineChart(data);

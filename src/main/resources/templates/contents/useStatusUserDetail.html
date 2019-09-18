@@ -4,15 +4,21 @@
 
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/tui-chart.css"/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/codemirror.css'/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/addon/lint/lint.css'/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/theme/neo.css'/>
+    <link rel='stylesheet' type='text/css' href='../../static/css/example.css'/>
 </th:block>
 
 <!-- index.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
-    <!-- // script 방법 2 -->
-<!--    <script type="text/javascript">-->
-<!--        console.log('::MarketPlace index text/javascript::');-->
-<!--    </script>-->
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.chart/latest/raphael.js'></script>
+    <script src='/static/js/tui-chart.js'></script>
 </th:block>
+
 <div class="rightCnt" layout:fragment="content">
     <!-- title area -->
     <div class="titWrap">

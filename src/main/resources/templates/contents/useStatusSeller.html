@@ -42,7 +42,7 @@
                 <li>
                     <!-- pieChart -->
                     <div class="inWrap bg01">
-                        <span class="tit">사용 앱</span>
+                        <span class="tit">등록 앱</span>
                         <div class="in_txtBox" id='pieChartArea'>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                 <li>
                     <!-- lineChart -->
                     <div class="inWrap bg01">
-                        <span class="tit">사용 추이</span>
+                        <span class="tit">사용 앱</span>
                         <div class="in_txtBox" id='lineChartArea'></div>
                     </div>
                     <!-- lineChart -->
@@ -132,14 +132,19 @@
         // 판매자별 총 판매량 수
         var soldSoftwareCount = JSON.parse("[[${soldSoftwareCount}]]".replace(/&quot;/g,'"'));
 
+        // 판매 상품 총 개수
+        var soldSoftwareTotal = "[[${instanceCountSum}]]";
+
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
+
 
         //차트(pie.line)
         var getSoftwareStatsChart = function(data) {
             pieChart(data);
             lineChart(data);
+            console.log("[soldSoftwareTotal]: " + soldSoftwareTotal);
         };
 
         var pieChart = function(contentData) {
@@ -150,22 +155,25 @@
             }else{
                 var seriesData = [];
                 var item = [];
-                var approvalSWCount;
+                var soldSWCount;
+                var soldSWCountPercent;  //전체값(soldSoftwareTotal) X 퍼센트 ÷ 100
 
+                console.log("[soldSoftwareTotal]: " + soldSoftwareTotal);
                 for (var i = 0; i < pieChartData.length; i++) {
 
                     var map = pieChartData[i];
 
-                    for(key in approvalSoftwareCount) {
+                    for(key in soldSoftwareCount) {
                         if(pieChartData[i].id == key){
-                            approvalSWCount = approvalSoftwareCount[key];
+                            soldSWCount = soldSoftwareCount[key];
+                            soldSWCountPercent = soldSWCount/soldSoftwareTotal*100 + '%';
                         }
                     }
-
                     //dataJson(softwareName,userCount)
-                    item = {name: map.name , data: approvalSWCount};
+                    item = {name: map.name , data: soldSWCountPercent};
                     seriesData.push(item);
                 }
+                console.log(seriesData);
             }
 
             var container = document.getElementById('pieChartArea');
@@ -177,37 +185,21 @@
             var options = {
                 chart: {
                     width : 500,
-                    height : 250,
-                    format: function(value, chartType, areaType, valuetype, legendName) {
-                        if (areaType === 'makingSeriesLabel') { // formatting at series area
-                            value = value;
-                        }
-                        return value;
-                    }
+                    height : 250
                 },
                 series: {
-                    radiusRange: ['40%', '100%'],
+                    radiusRange : [ '40%', '100%' ],
                     showLabel: true
-                }
-                ,
-                tooltip: {
-                    suffix: '%'
-                }
-            };
-            var theme = {
-                series: {
-                    series: {
-                        colors: [
-                            '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399',
-                            '#289399', '#617178', '#8a9a9a', '#516f7d', '#dddddd'
-                        ]
-                    },
-                    label: {
-                        color: '#fff',
-                        fontFamily: 'sans-serif'
-                    }
+                },
+                legend : {
+                    visible : true,
+                    showCheckbox : false
+                },
+                chartExportMenu : {
+                    visible : false
                 }
             };
+
             tui.chart.pieChart(container, data, options);
 
             //css 이미지 대체

@@ -2,7 +2,6 @@ package org.openpaas.paasta.marketplace.web.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import lombok.var;
 import org.openpaas.paasta.marketplace.api.domain.*;
 import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryService;
@@ -54,21 +53,17 @@ public class AdminStatsController {
 
         // 승인 상품 수
         Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
-        //model.addAttribute("__profileList", profileList);
-        //model.addAttribute("approvalSoftwareCount", totalApprovalSwCount);
         model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
-
 
         // 사용자 총 판매량
         Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
-        //model.addAttribute("soldSoftwareCount", totalSoldResult);
         model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
 
         // 총 판매량
        model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
 
         //사용량 추이(month)
-        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        Map countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
@@ -78,26 +73,15 @@ public class AdminStatsController {
     @GetMapping(value = "/sellers/{id}")
     public String getSellerStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
 
-        CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
-
-        List<String> idIn = new ArrayList<>();
-        for (Profile f:profileList.getContent()) {
-            idIn.add(f.getId());
-        }
-
         model.addAttribute("categories", adminSoftwareService.getAdminCategories());
         model.addAttribute("sellerStat", adminSellerProfileService.getProfiles(id));
 
-        // 승인 상품 수
-        Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
-        model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
-
-        // 사용자 총 판매량
-        Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
-        model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
+        // 단일 상품에 대한 총 사용자 수
+        List<String> idIn = new ArrayList<>();
+        idIn.add(id);
 
         //사용량 추이
-        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        Map countsOfInstsProvider = adminStatsService.sellerCountsOfInstsProviderMonthly(idIn);
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
@@ -150,11 +134,6 @@ public class AdminStatsController {
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
-        //사용량 추이(daily : 180일 기준)
-        Map  countOfInstsDaily =  adminStatsService.countOfInstsDaily();
-        model.addAttribute("countOfInstsDaily", countOfInstsDaily.get("terms"));
-        model.addAttribute("countOfInstsDailyCounts", countOfInstsDaily.get("counts"));
-
         model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
         model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
         model.addAttribute("instanceUsingUserSum", adminStatsService.getCountOfUsersUsing());
@@ -190,7 +169,7 @@ public class AdminStatsController {
             usedSwCount = 0;
         }
 
-        //사용량 추이(month)
+        //사용량 추이(month : 12개월 기준)
         Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
@@ -241,6 +220,37 @@ public class AdminStatsController {
     }
 
     /**
+     * 사용자별 상세 페이지 이동 및 조회
+     *
+     * @param model
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/users/{id}")
+    public String getUserStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
+        model.addAttribute("categories", adminCategoryService.getCategoryList());
+        model.addAttribute("userStat", adminStatsService.getUser(id));
+        model.addAttribute("spec", new SoftwareSpecification());
+        model.addAttribute("status", Software.Status.values());
+        //model.addAttribute("instance", adminStatsService.getInstanceListBySwInId(commonService.setParameters(httpServletRequest)));
+        return "contents/useStatusUserDetail";
+    }
+
+    /**
+     * 사용자별 상품 상세 페이지(전체상품수)
+     *
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/instances/users")
+    @ResponseBody
+    public CustomPage<Instance> getInstanceListBySwInId(Model model, HttpServletRequest httpServletRequest) {
+        return adminStatsService.getInstanceListBySwInId(commonService.setParameters(httpServletRequest));
+//        return adminStatsService.getInstanceListBySwInId("");
+    }
+
+
+    /**
      * 마켓플레이스 전체 사용자 목록 조회
      *
      * @param httpServletRequest
@@ -271,19 +281,5 @@ public class AdminStatsController {
         return adminStatsService.getUserList(commonService.setParameters(httpServletRequest));
     }
 
-
-    /**
-     * 사용자별 상세 페이지 이동 및 조회
-     *
-     * @param model
-     * @param id
-     * @return
-     */
-    @GetMapping(value = "/users/{id}")
-    public String getUserStats(Model model, @PathVariable String id) {
-        model.addAttribute("categories", adminCategoryService.getCategoryList());
-        model.addAttribute("userStat", adminStatsService.getUser(id));
-        return "contents/useStatusUserDetail";
-    }
 
 }

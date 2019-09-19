@@ -4,14 +4,19 @@
 
 <!-- index.html 고유 CSS 추가 -->
 <th:block layout:fragment="css">
+    <link rel="stylesheet" type="text/css" href="../../static/css/tui-chart.css"/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/codemirror.css'/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/addon/lint/lint.css'/>
+    <link rel='stylesheet' type='text/css' href='https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.43.0/theme/neo.css'/>
+    <link rel='stylesheet' type='text/css' href='../../static/css/example.css'/>
 </th:block>
 
 <!-- index.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
-    <!-- // script 방법 2 -->
-<!--    <script type="text/javascript">-->
-<!--        console.log('::MarketPlace index text/javascript::');-->
-<!--    </script>-->
+    <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.chart/latest/raphael.js'></script>
+    <script src='/static/js/tui-chart.js'></script>
 </th:block>
 <div class="rightCnt" layout:fragment="content">
     <!-- title area -->
@@ -96,7 +101,7 @@
         <!-- //검색 Form -->
 
         <div class="cont-titWrap mt30">
-            <h3 class="h-tit3">전체 상품 수 <span class="point4">(50)</span></h3>
+            <h3 class="h-tit3">총 건수 <span class="point4" id="totalCount"></span></h3>
         </div>
 
         <!-- 테이블 -->
@@ -147,7 +152,16 @@
     </div>
     <!-- //content -->
 
+    sellerStat
+<!--    <input type="hidden" id="sellerStat" th:value="${sellerStat}">-->
     <script type="text/javascript">
+
+        //판매자 기본 데이터
+        var sellerStat = $("#sellerStat").val();
+
+        //사용량 추이(terms,counts)
+        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
+        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
 
         var getSoftwaresPerSellerList = function() {
             var categoryId = $("#categoryId option:selected").val();
@@ -159,13 +173,10 @@
 
             var reqUrl = "/admin/stats/sellers/registSwList" + "?createdBy=" + createdById + "&categoryId=" + categoryId;
 
-            console.log("호호호 ::: " + reqUrl);
-
             procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwaresPerSellerList);
         };
 
         var callbackGetSoftwaresPerSellerList = function(data) {
-            console.log("aaa"  + JSON.stringify(data));
             //::totalElements::
             $("#totalElements").text("(" + data.totalElements + ")");
 

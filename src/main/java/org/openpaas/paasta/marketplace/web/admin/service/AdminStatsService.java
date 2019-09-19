@@ -89,12 +89,22 @@ public class AdminStatsService {
 
 
     /**
-     * 과거 사용량 추이 조회
+     * 과거 사용량 추이 조회(months)
      *
      * @return
      */
     public Map<String, Object> countsOfInstsProviderMonthly() {
         return paasApiRest.getForObject("/admin/stats/instances/sum/months", Map.class);
+    }
+
+    /**
+     * 과거 사용량 추이 조회(days)
+     *
+     * @return
+     */
+
+    public Map<String, Object> countOfInstsDaily() {
+        return paasApiRest.getForObject("/admin/stats/instances/sum/days", Map.class);
     }
 
     /**

@@ -2,6 +2,7 @@ package org.openpaas.paasta.marketplace.web.admin.controller;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import lombok.var;
 import org.openpaas.paasta.marketplace.api.domain.*;
 import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryService;
@@ -66,7 +67,7 @@ public class AdminStatsController {
         // 총 판매량
        model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
 
-        //사용량 추이
+        //사용량 추이(month)
         Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
@@ -76,8 +77,29 @@ public class AdminStatsController {
 
     @GetMapping(value = "/sellers/{id}")
     public String getSellerStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
+
+        CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
+
+        List<String> idIn = new ArrayList<>();
+        for (Profile f:profileList.getContent()) {
+            idIn.add(f.getId());
+        }
+
         model.addAttribute("categories", adminSoftwareService.getAdminCategories());
         model.addAttribute("sellerStat", adminSellerProfileService.getProfiles(id));
+
+        // 승인 상품 수
+        Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
+        model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
+
+        // 사용자 총 판매량
+        Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
+        model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
+
+        //사용량 추이
+        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
+        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
         return "contents/useStatusSellerDetail";
     }
@@ -123,10 +145,15 @@ public class AdminStatsController {
                 newResult.put(mapId, 0);
             }
         }
-        //사용량 추이
+        //사용량 추이(month)
         Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
+
+        //사용량 추이(daily : 180일 기준)
+        Map  countOfInstsDaily =  adminStatsService.countOfInstsDaily();
+        model.addAttribute("countOfInstsDaily", countOfInstsDaily.get("terms"));
+        model.addAttribute("countOfInstsDailyCounts", countOfInstsDaily.get("counts"));
 
         model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
         model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
@@ -163,10 +190,15 @@ public class AdminStatsController {
             usedSwCount = 0;
         }
 
-        //사용량 추이
+        //사용량 추이(month)
         Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
+
+        //사용량 추이(daily : 180일 기준)
+        Map  countOfInstsDaily =  adminStatsService.countOfInstsDaily();
+        model.addAttribute("countOfInstsDaily", countOfInstsDaily.get("terms"));
+        model.addAttribute("countOfInstsDailyCounts", countOfInstsDaily.get("counts"));
 
         model.addAttribute("usedSwCountSum", usedSwCount);
 

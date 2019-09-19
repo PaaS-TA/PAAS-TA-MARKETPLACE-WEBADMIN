@@ -16,7 +16,7 @@
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.js'></script>
     <script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
     <script type='text/javascript' src='https://uicdn.toast.com/tui.chart/latest/raphael.js'></script>
-    <script src='../../static/js/tui-chart.js'></script>
+    <script src='/static/js/tui-chart.js'></script>
 </th:block>
 
 <div class="rightCnt" layout:fragment="content">
@@ -86,6 +86,11 @@
                                 </tr>
                             </tbody>
                         </table>
+                        <!-- chart -->
+                        <div class='code-html' id='code-html'>
+                            <div id='lineChartArea'></div>
+                        </div>
+                        <!-- //chart -->
                     </div>
                     <!-- //table -->
                 </div>
@@ -95,7 +100,7 @@
         <!-- //cBox1 -->
 
         <div class="cont-titWrap mt30">
-            <h3 class="h-tit3">판매 현황 <span class="point4" id="totalCount">(50)</span></h3>
+            <h3 class="h-tit3">판매 현황 <span class="point4" id="totalCount"></span></h3>
         </div>
 
 
@@ -133,11 +138,104 @@
     </div>
     <!-- //content -->
 
+    <input type="hidden" id="softwareName" th:value="${softwareStat.name}">
     <input type="hidden" id="softwareId" th:value="${softwareStat.id}">
-
+    <input type="hidden" id="usedSwCountSum" th:value="${usedSwCountSum}">
     <script type="text/javascript">
+        //page&sort
         var PAGING_SIZE = 5;
         var SORT = "id,asc";
+
+        //사용량 추이(Monthly::terms,counts)
+        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
+        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
+
+        //사용량 추이(Daily::terms,counts)
+        var countOfInstsDaily = "[[${countOfInstsDaily}]]";
+        var countOfInstsDailyCounts = "[[${countOfInstsDailyCounts}]]";
+
+
+        var lineChart = function (contentData) {
+            console.log(">>lineChart");
+            var softwareName = $("#softwareName").val();
+            var usedSwCountSum = $("#usedSwCountSum").val();
+            var lineChartData = contentData.content;
+
+            console.log("[usedSwCountSum]: "+usedSwCountSum);
+
+            //x,y Monthly Data
+            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+
+            //x,y Daily Data
+            var categoriesDailyData = countOfInstsDaily.replace("[", "").replace("]", "").split(",");
+            var countsDailyData = countOfInstsDailyCounts.replace("[", "").replace("]", "").split(",");
+
+            var container = document.getElementById('lineChartArea');
+
+            if (lineChartData.length == 0) {
+                return;
+            }else{
+                var lineSeriesData = [];
+                lineItem = {name: softwareName, data: countsDailyData};
+                lineSeriesData.push(lineItem);
+                console.log(lineSeriesData);
+            }
+
+            var data = {
+                categories: categoriesDailyData,
+                series: lineSeriesData
+            };
+
+            var options = {
+                chart: {
+                    width: 1200,
+                    height: 250,
+                },
+                yAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto'
+                },
+                xAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto',
+                    type: 'datetime',
+                    dateFormat: 'yyyy-MMM'
+                },
+                series: {
+                    showDot: false,
+                    zoomable: true,
+                    pointWidth: 2
+                },
+                legend : {
+                    visible : true,
+                    showCheckbox : false
+                },
+                chartExportMenu : {
+                    visible : false
+                }
+            };
+
+            tui.chart.lineChart(container, data, options);
+            $(".tui-chart-series-custom-event-area").hide();
+
+        };
+
+        //formatDate
+        function getFormatDate(date){
+            var year = date.getFullYear(); //yyyy
+            var month = (1 + date.getMonth()); //M
+            month = month >= 10 ? month : '0' + month; //month 두자리로 저장
+            var day = date.getDate(); //d
+            day = day >= 10 ? day : '0' + day; //day 두자리로 저장
+            return year + '' + month + '' + day;
+            /*
+            var usageStartDate = new Date();
+            var usageStartDatew = getFormatDate(usageStartDate);
+            console.log("[data]: "+ usageStartDatew);
+            * */
+
+        }
 
         var getInstanceList = function(pageNum) {
           var reqUrl = "/admin/stats/instances" + "?softwareId=" + $("#softwareId").val() + "&size=" + PAGING_SIZE + "&sort=" + SORT + "&page=" + pageNum;
@@ -145,6 +243,8 @@
         };
 
         var callbackGetInstanceList = function(data) {
+            lineChart(data);
+
             $("#totalCount").text("(" + data.totalElements + ")");
 
             var instanceListArea = $("#instanceListArea");

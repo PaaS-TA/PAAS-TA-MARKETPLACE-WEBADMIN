@@ -147,6 +147,7 @@
                 var item = [];
                 var userCount;
                 var userCountPercent;
+                var userCountPercentFixed;
 
                 for (var i = 0; i < pieChartData.length; i++) {
 
@@ -156,12 +157,11 @@
                         if (pieChartData[i].id == key) {
                             userCount = resultCountList[key];
                             userCountPercent = userCount/userCountTotal*100;
+                            userCountPercentFixed = userCountPercent.toFixed(2);
                         }
                     }
 
-                    //dataJson(softwareName,userCount)
-                    // item = {name: map.name , data: userCount};
-                    item = {name: map.name + '(' + userCountPercent + '%)'   , data: userCount};
+                    item = {name: map.name + ' (' + userCountPercentFixed + '%)'   , data: userCount};
                     seriesData.push(item);
                 }
             }

@@ -35,7 +35,6 @@ public class AdminStatsService {
         return paasApiRest.getForObject("/admin/stats/providers/softwares/counts", Map.class);
     }
 
-
     /**
      * 판매자별 총 판매량 수 조회
      *
@@ -45,6 +44,15 @@ public class AdminStatsService {
         return paasApiRest.getForObject("/admin/stats/providers/instances/counts", Map.class);
     }
 
+
+//    public Map countOfSwsUsingProvider(List<String> idIn) {
+//        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/softwares/counts/provider");
+//        for (String id : idIn) {
+//            builder.queryParam("idIn", id);
+//        }
+//        String url = builder.buildAndExpand().toUriString();
+//        return paasApiRest.getForObject(url, Map.class);
+//    }
 
     /**
      * 상품별 사용자 수 목록 조회
@@ -61,6 +69,17 @@ public class AdminStatsService {
 
         return paasApiRest.getForObject(url, Map.class);
     }
+
+
+    public Map sellerCountsOfInstsProviderMonthly(List<String> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months");
+        for (String id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
 
     /**
      * 상품 총 팔린 개수
@@ -86,7 +105,6 @@ public class AdminStatsService {
     public long getCountOfInstsUsing() {
         return paasApiRest.getForObject("/admin/stats/instances/counts/sum", long.class);
     }
-
 
     /**
      * 과거 사용량 추이 조회(months)
@@ -137,7 +155,6 @@ public class AdminStatsService {
         return customPage;
     }
 
-
     /**
      * 사용자 상세 조회
      *
@@ -177,4 +194,16 @@ public class AdminStatsService {
         System.out.println("getTotalElements ::: " + customPage.getTotalElements());
         return customPage;
     }
+
+    //Page::Instance
+    public CustomPage<Instance> getInstanceListBySwInId(String queryParamString) {
+        ResponseEntity<CustomPage<Instance>> responseEntity = paasApiRest.exchange("/instances/my/totalPage" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Instance>>() {});
+        CustomPage<Instance> customPage = responseEntity.getBody();
+
+        System.out.println("getContent ::: " + customPage.getContent());
+        System.out.println("getTotalElements ::: " + customPage.getTotalElements());
+        return customPage;
+    }
+
+
 }

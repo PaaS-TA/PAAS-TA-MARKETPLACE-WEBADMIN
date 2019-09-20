@@ -175,96 +175,6 @@
                     <td>10</td>
                     <td>10,000</td>
                 </tr>
-                <tr>
-                    <td>9</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type4">커머스</span></td>
-                    <td>마젠토</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
-                <tr>
-                    <td>8</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type1">CRM</span></td>
-                    <td>알림톡, 친구톡</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
-                <tr>
-                    <td>7</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type2">ERP</span></td>
-                    <td>지오유 그룹웨어</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
-                <tr>
-                    <td>6</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type6">WEB</span></td>
-                    <td>그누보드</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
-                <tr>
-                    <td>5</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type3">의료</span></td>
-                    <td>스마트닥터</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
-                <tr>
-                    <td>4</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type4">커머스</span></td>
-                    <td>마젠토</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
-                <tr>
-                    <td>3</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type1">CRM</span></td>
-                    <td>알림톡, 친구톡</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
-                <tr>
-                    <td>2</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type2">ERP</span></td>
-                    <td>지오유 그룹웨어</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
-                <tr>
-                    <td>1</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type6">WEB</span></td>
-                    <td>스마트닥터</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
                 </tbody>
             </table>
         </div>
@@ -292,9 +202,44 @@
 
     </div>
     <!-- //content -->
-
+    <input type="hidden" id="userId" th:value="${userStat.id}">
     <script type="text/javascript">
-        console.log('::MarketPlace index Init::' + "[[${userStat}]]");
+        console.log('::userStat::' + "[[${userStat}]]");
+
+        //page&sort
+        var PAGING_SIZE = 10;
+        var SORT = "id,asc";
+
+        // ON LOAD
+        $(document.body).ready(function () {
+            // getInstanceList();
+            console.log('[userId]: ' + $("#userId").val());
+            getInstanceList();
+        });
+
+        var getInstanceList = function(pageNum) {
+            // var reqUrl = "/admin/stats/instances/users";
+            var reqUrl =  "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&size=" + PAGING_SIZE + "&sort=" + SORT + "&page=" + pageNum;
+
+            console.log("[reqUrl]: " + reqUrl);
+
+            procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
+        };
+
+        var callbackGetInstanceList = function(data) {
+            console.log(data.content);
+            // var softwareData = data.content[i].software
+
+            var listLength = content.length;
+
+            if(listLength > 0){
+                for(var i = 0; i < listLength; i++){
+
+                }
+            }
+        };
+
+
     </script>
 </div>
 

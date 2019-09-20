@@ -307,12 +307,20 @@
                         }
                     }
 
+                    var createdDateValue =  content[i].createdDate;
+                    var idx = createdDateValue.indexOf("T");
+                    var createdDate = createdDateValue.substring(0, idx);
+
+                    var lastModifiedDateValue =  content[i].lastModifiedDate;
+                    var idx = lastModifiedDateValue.indexOf("T");
+                    var lastModifiedDate = lastModifiedDateValue.substring(0, idx);
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><a href='javascript:void(0);' onclick=moveUserStatsDetail('"+content[i].id+"')>" + content[i].name + "</a></td>"
                         + "<td>" + content[i].id + "</td>"
-                        + "<td>" + content[i] + "</td>"
+                        + "<td>" +createdDate+ " - "+ lastModifiedDate +"</td>"
                         + "<td>" + instanceCount + "</td>"
                         + "</tr>"
                     );

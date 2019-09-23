@@ -138,7 +138,8 @@
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
-
+        var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
+        var countsCountInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
 
         //차트(pie.line)
         var getSoftwareStatsChart = function(data) {
@@ -158,7 +159,6 @@
                 var soldSWCount;
                 var soldSWCountPercent;  //전체값(soldSoftwareTotal) X 퍼센트 ÷ 100
 
-                console.log("[soldSoftwareTotal]: " + soldSoftwareTotal);
                 for (var i = 0; i < pieChartData.length; i++) {
 
                     var map = pieChartData[i];
@@ -217,31 +217,36 @@
             var lineChartData = contentData.content;
 
             var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
 
             var container = document.getElementById('lineChartArea');
-
 
             if (lineChartData.length == 0) {
                 return;
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
+                var dataPerMonth = [];
                 var soldSWCount;
 
                 for (var i = 0; i < lineChartData.length; i++) {
-                    var nameMap = lineChartData[i];
+                    var map = lineChartData[i];
 
                     for(key in soldSoftwareCount) {
-                        if(lineChartData[i].id == key){
-                            console.log(lineChartData[i]);
+                        if(map.id == key){
                             soldSWCount = soldSoftwareCount[key];
-                            console.log("[soldSWCount] :"+ soldSWCount);
+                            console.log("[soldSWCount]: "+soldSWCount);
                         }
                     }
 
+                    // if(countsCountInstsProvider.counts[map.id]) {
+                    //     dataPerMonth = countsCountInstsProvider.counts[map.id];
+                    //
+                    // } else {
+                    //     dataPerMonth = 0;
+                    // }
+
                     //dataJson(softwareName,series)
-                    lineItem = {name: nameMap.name, data: countsData};
+                    lineItem = {name: map.name, data: soldSWCount};
                     lineSeriesData.push(lineItem);
                 }
                 console.log(lineSeriesData);

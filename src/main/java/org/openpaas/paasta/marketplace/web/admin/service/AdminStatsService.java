@@ -136,6 +136,21 @@ public class AdminStatsService {
     }
 
     /**
+     * 라인 그래프 [판매자별 현황] 과거 사용량 추이 조회
+     *
+     * @return
+     */
+    public Map<String, Object> countsOfInstsStatsMonthly(List<String> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months");
+        for (String id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
+    /**
      * 라인 그래프 [상품별 현황] 과거 사용량 추이 조회
      *
      * @return

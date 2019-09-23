@@ -51,6 +51,18 @@ public class AdminStatsController {
             idIn.add(f.getId());
         }
 
+        Map<String, Long> result = adminStatsService.getCountsOfInstsUser(idIn);
+        Map newResult = new HashMap();
+
+        for (String id:idIn) {
+            String mapId = "" + id;
+            if(result.get(mapId) != null){
+                newResult.put(mapId, result.get(mapId));
+            }else{
+                newResult.put(mapId, 0);
+            }
+        }
+
         // 승인 상품 수
         Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
         model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
@@ -63,7 +75,8 @@ public class AdminStatsController {
        model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
 
         //사용량 추이(month)
-        Map countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        Map countsOfInstsProvider =  adminStatsService.countsOfInstsStatsMonthly(idIn);
+        model.addAttribute("totalCountInstsProviderInfo", commonService.getJsonStringFromMap(countsOfInstsProvider));
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 

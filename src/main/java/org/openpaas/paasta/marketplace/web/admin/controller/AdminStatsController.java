@@ -210,14 +210,34 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/users/list")
     public String getUserStatsMain(Model model, HttpServletRequest httpServletRequest) {
+        CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
+
+        List<String> createdBy = new ArrayList<>();
+
+        for (Profile f:profileList.getContent()) {
+            createdBy.add(f.getId());
+        }
+
+        Map<String, Long> result = adminStatsService.getCountsOfInstsUser(createdBy);
+        Map newResult = new HashMap();
+
+        for (String id:createdBy) {
+            String mapId = "" + id;
+            if(result.get(mapId) != null){
+                newResult.put(mapId, result.get(mapId));
+            }else{
+                newResult.put(mapId, 0);
+            }
+        }
+
+        //사용량 추이
+        Map  countsOfUserProvider =  adminStatsService.countsOfInstsUserMonthly(createdBy);
+        model.addAttribute("totalCountUserProviderInfo", commonService.getJsonStringFromMap(countsOfUserProvider));
+        model.addAttribute("countsOfUserProviderMonthly", countsOfUserProvider.get("terms"));
+        model.addAttribute("countsOfUserProviderCounts", countsOfUserProvider.get("counts"));
 
         // 사용자별 구매 상품 수
         model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
-
-        //사용량 추이
-        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
-        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
-        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
         return "contents/useStatusUser";
     }
@@ -232,22 +252,22 @@ public class AdminStatsController {
     @GetMapping(value = "/users/{id}")
     public String getUserStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
         CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
-
-        List<String> idIn = new ArrayList<>();
+        List<String> createdBy = new ArrayList<>();
         for (Profile f:profileList.getContent()) {
-            idIn.add(f.getId());
+            createdBy.add(f.getId());
         }
-
-        //사용량 추이
-        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
-        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
-        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
         model.addAttribute("userStat", adminStatsService.getUser(id));
         model.addAttribute("categories", adminCategoryService.getCategoryList());
         model.addAttribute("spec", new SoftwareSpecification());
         model.addAttribute("status", Software.Status.values());
         model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
+
+        //사용량 추이
+        Map  countsOfUserProvider =  adminStatsService.countsOfInstsUserMonthly(createdBy);
+        model.addAttribute("totalCountUserProviderInfo", commonService.getJsonStringFromMap(countsOfUserProvider));
+        model.addAttribute("countsOfUserProviderMonthly", countsOfUserProvider.get("terms"));
+        model.addAttribute("countsOfUserProviderCounts", countsOfUserProvider.get("counts"));
 
         return "contents/useStatusUserDetail";
     }

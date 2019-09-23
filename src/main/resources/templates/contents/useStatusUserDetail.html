@@ -186,13 +186,13 @@
     <!-- //content -->
     <input type="hidden" id="userId" th:value="${userStat.id}">
     <script type="text/javascript">
-        //사용량 추이(Monthly::terms,counts)
-        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
-        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
-
         // 사용자별 구매한 상품 수
         var userCountPerInstance = "[[${instancesCount}]]";
         var resultCountList = JSON.parse(userCountPerInstance.replace(/&quot;/g,'"'));
+
+        //사용량 추이(Monthly::terms,counts)
+        var countsOfUserProviderMonthly = "[[${countsOfUserProviderMonthly}]]";
+        var countsOfUserProviderCounts = "[[${countsOfUserProviderCounts}]]";
 
         //page&sort
         var PAGING_SIZE = 10;
@@ -213,11 +213,10 @@
             console.log(">> lineChart init");
             var lineChartData = contentData.content;
 
-            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+            var categoriesData = countsOfUserProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var countsData = countsOfUserProviderCounts.replace("[", "").replace("]", "").split(",");
 
-            console.log("categoriesData" + categoriesData);
-
+            console.log("[categoriesData]: " + categoriesData);
 
             var container = document.getElementById('lineChartArea');
 

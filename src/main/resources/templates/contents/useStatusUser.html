@@ -126,8 +126,10 @@
         var resultCountList = JSON.parse(userCountPerInstance.replace(/&quot;/g,'"'));
 
         //사용량 추이(terms,counts)
-        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
-        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
+        var countsOfUserProviderMonthly = "[[${countsOfUserProviderMonthly}]]";
+        var countsOfUserProviderCounts = "[[${countsOfUserProviderCounts}]]";
+        var totalCountUserProviderInfo = "[[${totalCountUserProviderInfo}]]";
+        var countsOfUserProvider = JSON.parse(totalCountUserProviderInfo.replace(/&quot;/g,'"'));
 
         //차트(pie.line)
         var getSoftwareStatsChart = function(data) {
@@ -190,10 +192,9 @@
 
         var lineChart = function (contentData) {
             console.log(">> lineChart init");
+            var categoriesData = countsOfUserProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var countsData = countsOfUserProviderCounts;
             var lineChartData = contentData.content;
-
-            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
 
             var container = document.getElementById('lineChartArea');
 
@@ -202,12 +203,19 @@
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
+                var dataPerMonth = [];
 
                 for (var i = 0; i < lineChartData.length; i++) {
-                    var nameMap = lineChartData[i];
+                    var map = lineChartData[i];
+
+                    if(countsOfUserProvider.counts[map.id]) {
+                        dataPerMonth = countsOfUserProvider.counts[map.id];
+                    } else {
+                        dataPerMonth = 0;
+                    }
 
                     //dataJson(softwareName,series)
-                    lineItem = {name: nameMap.name , data: countsData};
+                    lineItem = {name: map.name , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
                 }
                 console.log(lineSeriesData);

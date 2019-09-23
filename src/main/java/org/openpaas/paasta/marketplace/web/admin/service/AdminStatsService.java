@@ -70,6 +70,15 @@ public class AdminStatsService {
         return paasApiRest.getForObject(url, Map.class);
     }
 
+    public Map<String, Long> getCountsOfInstsUser(List<String> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/users/instances/counts/ids");
+        for (String id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
 
     public Map sellerCountsOfInstsProviderMonthly(List<String> idIn) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months");
@@ -141,15 +150,16 @@ public class AdminStatsService {
         return paasApiRest.getForObject(url, Map.class);
     }
 
+
     /**
      * 라인 그래프 [판매자별 현황] 과거 사용량 추이 조회
      *
      * @return
      */
-    public Map<String, Object> countsOfInstsUserMonthly(List<String> idIn) {
+    public Map<String, Object> countsOfInstsUserMonthly(List<String> createdBy) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/user/months");
-        for (String id : idIn) {
-            builder.queryParam("idIn", id);
+        for (String id : createdBy) {
+            builder.queryParam("createdBy", id);
         }
         String url = builder.buildAndExpand().toUriString();
 

@@ -209,7 +209,8 @@ public class AdminStatsController {
      * @return ModelAndView(Spring 클래스)
      */
     @GetMapping(value = "/users/list")
-    public String getUserStatsMain(Model model) {
+    public String getUserStatsMain(Model model, HttpServletRequest httpServletRequest) {
+
         // 사용자별 구매 상품 수
         model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
 
@@ -230,11 +231,24 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/users/{id}")
     public String getUserStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
-        model.addAttribute("categories", adminCategoryService.getCategoryList());
+        CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
+
+        List<String> idIn = new ArrayList<>();
+        for (Profile f:profileList.getContent()) {
+            idIn.add(f.getId());
+        }
+
+        //사용량 추이
+        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
+        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
+
         model.addAttribute("userStat", adminStatsService.getUser(id));
+        model.addAttribute("categories", adminCategoryService.getCategoryList());
         model.addAttribute("spec", new SoftwareSpecification());
         model.addAttribute("status", Software.Status.values());
-        //model.addAttribute("instance", adminStatsService.getInstanceListBySwInId(commonService.setParameters(httpServletRequest)));
+        model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
+
         return "contents/useStatusUserDetail";
     }
 
@@ -248,7 +262,6 @@ public class AdminStatsController {
     @ResponseBody
     public CustomPage<Instance> getInstanceListBySwInId(Model model, HttpServletRequest httpServletRequest) {
         return adminStatsService.getInstanceListBySwInId(commonService.setParameters(httpServletRequest));
-//        return adminStatsService.getInstanceListBySwInId("");
     }
 
 

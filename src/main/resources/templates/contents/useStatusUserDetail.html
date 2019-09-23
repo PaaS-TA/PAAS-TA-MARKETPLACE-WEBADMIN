@@ -55,12 +55,18 @@
                             <tbody>
                             <tr>
                                 <th scope="row">사용자명</th>
-                                <td th:text="${userStat.name}">한세계</td>
+                                <td th:text="${userStat.name}"></td>
                                 <th scope="row">ID</th>
                                 <td th:text="${userStat.id}"></td>
                             </tr>
                             </tbody>
                         </table>
+                        <br><br>
+                        <!-- chart -->
+                        <div class='code-html' id='code-html'>
+                            <div id='lineChartArea'></div>
+                        </div>
+                        <!-- //chart -->
                     </div>
                     <!-- //table -->
                 </div>
@@ -130,14 +136,15 @@
                     </div>
                 </div>
                 <!-- //Form 그룹 -->
-                <button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+                <button type="button" name="searchBtn" class="btn btn-sch" title="검색" id="searchBtn"><span class="ico">검색</span></button>
             </div>
         </div>
         <!-- //검색 Form -->
 
         <div class="cont-titWrap mt30">
-            <h3 class="h-tit3">전체 상품 수 <span class="point4">(50)</span><span class="point_txt"> / 총 금액(77,000원)</span></h3>
+            <h3 class="h-tit3">총 건수 / 총 금액 <span class="point4" id="totalCount"></span></h3>
         </div>
+
 
         <!-- 테이블 -->
         <div class="tbl type1 pt20">
@@ -145,36 +152,24 @@
                 <colgroup>
                     <col style="width:8%;">
                     <col style="width:10%;">
-                    <col style="width:10%;">
                     <col style="width:auto;">
                     <col style="width:10%;">
-                    <col style="width:10%;">
+                    <col style="width:auto;">
                     <col style="width:10%;">
                     <col style="width:10%;">
                 </colgroup>
                 <thead>
                 <tr>
                     <th scope="col">No.</th>
-                    <th scope="col">사용연월</th>
                     <th scope="col">카테고리</th>
                     <th scope="col">상품명</th>
                     <th scope="col">버전</th>
-                    <th scope="col">가격표</th>
-                    <th scope="col">사용일</th>
-                    <th scope="col">사용요금</th>
+                    <th scope="col">이용기간</th>
+                    <th scope="col">이용월수</th>
+                    <th scope="col">이용상태</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>10</td>
-                    <td>2019.05</td>
-                    <td><span class="pn_cate type3">의료</span></td>
-                    <td>스마트닥터</td>
-                    <td>1.0</td>
-                    <td>1,000원/일</td>
-                    <td>10</td>
-                    <td>10,000</td>
-                </tr>
+                <tbody id="userListArea">
                 </tbody>
             </table>
         </div>
@@ -182,20 +177,7 @@
 
         <!-- page -->
         <nav class="pagiWrap">
-            <ul class="pagination">
-                <li class="first disabled"><a href="#">맨 처음</a></li>
-                <li class="prev"><a href="#">이전</a></li>
-                <li class="active"><a href="#">1 <span class="sr-only">(current)</span></a></li>
-                <li class=" disabled"><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#">6</a></li>
-                <li><a href="#">7</a></li>
-                <li><a href="#">8</a></li>
-                <li><a href="#">9</a></li>
-                <li class="next"><a href="#">다음</a></li>
-                <li class="end"><a href="#">맨 끝</a></li>
+            <ul class="pagination" id="pageNumberList">
             </ul>
         </nav>
         <!-- //page -->
@@ -204,7 +186,13 @@
     <!-- //content -->
     <input type="hidden" id="userId" th:value="${userStat.id}">
     <script type="text/javascript">
-        console.log('::userStat::' + "[[${userStat}]]");
+        //사용량 추이(Monthly::terms,counts)
+        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
+        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
+
+        // 사용자별 구매한 상품 수
+        var userCountPerInstance = "[[${instancesCount}]]";
+        var resultCountList = JSON.parse(userCountPerInstance.replace(/&quot;/g,'"'));
 
         //page&sort
         var PAGING_SIZE = 10;
@@ -217,28 +205,176 @@
             getInstanceList();
         });
 
+        var getAdminStatsUserChart =function(data){
+            lineChart(data);
+        }
+
+        var lineChart = function (contentData) {
+            console.log(">> lineChart init");
+            var lineChartData = contentData.content;
+
+            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+
+            console.log("categoriesData" + categoriesData);
+
+
+            var container = document.getElementById('lineChartArea');
+
+            if (lineChartData.length == 0) {
+                return;
+            }else{
+                var lineSeriesData = [];
+                var lineItem = [];
+
+                for (var i = 0; i < lineChartData.length; i++) {
+                    var map = lineChartData[i];
+
+                    //dataJson(softwareName,series)
+                    lineItem = {name: map.createdBy , data: countsData};
+                    lineSeriesData.push(lineItem);
+                }
+                console.log(lineSeriesData);
+            }
+
+            var data = {
+                categories: categoriesData,
+                series: lineSeriesData
+            };
+
+            var options = {
+                chart: {
+                    width: 1200,
+                    height: 250,
+                },
+                yAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto'
+                },
+                xAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto',
+                    type: 'datetime',
+                    dateFormat: 'yyyy-MMM'
+                },
+                series: {
+                    showDot: false,
+                    zoomable: true,
+                    pointWidth: 2
+                },
+                legend : {
+                    visible : true,
+                    showCheckbox : false
+                },
+                chartExportMenu : {
+                    visible : false
+                }
+            };
+
+            tui.chart.lineChart(container, data, options);
+            $(".tui-chart-series-custom-event-area").hide();
+        };
+
         var getInstanceList = function(pageNum) {
-            // var reqUrl = "/admin/stats/instances/users";
-            var reqUrl =  "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&size=" + PAGING_SIZE + "&sort=" + SORT + "&page=" + pageNum;
+            //카테고리
+            var categoryId = $("#categoryId option:selected").val();
+
+            if (categoryId === 'ALL' || categoryId === '') {
+                categoryId = '';
+            }
+            console.log("[categoryId]: "  + categoryId);
+
+            var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + PAGING_SIZE + "&sort=" + SORT;
 
             console.log("[reqUrl]: " + reqUrl);
 
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
 
-        var callbackGetInstanceList = function(data) {
-            console.log(data.content);
-            // var softwareData = data.content[i].software
 
+        var callbackGetInstanceList = function(data) {
+            getAdminStatsUserChart(data);
+
+            var userList = $("#userListArea");
+            var htmlString = [];
+            var instanceCount;
+            var content = data.content;
             var listLength = content.length;
+
+            console.log(content);
 
             if(listLength > 0){
                 for(var i = 0; i < listLength; i++){
 
+                    for(key in resultCountList) {
+                        if(content[i].id == key){
+                            instanceCount = resultCountList[key];
+                            break;
+                        } else {
+                            instanceCount = 0;
+                        }
+                    }
+
+                    //총 건수 / 총 금액
+                    $("#totalCount").text(" (" + data.totalElements + " / " + content[i].software.pricePerDay +" 원)");
+
+                    //이용기간(YYYY-MM-DD)
+                    var createdDateValue =  content[i].createdDate;
+                    var idx = createdDateValue.indexOf("T");
+                    var createdDate = createdDateValue.substring(0, idx);
+
+                    var lastModifiedDateValue =  content[i].lastModifiedDate;
+                    var idx = lastModifiedDateValue.indexOf("T");
+                    var lastModifiedDate = lastModifiedDateValue.substring(0, idx);
+
+                    //이용 월(일)수
+                    var stDate = new Date(createdDate);
+                    var endDate = new Date(lastModifiedDate);
+                    var btMs = endDate.getTime() - stDate.getTime();
+                    var btDay = btMs / (1000*60*60*24);
+                    var btMonth = btDay *30;
+
+                    htmlString.push(
+                        "<tr>"
+                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td><span class=\"pn_cate type"+ content[i].software.category.id +"\">" + content[i].software.category.name + "</span></td>"
+                        + "<td>" + content[i].software.name + "</td>"
+                        + "<td>" + content[i].software.version + "</td>"
+                        + "<td>" + createdDate+ " ~ "+ lastModifiedDate +"</td>"
+                        + "<td>" + btMonth +"</td>"
+                        + "<td>" + content[i].status + "</td>"
+                        + "</tr>"
+                    );
+                }
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='7'><p class='user_p'>상품이 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+            userList.html(htmlString);
+
+            //::page::
+            var pageNumberList = $("#pageNumberList");
+            var htmlStringPage = "<li class='first disabled'><a href='#'>맨 처음</a></li>" + "<li class='prev'><a href='#'>이전</a></li>";
+            var pageTotalNumber = data.totalElements;
+            var pageSize = data.size;
+
+            var pageCount = Math.ceil(pageTotalNumber/pageSize);
+            console.log("::pageCount :: " + pageCount);
+
+            if(pageCount > 0){
+                for(var page = 0; page < pageCount; page++){
+                    htmlStringPage += "<li class='active'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ page +"')>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
                 }
             }
+            htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
+            pageNumberList.html(htmlStringPage);
+
         };
 
+        //eventBtn
+        $("#searchBtn").on("click", function () {
+            getInstanceList();
+        });
 
     </script>
 </div>

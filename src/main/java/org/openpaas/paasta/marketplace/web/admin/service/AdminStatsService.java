@@ -107,6 +107,17 @@ public class AdminStatsService {
     }
 
     /**
+     * 과거 사용량 추이 조회(days)
+     *
+     * @return
+     */
+
+    public Map<String, Object> countOfInstsDaily() {
+        return paasApiRest.getForObject("/admin/stats/instances/sum/days", Map.class);
+    }
+
+
+    /**
      * 과거 사용량 추이 조회(months)
      *
      * @return
@@ -116,7 +127,7 @@ public class AdminStatsService {
     }
 
     /**
-     * 과거 사용량 추이 조회
+     * 라인 그래프 [상품별 현황] 과거 사용량 추이 조회
      *
      * @return
      */
@@ -131,14 +142,20 @@ public class AdminStatsService {
     }
 
     /**
-     * 과거 사용량 추이 조회(days)
+     * 라인 그래프 [판매자별 현황] 과거 사용량 추이 조회
      *
      * @return
      */
+    public Map<String, Object> countsOfInstsUserMonthly(List<String> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/user/months");
+        for (String id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
 
-    public Map<String, Object> countOfInstsDaily() {
-        return paasApiRest.getForObject("/admin/stats/instances/sum/days", Map.class);
+        return paasApiRest.getForObject(url, Map.class);
     }
+
 
     /**
      * 총 사용자 수 조회

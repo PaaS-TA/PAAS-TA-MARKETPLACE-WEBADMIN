@@ -155,6 +155,8 @@
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
+        var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
+        var countofInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
 
         //차트(pie.line)
         var getSoftwareStatsChart = function(data) {
@@ -240,9 +242,10 @@
         };
 
         var lineChart = function(contentData) {
-            var lineChartData = contentData.content;
+            console.log(">> lineChart init");
             var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+            var countsData = countOfInstsProviderCounts;
+            var lineChartData = contentData.content;
 
             var container = document.getElementById('lineChartArea');
 
@@ -251,15 +254,24 @@
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
+                var dataPerMonth = [];
 
                 for (var i = 0; i < lineChartData.length; i++) {
-                    var nameMap = lineChartData[i];
+                    var map = lineChartData[i];
+
+                    if(countofInstsProvider.counts[map.id]) {
+                        dataPerMonth = countofInstsProvider.counts[map.id];
+                    } else {
+                        dataPerMonth = 0;
+                    }
 
                     //dataJson(softwareName,series)
-                    lineItem = {name: nameMap.name , data: countsData};
+                    lineItem = {name: map.name , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
                 }
             }
+
+            console.log(lineSeriesData);
 
             var data = {
                 categories: categoriesData,
@@ -268,8 +280,8 @@
 
             var options = {
                 chart: {
-                    width: 700,
-                    height: 250,
+                    width : 700,
+                    height : 250,
                 },
                 yAxis: {
                     pointOnColumn: true,
@@ -297,8 +309,7 @@
 
             tui.chart.lineChart(container, data, options);
             $(".tui-chart-series-custom-event-area").hide();
-            $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
-        };
+        }
 
         var getSoftwareList = function (pageNum) {
             var dateParameter;                                              //날짜

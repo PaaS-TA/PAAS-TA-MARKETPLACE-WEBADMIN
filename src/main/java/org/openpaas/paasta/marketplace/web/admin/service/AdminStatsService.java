@@ -116,6 +116,21 @@ public class AdminStatsService {
     }
 
     /**
+     * 과거 사용량 추이 조회
+     *
+     * @return
+     */
+    public Map<String, Object> countsOfInstsProviderMonthlyTransition(List<Long> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/counts/months");
+        for (Long id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
+    /**
      * 과거 사용량 추이 조회(days)
      *
      * @return

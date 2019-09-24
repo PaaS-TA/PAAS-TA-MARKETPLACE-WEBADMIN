@@ -68,6 +68,28 @@
                             </tr>
                             </tbody>
                         </table>
+                        <br><br>
+                        <div class="statusBox">
+                            <ul>
+                                <li>
+                                    <!-- pieChart -->
+                                    <div class="tbw type1" id ='inWrap_bg04'>
+                                        <h2 class="h4">등록 앱</h2><br>
+                                        <div class="in_txtBox" id='pieChartArea'>
+                                        </div>
+                                    </div>
+                                    <!-- pieChart -->
+                                </li>
+                                <li>
+                                    <!-- lineChart -->
+                                    <div class="tbw type1">
+                                        <h2 class="h4">사용 앱</h2><br>
+                                        <div class="in_txtBox" id='lineChartArea'></div>
+                                    </div>
+                                    <!-- lineChart -->
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                     <!-- //table -->
                 </div>
@@ -159,6 +181,146 @@
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
 
+
+        var getAdminStatsSellerChart = function(data){
+            pieChart(data);
+            lineChart(data);
+        };
+
+        var pieChart = function (contentData) {
+            var pieChartData = contentData.content;
+
+            if(pieChartData.length == 0){
+                return;
+            }else{
+                var seriesData = [];
+                var item = [];
+                var userCount;
+
+                for (var i = 0; i < pieChartData.length; i++) {
+
+                    var map = pieChartData[i];
+
+                    for (key in resultCountList) {
+                        if (pieChartData[i].id == key) {
+                            userCount = resultCountList[key];
+                        }
+                    }
+
+                    if(userCount == "" || userCount == undefined){
+                        userCount = 0;
+                    }
+
+                    //dataJson(softwareName,userCount)
+                    item = {name: map.name , data: userCount};
+                    seriesData.push(item);
+                }
+            }
+
+            var container = document.getElementById('pieChartArea');
+
+            var data = {
+                series: seriesData
+            };
+
+            var options = {
+                chart: {
+                    width : 450,
+                    height : 250,
+                    format: function(value, chartType, areaType, valuetype, legendName) {
+                        if (areaType === 'makingSeriesLabel') { // formatting at series area
+                            value = value;
+                        }
+                        return value;
+                    }
+                },
+                series: {
+                    radiusRange: ['40%', '100%'],
+                    showLabel: true
+                },
+                tooltip: {
+                    suffix: '%'
+                }
+            };
+            var theme = {
+                series: {
+                    series: {
+                        colors: [
+                            '#83b14e', '#458a3f', '#295ba0', '#2a4175', '#289399',
+                            '#289399', '#617178', '#8a9a9a', '#516f7d', '#dddddd'
+                        ]
+                    },
+                    label: {
+                        color: '#fff',
+                        fontFamily: 'sans-serif'
+                    }
+                }
+            };
+            tui.chart.pieChart(container, data, options);
+        };
+
+        var lineChart = function (contentData) {
+            var lineChartData = contentData.content;
+
+            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+
+            var container = document.getElementById('lineChartArea');
+
+            if (lineChartData.length == 0) {
+                return;
+            }else{
+                var lineSeriesData = [];
+                var lineItem = [];
+
+                for (var i = 0; i < lineChartData.length; i++) {
+                    var map = lineChartData[i];
+
+                    //dataJson(softwareName,series)
+                    lineItem = {name: map.createdBy , data: countsData};
+                    lineSeriesData.push(lineItem);
+                }
+            }
+
+            var data = {
+                categories: categoriesData,
+                series: lineSeriesData
+            };
+
+            var options = {
+                chart: {
+                    width: 650,
+                    height: 250,
+                },
+                yAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto'
+                },
+                xAxis: {
+                    pointOnColumn: true,
+                    tickInterval: 'auto',
+                    type: 'datetime',
+                    dateFormat: 'yyyy-MMM'
+                },
+                series: {
+                    showDot: false,
+                    zoomable: true,
+                    pointWidth: 2
+                },
+                legend : {
+                    visible : true,
+                    showCheckbox : false
+                },
+                chartExportMenu : {
+                    visible : false
+                }
+            };
+
+            tui.chart.lineChart(container, data, options);
+            $(".tui-chart-series-custom-event-area").hide();
+        };
+
+
         var getSoftwaresPerSellerList = function() {
             var categoryId = $("#categoryId option:selected").val();
 
@@ -173,6 +335,8 @@
         };
 
         var callbackGetSoftwaresPerSellerList = function(data) {
+            getAdminStatsSellerChart(data);
+
             //::totalElements::
             $("#totalElements").text("(" + data.totalElements + ")");
 
@@ -229,7 +393,6 @@
             var pageSize = data.size;
 
             var pageCount = Math.ceil(pageTotalNumber/pageSize);
-            console.log("::pageCount :: " + pageCount);
 
             if(pageCount > 0){
                 for(var page = 0; page < pageCount; page++){

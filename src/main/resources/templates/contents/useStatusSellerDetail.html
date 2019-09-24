@@ -60,11 +60,11 @@
                                 <th scope="row">판매자</th>
                                 <td th:text="${sellerStat.name}"></td>
                                 <th scope="row">승인상품 수</th>
-                                <td>111</td>
+                                <td>1</td>
                                 <th scope="row">판매상품 수</th>
-                                <td>5</td>
+                                <td>2</td>
                                 <th scope="row">판매량</th>
-                                <td>27</td>
+                                <td>0</td>
                             </tr>
                             </tbody>
                         </table>
@@ -95,13 +95,13 @@
                     </div>
                 </div>
                 <!-- //Form 그룹 -->
-                <button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+                <button type="button" name="button" class="btn btn-sch" title="검색" id="searchBtn"><span class="ico">검색</span></button>
             </div>
         </div>
         <!-- //검색 Form -->
 
         <div class="cont-titWrap mt30">
-            <h3 class="h-tit3">총 건수 <span class="point4" id="totalCount"></span></h3>
+            <h3 class="h-tit3">총 건수 <span class="point4" id="totalElements"></span></h3>
         </div>
 
         <!-- 테이블 -->
@@ -124,19 +124,10 @@
                     <th scope="col">버전</th>
                     <th scope="col">등록일</th>
                     <th scope="col">승인일</th>
-                    <th scope="col">사용 수</th>
+                    <th scope="col">판매량</th>
                 </tr>
                 </thead>
-                <tbody>
-                <tr>
-                    <td>10</td>
-                    <td>(주)씨이랩</td>
-                    <td>hongil98</td>
-                    <td>기업</td>
-                    <td>2019-04-01</td>
-                    <td>5</td>
-                    <td>3</td>
-                </tr>
+                <tbody id="softwareArea">
                 </tbody>
             </table>
         </div>
@@ -152,12 +143,17 @@
     </div>
     <!-- //content -->
 
-    sellerStat
-<!--    <input type="hidden" id="sellerStat" th:value="${sellerStat}">-->
-    <script type="text/javascript">
+    <input type="hidden" id="approvalSWCount" th:id="approvalSWCount">
 
-        //판매자 기본 데이터
-        var sellerStat = $("#sellerStat").val();
+    <script type="text/javascript">
+        var createdById = "[[${sellerStat.id}]]";
+
+        // 상품별 사용자 수
+        var userCountPerSoftware = "[[${instanceUserCount}]]";
+        var resultCountList = JSON.parse(userCountPerSoftware.replace(/&quot;/g,'"'));
+
+        // 판매자별 승인 상품 수
+        var approvalSoftwareCount = JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
 
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
@@ -165,7 +161,6 @@
 
         var getSoftwaresPerSellerList = function() {
             var categoryId = $("#categoryId option:selected").val();
-            var createdById = "[[${sellerStat.id}]]";
 
             if (categoryId === 'ALL' || categoryId === '') {
                 categoryId = '';
@@ -174,6 +169,7 @@
             var reqUrl = "/admin/stats/sellers/registSwList" + "?createdBy=" + createdById + "&categoryId=" + categoryId;
 
             procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwaresPerSellerList);
+
         };
 
         var callbackGetSoftwaresPerSellerList = function(data) {
@@ -187,16 +183,35 @@
             var listLength = content.length;
 
             if(listLength > 0){
+                var userCount;
+
                 for(var i = 0; i < listLength; i++){
+
+                    for (key in resultCountList) {
+                        if (content[i].id == key) {
+                            userCount = resultCountList[key];
+                        }else{
+                            userCount = 0;
+                        }
+                    }
+
+                    var createdDateValue =  content[i].createdDate;
+                    var idx = createdDateValue.indexOf("T");
+                    var createdDate = createdDateValue.substring(0, idx);
+
+                    var lastModifiedDateValue =  content[i].lastModifiedDate;
+                    var idx = lastModifiedDateValue.indexOf("T");
+                    var lastModifiedDate = lastModifiedDateValue.substring(0, idx);
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
                         + "<td><a href='javascript:void(0);' onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].version + "</td>"
-                        + "<td>" + content[i].createdDate + "</td>"
-                        + "<td>" + content[i].statusModifiedDate + "</td>"
-                        + "<td>" + "사용 수" + "</td>"
+                        + "<td>" + createdDate + "</td>"
+                        + "<td>" + lastModifiedDate + "</td>"
+                        + "<td>" + userCount + "</td>"
                         + "</tr>"
                     );
                 }
@@ -225,12 +240,14 @@
             pageNumberList.html(htmlStringPage);
         };
 
+        //eventBtn
+        $("#searchBtn").on("click", function () {
+            getSoftwaresPerSellerList();
+        });
 
         $(document).ready(function () {
             getSoftwaresPerSellerList();
         });
-        console.log('::MarketPlace index Init::');
-
 
     </script>
 </div>

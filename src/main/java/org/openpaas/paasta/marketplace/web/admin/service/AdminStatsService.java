@@ -44,15 +44,14 @@ public class AdminStatsService {
         return paasApiRest.getForObject("/admin/stats/providers/instances/counts", Map.class);
     }
 
-
-//    public Map countOfSwsUsingProvider(List<String> idIn) {
-//        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/softwares/counts/provider");
-//        for (String id : idIn) {
-//            builder.queryParam("idIn", id);
-//        }
-//        String url = builder.buildAndExpand().toUriString();
-//        return paasApiRest.getForObject(url, Map.class);
-//    }
+    public Map<String, Long> countOfSwsUsingProvider(List<Long> providerId) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/softwares/counts/provider");
+        for (Long id : providerId) {
+            builder.queryParam("providerId", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+        return paasApiRest.getForObject(url, Map.class);
+    }
 
     /**
      * 상품별 사용자 수 목록 조회

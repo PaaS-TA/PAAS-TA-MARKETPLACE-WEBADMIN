@@ -165,7 +165,6 @@
         };
 
         var pieChart = function(contentData) {
-            console.log(">> Chart init");
             // Chart [pieChart]
             var pieChartData = contentData.content;
 
@@ -242,7 +241,6 @@
         };
 
         var lineChart = function(contentData) {
-            console.log(">> lineChart init");
             var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
             var countsData = countOfInstsProviderCounts;
             var lineChartData = contentData.content;
@@ -270,8 +268,6 @@
                     lineSeriesData.push(lineItem);
                 }
             }
-
-            console.log(lineSeriesData);
 
             var data = {
                 categories: categoriesData,
@@ -322,11 +318,8 @@
 
             // datepicker
             var startDate = $("#startDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
-            console.log("startDate : "  + startDate);
 
             var endDate = $("#endDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
-            console.log("endDate : "  + endDate);
-
 
             if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
                 dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
@@ -394,7 +387,6 @@
             var pageSize = data.size;
 
             var pageCount = Math.ceil(pageTotalNumber/pageSize);
-            console.log("::pageCount :: " + pageCount);
 
             if(pageCount > 0){
                 for(var page = 0; page < pageCount; page++){

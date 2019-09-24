@@ -333,11 +333,13 @@
                     var btDay = btMs / (1000*60*60*24);
                     var btMonth = btDay *30;
 
+                    var software = content[i].software;
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
-                        + "<td><span class=\"pn_cate type"+ content[i].software.category.id +"\">" + content[i].software.category.name + "</span></td>"
-                        + "<td>" + content[i].software.name + "</td>"
+                        + "<td><span class=\"pn_cate type"+ software.category.id +"\">" + software.category.name + "</span></td>"
+                        + "<td>" + software.name + "</td>"
                         + "<td>" + content[i].software.version + "</td>"
                         + "<td>" + createdDate+ " ~ "+ lastModifiedDate +"</td>"
                         + "<td>" + btMonth +"</td>"
@@ -374,6 +376,8 @@
         $("#searchBtn").on("click", function () {
             getInstanceList();
         });
+
+
 
     </script>
 </div>

@@ -122,30 +122,36 @@
     </div>
     <!-- //content -->
 
+    profiles.id
+    <input type="hidden" id="profile" th:value="${profiles}">
     <script type="text/javascript">
+        var profiles  = "[[${profiles}]]";
+
         var PAGING_SIZE = 10;
         var SORT = "id,asc";
 
         // 판매자별 승인 상품 수
         var approvalSoftwareCount = JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
-
         // 판매자별 총 판매량 수
         var soldSoftwareCount = JSON.parse("[[${soldSoftwareCount}]]".replace(/&quot;/g,'"'));
-
         // 판매 상품 총 개수
         var soldSoftwareTotal = "[[${instanceCountSum}]]";
-
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
         var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
         var countsCountInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
 
+        // ON LOAD
+        $(document).ready(function() {
+            getProfileStatsList();
+            console.log('[profiles]: ' + profiles);
+        });
+
         //차트(pie.line)
         var getSoftwareStatsChart = function(data) {
             pieChart(data);
             lineChart(data);
-            console.log("[soldSoftwareTotal]: " + soldSoftwareTotal);
         };
 
         var pieChart = function(contentData) {
@@ -173,7 +179,6 @@
                     item = {name: map.name + '(' + soldSWCountPercent + '%)'   , data: soldSWCountPercent};
                     seriesData.push(item);
                 }
-                console.log(seriesData);
             }
 
             var container = document.getElementById('pieChartArea');
@@ -231,26 +236,24 @@
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
 
-                    for(key in soldSoftwareCount) {
-                        if(map.id == key){
-                            soldSWCount = soldSoftwareCount[key];
-                            console.log("[soldSWCount]: "+soldSWCount);
-                        }
+                    if(countsCountInstsProvider.counts[map.id]) {
+                        dataPerMonth = countsCountInstsProvider.counts[map.id];
+                    } else {
+                        dataPerMonth = 0;
                     }
 
-                    // if(countsCountInstsProvider.counts[map.id]) {
-                    //     dataPerMonth = countsCountInstsProvider.counts[map.id];
-                    //
-                    // } else {
-                    //     dataPerMonth = 0;
-                    // }
-
+                    for(key in soldSoftwareCount) {
+                        if(lineChartData[i].id == key){
+                            soldSWCount = soldSoftwareCount[key];
+                        }
+                    }
                     //dataJson(softwareName,series)
-                    lineItem = {name: map.name, data: soldSWCount};
+                    lineItem = {name: map.name , data: soldSWCount};
                     lineSeriesData.push(lineItem);
                 }
                 console.log(lineSeriesData);
             }
+
 
             var data = {
                 categories: categoriesData,
@@ -300,10 +303,9 @@
 
             var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike + "&size=" + PAGING_SIZE + "&sort=" + SORT;
 
-            console.log("전체 경로 ::: "  + reqUrl);
-
             procCallAjax(reqUrl, "GET", null, null, callbackProfileStatsList);
         };
+
 
         var callbackProfileStatsList = function(data){
             getSoftwareStatsChart(data);
@@ -313,12 +315,12 @@
             var adminProfileList = $("#profileArea");
             var htmlString = [];
             var content = data.content;
-
             var listLength = content.length;
 
             if(listLength > 0){
                 var approvalSWCount;
                 var soldSWCount;
+                var totalElements;
 
                     for(var i = 0; i < listLength; i++){
                         for(key in approvalSoftwareCount) {
@@ -333,6 +335,16 @@
                         }
                     }
 
+                    for(key in profiles) {
+                        if(content[i].id == key){
+                            totalElements = profiles[key];
+                        }
+                        else{
+                            totalElements = 1;
+                        }
+                    }
+
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i+1) + "</td>"
@@ -341,7 +353,7 @@
                         + "<td>" + content[i].type+ "</td>"
                         + "<td>" + content[i].createdDate + "</td>"
                         + "<td>" + approvalSWCount + "</td>"
-                        + "<td>" + "판매상품 수" + "</td>"
+                        + "<td>" + totalElements + "</td>"
                         + "<td>" + soldSWCount + "</td>"
                         + "</tr>"
                     );
@@ -382,11 +394,31 @@
             procMovePage("/admin/stats/sellers/{id}".replace("{id}", id));
         };
 
+        var getInstanceList = function (data, pageNum) {
+            var softwareId = data.createdBy;
+            var reqUrl = "/admin/stats/instances" + "?softwareId=" + softwareId + "&size=" + PAGING_SIZE + "&sort=" + SORT + "&page=" + pageNum;
+            procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
+        };
 
-        // ON LOAD
-        $(document).ready(function() {
-            getProfileStatsList();
-        });
+        var callbackGetInstanceList = function(data){
+            var content = data.content;
+            var map = new Object();
+
+            for (var i = 0; i < content.length; i++) {
+                var uniqueCount = content[i];
+                var createdBy = uniqueCount.createdBy;
+                var software = content.software;
+                var status = software.status; // Pending("대기"), Approval("승인"), Rejected("반려");
+
+                if(map[uniqueCount[i]] != null) {
+                    map[createdBy] += 1;
+                } else {
+                    map[createdBy] = 1;
+                }
+            }
+            console.log(map);
+        };
+
 
     </script>
 </div>

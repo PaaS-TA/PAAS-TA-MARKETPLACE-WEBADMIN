@@ -181,6 +181,7 @@
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
 
+        // var instanceUserCountByProvider = "[[${instanceUserCountByProvider}]]";
 
         var getAdminStatsSellerChart = function(data){
             pieChart(data);
@@ -204,11 +205,12 @@
                     for (key in resultCountList) {
                         if (pieChartData[i].id == key) {
                             userCount = resultCountList[key];
+
                         }
                     }
 
                     if(userCount == "" || userCount == undefined){
-                        userCount = 0;
+                        userCount = 1;
                     }
 
                     //dataJson(softwareName,userCount)
@@ -371,7 +373,7 @@
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
-                        + "<td><a href='javascript:void(0);' onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
+                        + "<td>" + content[i].name + "</a></td>"
                         + "<td>" + content[i].version + "</td>"
                         + "<td>" + createdDate + "</td>"
                         + "<td>" + lastModifiedDate + "</td>"

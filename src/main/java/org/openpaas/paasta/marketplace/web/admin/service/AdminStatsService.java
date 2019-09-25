@@ -261,5 +261,15 @@ public class AdminStatsService {
         return customPage;
     }
 
+    public Map<Long, Object> getUsingPerInstanceByProvider(List<Long> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/usingCount");
+        for (Long id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
 
 }

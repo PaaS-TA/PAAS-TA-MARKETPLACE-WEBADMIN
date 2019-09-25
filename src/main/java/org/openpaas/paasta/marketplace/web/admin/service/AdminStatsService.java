@@ -44,6 +44,17 @@ public class AdminStatsService {
         return paasApiRest.getForObject("/admin/stats/providers/instances/counts", Map.class);
     }
 
+    // 판매자 승인(status = Approval)상품 수
+    public Map<Long, Object> getUsingPerInstanceByProvider(String providerId, List<Long> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/usingCount/provider/" + providerId);
+        for (Long id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
     public Map<String, Long> countOfSwsUsingProvider(List<Long> providerId) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/softwares/counts/provider");
         for (Long id : providerId) {
@@ -260,16 +271,5 @@ public class AdminStatsService {
         System.out.println("getTotalElements ::: " + customPage.getTotalElements());
         return customPage;
     }
-
-    public Map<Long, Object> getUsingPerInstanceByProvider(List<Long> idIn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/usingCount");
-        for (Long id : idIn) {
-            builder.queryParam("idIn", id);
-        }
-        String url = builder.buildAndExpand().toUriString();
-
-        return paasApiRest.getForObject(url, Map.class);
-    }
-
 
 }

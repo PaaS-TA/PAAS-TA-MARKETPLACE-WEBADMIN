@@ -175,13 +175,11 @@
         var resultCountList = JSON.parse(userCountPerSoftware.replace(/&quot;/g,'"'));
 
         // 판매자별 승인 상품 수
-        var approvalSoftwareCount = JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
+        var instanceUserCountProvider = "[[${instanceUserCountProvider}]]";
 
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
-
-        // var instanceUserCountByProvider = "[[${instanceUserCountByProvider}]]";
 
         var getAdminStatsSellerChart = function(data){
             pieChart(data);
@@ -196,25 +194,27 @@
             }else{
                 var seriesData = [];
                 var item = [];
-                var userCount;
+                var instanceUserCount;
 
                 for (var i = 0; i < pieChartData.length; i++) {
 
                     var map = pieChartData[i];
 
-                    for (key in resultCountList) {
+                    for (key in instanceUserCountProvider) {
                         if (pieChartData[i].id == key) {
-                            userCount = resultCountList[key];
-
+                            instanceUserCount = instanceUserCountProvider[key];
+                        }else{
+                            instanceUserCount = 0;
                         }
                     }
 
-                    if(userCount == "" || userCount == undefined){
-                        userCount = 1;
+
+                    if(instanceUserCount == "" || instanceUserCount == undefined){
+                        instanceUserCount = 0;
                     }
 
                     //dataJson(softwareName,userCount)
-                    item = {name: map.name , data: userCount};
+                    item = {name: map.name , data: instanceUserCount};
                     seriesData.push(item);
                 }
             }
@@ -331,15 +331,12 @@
             }
 
             var reqUrl = "/admin/stats/sellers/registSwList" + "?createdBy=" + createdById + "&categoryId=" + categoryId;
-
             procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwaresPerSellerList);
-
         };
 
         var callbackGetSoftwaresPerSellerList = function(data) {
             getAdminStatsSellerChart(data);
 
-            //::totalElements::
             $("#totalElements").text("(" + data.totalElements + ")");
 
             var softwareList = $("#softwareArea");
@@ -350,6 +347,9 @@
 
             if(listLength > 0){
                 var userCount;
+                var instanceUserCount;
+
+                console.log(instanceUserCountProvider);
 
                 for(var i = 0; i < listLength; i++){
 
@@ -358,6 +358,14 @@
                             userCount = resultCountList[key];
                         }else{
                             userCount = 0;
+                        }
+                    }
+
+                    for (key in instanceUserCountProvider) {
+                        if (content[i].id == key) {
+                            instanceUserCount = instanceUserCountProvider[key];
+                        }else{
+                            instanceUserCount = 0;
                         }
                     }
 
@@ -373,11 +381,11 @@
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
-                        + "<td>" + content[i].name + "</a></td>"
+                        + "<td>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].version + "</td>"
                         + "<td>" + createdDate + "</td>"
                         + "<td>" + lastModifiedDate + "</td>"
-                        + "<td>" + userCount + "</td>"
+                        + "<td>" + instanceUserCount + "</td>"
                         + "</tr>"
                     );
                 }

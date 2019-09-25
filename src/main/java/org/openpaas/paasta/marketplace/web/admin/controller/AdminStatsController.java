@@ -33,6 +33,7 @@ public class AdminStatsController {
     private final AdminSellerProfileService adminSellerProfileService;
     private final AdminStatsService adminStatsService;
     private final AdminCategoryService adminCategoryService;
+    //private final SoftwareService softwareService;
     private final CommonService commonService;
 
     /**
@@ -167,11 +168,6 @@ public class AdminStatsController {
         // 총 판매량
         model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
 
-        /*//판매자 판매상품 수
-        Map countOfSwsUsingProvider = adminStatsService.countOfSwsUsingProvider(idIn);
-        model.addAttribute("userSoftwareCount", commonService.getJsonStringFromMap(countOfSwsUsingProvider));
-        */
-
         //사용량 추이(month)
         Map countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
         model.addAttribute("totalCountInstsProviderInfo", commonService.getJsonStringFromMap(countsOfInstsProvider));
@@ -181,7 +177,11 @@ public class AdminStatsController {
         return "contents/useStatusSeller";
     }
 
-
+    /**
+     * 판매자별 현황 상세페이지로 이동한다.
+     *
+     * @return ModelAndView(Spring 클래스)
+     */
     @GetMapping(value = "/sellers/{id}")
     public String getSellerStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
 
@@ -223,7 +223,15 @@ public class AdminStatsController {
             }
         }
         model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
-//
+
+        //(status = Approval)
+        CustomPage<Software> sellerMySoftware = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id);
+        List<Long> softwareId = new ArrayList<>();
+        for (Software s:sellerMySoftware.getContent()) {
+            softwareId.add(s.getId());
+        }
+        model.addAttribute("instanceUserCountProvider", adminStatsService.getUsingPerInstanceByProvider(id, softwareId));
+
         //사용량 추이
         Map countsOfInstsProvider = adminStatsService.sellerCountsOfInstsProviderMonthly(idIn);
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
@@ -339,25 +347,6 @@ public class AdminStatsController {
     @GetMapping(value = "/users")
     @ResponseBody
     public CustomPage<Object> getUserStatList(HttpServletRequest httpServletRequest) {
-
-        // 전체 사용자 조회
-//        List<String> idIn = new ArrayList<>();
-//        idIn.add("");
-//
-//        Map aaa = adminStatsService.getUserStatList(idIn);
-//
-//        Set<String> set = aaa.keySet();
-//        Iterator<String> iter = set.iterator();
-//
-//        List userAllList = new ArrayList();
-//        ObjectMapper objectMapper = new ObjectMapper();
-//
-//        while (iter.hasNext()) {
-//            String key = iter.next();
-//            Object user = objectMapper.convertValue(aaa.get(key), Object.class);
-//            userAllList.add(user);
-//        }
-
         return adminStatsService.getUserList(commonService.setParameters(httpServletRequest));
     }
 

@@ -196,20 +196,17 @@
                 var item = [];
                 var instanceUserCount;
 
+                var instanceUserCountList = instanceUserCountProvider.replace("{", "").replace("}", "").split(",");
+
                 for (var i = 0; i < pieChartData.length; i++) {
 
                     var map = pieChartData[i];
+                    var instancemap = instanceUserCountList[i];
+                    var value = instancemap.split("=");
 
-                    for (key in instanceUserCountProvider) {
-                        if (pieChartData[i].id == key) {
-                            instanceUserCount = instanceUserCountProvider[key];
-                        }else{
-                            instanceUserCount = 0;
-                        }
-                    }
-
-
-                    if(instanceUserCount == "" || instanceUserCount == undefined){
+                    if (map.id == value[0]) {
+                        instanceUserCount = value[1];
+                    }else{
                         instanceUserCount = 0;
                     }
 
@@ -348,8 +345,6 @@
             if(listLength > 0){
                 var userCount;
                 var instanceUserCount;
-
-                console.log(instanceUserCountProvider);
 
                 for(var i = 0; i < listLength; i++){
 

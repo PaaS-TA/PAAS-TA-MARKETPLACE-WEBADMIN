@@ -64,7 +64,7 @@
                                 <th scope="row">판매상품 수</th>
                                 <td>2</td>
                                 <th scope="row">판매량</th>
-                                <td>0</td>
+                                <td>1</td>
                             </tr>
                             </tbody>
                         </table>
@@ -169,10 +169,6 @@
 
     <script type="text/javascript">
         var createdById = "[[${sellerStat.id}]]";
-
-        // 상품별 사용자 수
-        var userCountPerSoftware = "[[${instanceUserCount}]]";
-        var resultCountList = JSON.parse(userCountPerSoftware.replace(/&quot;/g,'"'));
 
         // 판매자별 승인 상품 수
         var instanceUserCountProvider = "[[${instanceUserCountProvider}]]";
@@ -343,25 +339,18 @@
             var listLength = content.length;
 
             if(listLength > 0){
-                var userCount;
                 var instanceUserCount;
+                var instanceUserCountList = instanceUserCountProvider.replace("{", "").replace("}", "").split(",");
 
                 for(var i = 0; i < listLength; i++){
 
-                    for (key in resultCountList) {
-                        if (content[i].id == key) {
-                            userCount = resultCountList[key];
-                        }else{
-                            userCount = 0;
-                        }
-                    }
+                    var instanceRate = instanceUserCountList[i];
+                    var value = instanceRate.split("=");
 
-                    for (key in instanceUserCountProvider) {
-                        if (content[i].id == key) {
-                            instanceUserCount = instanceUserCountProvider[key];
-                        }else{
-                            instanceUserCount = 0;
-                        }
+                    if (content[i].id == value[0]) {
+                        instanceUserCount = value[1];
+                    }else{
+                        instanceUserCount = 0;
                     }
 
                     var createdDateValue =  content[i].createdDate;

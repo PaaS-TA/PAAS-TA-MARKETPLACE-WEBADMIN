@@ -196,35 +196,11 @@ public class AdminStatsController {
             idIn.add(f.getId());
         }
 
-        // 승인 상품 수
-        Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
-        model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
-
         // 판매자 총 건수
         Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
         model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
 
-        //판매자 판매량 수
-        CustomPage<Software> software = adminSoftwareService.getAdminSoftwareList(commonService.setParameters(httpServletRequest));
-        List<Long> idInSw = new ArrayList<>();
-        for (Software s:software.getContent()) {
-            idIn.add(s.getCreatedBy());
-        }
-
-        Map<Long, Long> result = adminStatsService.getCountsOfInsts(idInSw);
-        Map newResult = new HashMap();
-
-        for (String createdBy:idIn) {
-            String mapId = "" + createdBy;
-            if(result.get(mapId) != null){
-                newResult.put(mapId, result.get(mapId));
-            }else{
-                newResult.put(mapId, 0);
-            }
-        }
-        model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
-
-        //(status = Approval)
+        //승인(status = Approval)
         CustomPage<Software> sellerMySoftware = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id);
         List<Long> softwareId = new ArrayList<>();
         for (Software s:sellerMySoftware.getContent()) {

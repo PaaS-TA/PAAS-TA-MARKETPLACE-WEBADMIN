@@ -161,6 +161,11 @@
                             userCountPercent = userCount/userCountTotal*100;
                             userCountPercentFixed = userCountPercent.toFixed(2);
                         }
+                        if(userCount == undefined){
+                            userCount = 0;
+                        }else
+                            {userCount;
+                        }
                     }
 
                     item = {name: map.name + ' (' + userCountPercentFixed + '%)'   , data: userCount};

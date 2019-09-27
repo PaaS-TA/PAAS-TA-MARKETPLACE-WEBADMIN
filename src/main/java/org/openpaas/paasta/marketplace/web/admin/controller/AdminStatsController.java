@@ -33,7 +33,6 @@ public class AdminStatsController {
     private final AdminSellerProfileService adminSellerProfileService;
     private final AdminStatsService adminStatsService;
     private final AdminCategoryService adminCategoryService;
-    //private final SoftwareService softwareService;
     private final CommonService commonService;
 
     /**
@@ -209,9 +208,11 @@ public class AdminStatsController {
         model.addAttribute("instanceUserCountProvider", adminStatsService.getUsingPerInstanceByProvider(id, softwareId));
 
         //사용량 추이
-        Map countsOfInstsProvider = adminStatsService.sellerCountsOfInstsProviderMonthly(idIn);
+        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthlyTransition(softwareId);
+        model.addAttribute("totalCountInstsProviderInfo", commonService.getJsonStringFromMap(countsOfInstsProvider));
         model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
         model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
+
 
         return "contents/useStatusSellerDetail";
     }

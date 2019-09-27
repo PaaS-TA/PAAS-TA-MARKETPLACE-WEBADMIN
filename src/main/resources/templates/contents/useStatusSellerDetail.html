@@ -69,7 +69,7 @@
                             </tbody>
                         </table>
                         <br><br>
-                        <div class="statusBox">
+                        <div class="statusBox" id="statusBox">
                             <ul>
                                 <li>
                                     <!-- pieChart -->
@@ -176,6 +176,9 @@
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
+        var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
+        var countofInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
+
 
         var getAdminStatsSellerChart = function(data){
             pieChart(data);
@@ -254,11 +257,10 @@
             tui.chart.pieChart(container, data, options);
         };
 
-        var lineChart = function (contentData) {
-            var lineChartData = contentData.content;
-
+        var lineChart = function(contentData) {
             var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
+            var countsData = countOfInstsProviderCounts;
+            var lineChartData = contentData.content;
 
             var container = document.getElementById('lineChartArea');
 
@@ -267,12 +269,20 @@
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
+                var dataPerMonth = [];
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
 
+                    if(countofInstsProvider.counts[map.id]) {
+                        dataPerMonth = countofInstsProvider.counts[map.id];
+                        console.log("[dataPerMonth]: "+dataPerMonth);
+                    } else {
+                        dataPerMonth = 0;
+                    }
+
                     //dataJson(softwareName,series)
-                    lineItem = {name: map.createdBy , data: countsData};
+                    lineItem = {name: map.name , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
                 }
             }
@@ -284,8 +294,8 @@
 
             var options = {
                 chart: {
-                    width: 650,
-                    height: 250,
+                    width : 700,
+                    height : 250,
                 },
                 yAxis: {
                     pointOnColumn: true,
@@ -313,8 +323,8 @@
 
             tui.chart.lineChart(container, data, options);
             $(".tui-chart-series-custom-event-area").hide();
-        };
 
+        };
 
         var getSoftwaresPerSellerList = function() {
             var categoryId = $("#categoryId option:selected").val();
@@ -400,7 +410,10 @@
         //eventBtn
         $("#searchBtn").on("click", function () {
             getSoftwaresPerSellerList();
+            $("#pieChartArea").empty();
+            $("#lineChartArea").empty();
         });
+
 
         $(document).ready(function () {
             getSoftwaresPerSellerList();

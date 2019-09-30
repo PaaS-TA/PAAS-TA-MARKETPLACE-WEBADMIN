@@ -131,10 +131,14 @@ public class AdminStatsService {
      * @return
      */
 
-    public Map<String, Object> countOfInstsDaily() {
-        return paasApiRest.getForObject("/admin/stats/instances/sum/days", Map.class);
+    public Map<String, Object> countsOfInstsMonthly(List<Long> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months");
+        for (Long id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+        return paasApiRest.getForObject(url, Map.class);
     }
-
 
     /**
      * 과거 사용량 추이 조회(months)

@@ -86,7 +86,7 @@ public class AdminStatsController {
      * @return
      */
     @GetMapping(value = "/softwares/{id}")
-    public String getSoftwareStats(Model model, @PathVariable Long id) {
+    public String getSoftwareStats(Model model, @PathVariable Long id,  HttpServletRequest httpServletRequest) {
         model.addAttribute("softwareStat", adminSoftwareService.getAdminSoftwares(id));
 
         // 단일 상품에 대한 총 사용자 수
@@ -106,15 +106,17 @@ public class AdminStatsController {
             usedSwCount = 0;
         }
 
-        //사용량 추이(month : 12개월 기준)
-        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
-        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
-        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
+        //사용량 추이
+        CustomPage<Software> software = adminSoftwareService.getAdminSoftwareList(commonService.setParameters(httpServletRequest));
+        List<Long> softwareId = new ArrayList<>();
+        for (Software s:software.getContent()) {
+            softwareId.add(s.getId());
+        }
 
-        //사용량 추이(daily : 180일 기준)
-        Map  countOfInstsDaily =  adminStatsService.countOfInstsDaily();
-        model.addAttribute("countOfInstsDaily", countOfInstsDaily.get("terms"));
-        model.addAttribute("countOfInstsDailyCounts", countOfInstsDaily.get("counts"));
+        Map  countsOfInstsMonthly =  adminStatsService.countsOfInstsProviderMonthlyTransition(idIn);
+        model.addAttribute("totalCountsOfInstsMonthlyInfo", commonService.getJsonStringFromMap(countsOfInstsMonthly));
+        model.addAttribute("countsOfInstsMonthly", countsOfInstsMonthly.get("terms"));
+        model.addAttribute("ccountsOfInstsMonthlyCounts", countsOfInstsMonthly.get("counts"));
 
         model.addAttribute("usedSwCountSum", usedSwCount);
 

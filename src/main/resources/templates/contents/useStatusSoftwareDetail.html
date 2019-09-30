@@ -146,44 +146,40 @@
         var PAGING_SIZE = 5;
         var SORT = "id,asc";
 
-        //사용량 추이(Monthly::terms,counts)
-        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
-        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
-
         //사용량 추이(Daily::terms,counts)
-        var countOfInstsDaily = "[[${countOfInstsDaily}]]";
-        var countOfInstsDailyCounts = "[[${countOfInstsDailyCounts}]]";
-
+        var totalCountsOfInstsMonthlyInfo = "[[${totalCountsOfInstsMonthlyInfo}]]";
+        var countsOfInstsMonthly = "[[${countsOfInstsMonthly}]]";
+        var countofInstsProvider = JSON.parse(totalCountsOfInstsMonthlyInfo.replace(/&quot;/g,'"'));
 
         var lineChart = function (contentData) {
             console.log(">>lineChart");
+            var softwareId = $("#softwareId").val();
             var softwareName = $("#softwareName").val();
-            var usedSwCountSum = $("#usedSwCountSum").val();
             var lineChartData = contentData.content;
-
-            console.log("[usedSwCountSum]: "+usedSwCountSum);
-
-            //x,y Monthly Data
-            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countOfInstsProviderCounts.replace("[", "").replace("]", "").split(",");
-
-            //x,y Daily Data
-            var categoriesDailyData = countOfInstsDaily.replace("[", "").replace("]", "").split(",");
-            var countsDailyData = countOfInstsDailyCounts.replace("[", "").replace("]", "").split(",");
-
-            var container = document.getElementById('lineChartArea');
+            var categoriesData = countsOfInstsMonthly.replace("[", "").replace("]", "").split(",");
 
             if (lineChartData.length == 0) {
                 return;
             }else{
                 var lineSeriesData = [];
-                lineItem = {name: softwareName, data: countsDailyData};
+                var dataPerMonth = [];
+
+                if(countofInstsProvider.counts[softwareId]) {
+                    dataPerMonth = countofInstsProvider.counts[softwareId];
+                    console.log(dataPerMonth);
+                } else {
+                    dataPerMonth = 0;
+                }
+
+                //dataJson(softwareName,series)
+                lineItem = {name: softwareName , data: dataPerMonth};
                 lineSeriesData.push(lineItem);
-                console.log(lineSeriesData);
             }
 
+            var container = document.getElementById('lineChartArea');
+
             var data = {
-                categories: categoriesDailyData,
+                categories: categoriesData,
                 series: lineSeriesData
             };
 
@@ -218,24 +214,7 @@
 
             tui.chart.lineChart(container, data, options);
             $(".tui-chart-series-custom-event-area").hide();
-
         };
-
-        //formatDate
-        function getFormatDate(date){
-            var year = date.getFullYear(); //yyyy
-            var month = (1 + date.getMonth()); //M
-            month = month >= 10 ? month : '0' + month; //month 두자리로 저장
-            var day = date.getDate(); //d
-            day = day >= 10 ? day : '0' + day; //day 두자리로 저장
-            return year + '' + month + '' + day;
-            /*
-            var usageStartDate = new Date();
-            var usageStartDatew = getFormatDate(usageStartDate);
-            console.log("[data]: "+ usageStartDatew);
-            * */
-
-        }
 
         var getInstanceList = function(pageNum) {
           var reqUrl = "/admin/stats/instances" + "?softwareId=" + $("#softwareId").val() + "&size=" + PAGING_SIZE + "&sort=" + SORT + "&page=" + pageNum;
@@ -255,12 +234,18 @@
 
             if(listLength > 0){
                 for(var i = 0; i < listLength; i++){
-                    var usageEndDate = '';
-                    if(content[i].usageEndDate == null){
-                        usageEndDate = '';
-                    }else{
-                        usageEndDate = content[i].usageEndDate;
+
+                    if(content[i].usageEndDate === null){
+                        content[i].usageEndDate = ''
                     }
+
+                    var usageStartDateValue =  content[i].usageStartDate;
+                    var idx = usageStartDateValue.indexOf("T");
+                    var usageStartDate = usageStartDateValue.substring(0, idx);
+
+                    var usageEndDateValue =  content[i].usageEndDate;
+                    var idx = usageEndDateValue.indexOf("T");
+                    var usageEndDate = usageEndDateValue.substring(0, idx);
 
                     htmlString.push(
                         "<tr>"
@@ -268,7 +253,7 @@
                         + "<td>" + content[i].appName + "</td>"
                         + "<td>" + content[i].createdBy + "</td>"
                         + "<td>" + content[i].createdBy + "</td>"
-                        + "<td>" + content[i].usageStartDate + "</td>"
+                        + "<td>" + usageStartDate + "</td>"
                         + "<td>" + usageEndDate + "</td>"
                         + "</tr>"
                     );

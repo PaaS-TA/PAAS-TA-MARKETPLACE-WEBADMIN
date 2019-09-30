@@ -193,6 +193,8 @@
         //사용량 추이(Monthly::terms,counts)
         var countsOfUserProviderMonthly = "[[${countsOfUserProviderMonthly}]]";
         var countsOfUserProviderCounts = "[[${countsOfUserProviderCounts}]]";
+        var totalCountUserProviderInfo = "[[${totalCountUserProviderInfo}]]";
+        var countUserProvider = JSON.parse(totalCountUserProviderInfo.replace(/&quot;/g,'"'));
 
         //page&sort
         var PAGING_SIZE = 10;
@@ -207,34 +209,39 @@
 
         var getAdminStatsUserChart =function(data){
             lineChart(data);
-        }
+        };
 
         var lineChart = function (contentData) {
             console.log(">> lineChart init");
             var lineChartData = contentData.content;
-
             var categoriesData = countsOfUserProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countsOfUserProviderCounts.replace("[", "").replace("]", "").split(",");
-
-            console.log("[categoriesData]: " + categoriesData);
-
-            var container = document.getElementById('lineChartArea');
+            var countsData = countsOfUserProviderCounts;
+            var userId = $("#userId").val();
 
             if (lineChartData.length == 0) {
                 return;
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
+                var dataPerMonth = [];
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
 
+                    if(countUserProvider.counts) {
+                        dataPerMonth = countUserProvider.counts;
+                        console.log("[dataPerMonth]: "+dataPerMonth);
+                    } else {
+                        dataPerMonth = 0;
+                    }
+
                     //dataJson(softwareName,series)
-                    lineItem = {name: map.createdBy , data: countsData};
+                    lineItem = {name:userId , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
                 }
-                console.log(lineSeriesData);
             }
+
+            var container = document.getElementById('lineChartArea');
 
             var data = {
                 categories: categoriesData,
@@ -281,15 +288,10 @@
             if (categoryId === 'ALL' || categoryId === '') {
                 categoryId = '';
             }
-            console.log("[categoryId]: "  + categoryId);
 
             var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + PAGING_SIZE + "&sort=" + SORT;
-
-            console.log("[reqUrl]: " + reqUrl);
-
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
-
 
         var callbackGetInstanceList = function(data) {
             getAdminStatsUserChart(data);
@@ -299,8 +301,6 @@
             var instanceCount;
             var content = data.content;
             var listLength = content.length;
-
-            console.log(content);
 
             if(listLength > 0){
                 for(var i = 0; i < listLength; i++){
@@ -376,7 +376,6 @@
         $("#searchBtn").on("click", function () {
             getInstanceList();
         });
-
 
 
     </script>

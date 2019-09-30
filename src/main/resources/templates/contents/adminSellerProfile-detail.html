@@ -78,22 +78,26 @@
         </div>
         <!-- //cBox1 -->
 
-<!--        <div class="cont_btnBox">-->
-<!--            <button name="button" class="btn btn-color1 btn-md" type="button" onclick="moveProfilesUpdate()">수정</button>-->
-<!--        </div>-->
+       <div class="cont_btnBox">
+           <button name="button" class="btn btn-color1 btn-md" type="button" onclick="moveProfilesUpdate()">수정</button>
+       </div>
     </div>
     <!-- //content -->
 
     <input type="hidden" id="id" name="id" th:value="${profiles.id}" />
     <script type="text/javascript">
         /*<![CDATA[*/
+        /*profiles*/
+        var profiles = "[[${profiles}]]";
+        var profilesId = "[[${profiles.id}]]";
+        
         // ON LOAD
         $(document).ready(function() {
             console.log('::adminSellerProfile-detail::');
         });
 
         var moveProfilesUpdate = function() {
-            procMovePage("/softwares/page");
+        	procMovePage("/admin/profiles/update/{id}".replace("{id}", profilesId));    
         }
 
         /*]]>*/

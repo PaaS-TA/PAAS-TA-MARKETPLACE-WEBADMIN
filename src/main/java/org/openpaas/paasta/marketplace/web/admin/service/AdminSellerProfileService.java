@@ -46,13 +46,14 @@ public class AdminSellerProfileService {
         return paasApiRest.getForObject(url, Profile.class);
     }
 
-    public Profile updateProfiles(String id) {
+    public Profile updateProfiles(String id, Profile profile) {
         String url = UriComponentsBuilder.newInstance().path("/admin/profiles/{id}")
                 .build()
                 .expand(id)
                 .toString();
 
-        return paasApiRest.getForObject(url, Profile.class);
+        paasApiRest.put(url, profile);
+        return getProfiles(id);
     }
 
 

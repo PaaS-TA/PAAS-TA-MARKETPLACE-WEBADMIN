@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" layout:decorate="~{layout/layout-admin}">
+
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css">
+</th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script">
+</th:block>
+
+<div class="rightCnt" layout:fragment="content">
+    <!-- title area -->
+    <div class="titWrap">
+        <h2 class="h2">판매자 관리</h2>
+        <div class="breadWrap">
+            <ol class="breadcrumb">
+                <li><a href="#">Home</a></li>
+                <li><a href="#">판매자 관리</a></li>
+                <li class="active">판매자 프로필 수정</li><!-- 마지막 li -->
+            </ol>
+        </div>
+    </div>
+    <!-- //title area -->
+
+    <!-- content -->
+    <div class="content">
+            <!-- cBox1 -->
+            <div class="cBox type1 appCnt-info">
+                <div class="cBox-hd">
+                    <h4 class="c-tit">판매자 프로필 수정</h4>
+                </div>
+                <div class="cBox-cnt pt20">
+                    <!-- inner -->
+                    <div class="in pd0 d_block">
+                        <!-- table top -->
+                        <div class="tb-top">
+                            <div class="pull-right">
+                                <span class="point2"><i class="i_star">필수입력</i> 는 필수입력 사항입니다.</span>
+                            </div>
+                        </div>
+                        <!-- //table top -->
+
+                        <!-- table -->
+                        <div class="tbw type1">
+                            <table class="table">
+                                <colgroup>
+                                    <col style="width:15%;">
+                                    <col style="width:auto;">
+                                </colgroup>
+                                <tbody>
+                                <tr>
+                                    <th scope="row">판매자명<i class="i_star">필수입력</i></th>
+                                    <td th:text="${profiles.name}" id="profilesName"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">유형<i class="i_star">필수입력</i></th>
+                                    <td>
+                                    	<select th:field="*{profiles.type}" id="profilesTypes">
+                                    		<option value="">선택</option>
+                                            <option th:each="type : ${types}"
+                                                    th:value="${type}"
+                                                    th:text="${type}"></option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">담당자명</th>
+                                    <td th:text="${profiles.manager}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">메일주소<i class="i_star">필수입력</i></th>
+                                    <td th:text="${profiles.email}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">홈페이지주소</th>
+                                    <td th:text="${profiles.siteUrl}"></td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">등록일</th>
+                                    <td th:text="${profiles.createdDate}"></td>
+                                </tr>
+<!--                                 <tr>
+                                    <th scope="row">상태</th>
+                                    <td>
+                                    	<div class="radio radio-inline">
+                                    		<input type="radio">
+                                    		<label class="label" th:text="승인"></label>
+                                    	</div>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <th scope="row">관리자 처리일</th>
+                                    <td></td>
+                                    <td th:text="${profiles.}"></td>
+                                </tr> -->
+                                </tbody>
+                            </table>
+                        </div>
+                        <!-- //table -->
+                    </div>
+                    <!-- //inner -->
+                </div>
+            </div>
+            <!-- //cBox1 -->
+        <div class="cont_btnBox">
+            <button name="button" class="btn btn-color1 btn-md" type="button" id="saveBtn">저장</button>
+        </div>
+    </div>
+    <!-- //content -->
+
+    <script type="text/javascript">
+
+        /*<![CDATA[*/
+        var profile = "[[${profiles}]]";
+        var profileId = "[[${profiles.id}]]";
+        var profileName = "[[${profiles.name}]]";
+        var profilesManager= "[[${profiles.manager}]]";
+        var profilesEmail= "[[${profiles.email}]]";
+        var profilesSiteUrl= "[[${profiles.siteUrl}]]";
+
+        $("#profilesTypes").change(function() { 
+            // Add action of select option
+            console.log($("#profilesTypes option:selected").val());
+        });
+
+        $("#saveBtn").on("click", function () {
+            modifyProfiles();
+        });
+
+        var modifyProfiles = function () {
+
+            //var profilesName = $("#profilesName").val();
+            var profilesTypes = $("#profilesTypes option:selected").val();
+/*             var profilesManager = $("#profilesManager").val();
+            var profilesEmail = $("#profilesEmail").val();
+            var profilesSiteUrl = $("#profilesSiteUrl").val();  */
+
+            var reqUrl = "/admin/profiles/" + profileId;
+
+            var reqParam = {
+                "id" : profileId,
+                "name" : profileName,
+                "type" : profilesTypes,
+                "manager" : profilesManager,
+                "email" : profilesEmail,
+                "siteUrl" : profilesSiteUrl 
+            }
+			console.log(reqParam.id);
+            console.log(reqParam.name);
+            console.log(reqParam.type);
+			
+            console.log(JSON.stringify(reqParam));
+            procCallAjax(reqUrl, "PUT", JSON.stringify(reqParam), null, callbackModifyProfiles);
+        }
+
+        var callbackModifyProfiles = function(data) {
+            console.log("::callbackModifyProfiles DATA:: " + data);
+            procMovePage("/admin/profiles/{id}".replace("{id}", profileId));
+        };
+
+        /*]]>*/
+    </script>
+</div>
+</html>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 @Slf4j
 @Controller
@@ -43,6 +44,13 @@ public class AdminSellerProfileController {
         return "contents/adminSellerProfile-list";
     }
 
+    
+    @GetMapping(value = "/update/{id}")
+    public String getProfilesUpdatePage(Model model, @PathVariable String id) {
+        model.addAttribute("types", Profile.Type.values());
+        model.addAttribute("profiles", adminSellerProfileService.getProfiles(id));
+        return "contents/adminSellerProfile-update";
+    }
 
     @GetMapping(value = "/{id}")
     public String getProfiles(Model model, @PathVariable String id) {
@@ -51,11 +59,12 @@ public class AdminSellerProfileController {
     }
 
     @PutMapping(value = "/{id}")
-    public String updateProfiles(Model model, @PathVariable String id) {
-        model.addAttribute("profiles", adminSellerProfileService.updateProfiles(id));
-        return "contents/adminSellerProfile-detail";
+    @ResponseBody
+    public Profile updateProfiles(@PathVariable String id, @Valid @RequestBody Profile profile) {
+        //model.addAttribute("profiles", adminSellerProfileService.getProfiles(id));
+    	return adminSellerProfileService.updateProfiles(id, profile);
+        //return "contents/adminSellerProfile-detail";
     }
-
 
 
 

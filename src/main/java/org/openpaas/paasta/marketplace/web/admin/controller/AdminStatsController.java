@@ -268,11 +268,6 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/users/{id}")
     public String getUserStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
-        CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
-        List<String> createdBy = new ArrayList<>();
-        for (Profile f:profileList.getContent()) {
-            createdBy.add(f.getId());
-        }
 
         model.addAttribute("userStat", adminStatsService.getUser(id));
         model.addAttribute("categories", adminCategoryService.getCategoryList());
@@ -280,14 +275,13 @@ public class AdminStatsController {
         model.addAttribute("status", Software.Status.values());
         model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
 
-        //사용량 추이
-        CustomPage<Software> software = adminSoftwareService.getAdminSoftwareList(commonService.setParameters(httpServletRequest));
-        List<Long> softwareId = new ArrayList<>();
-        for (Software s:software.getContent()) {
-            softwareId.add(s.getId());
+        CustomPage<Profile> profiles = adminSellerProfileService.getProfileList("?createdBy=" + id);
+        List<String> createdBy = new ArrayList<>();
+        for (Profile f:profiles.getContent()) {
+            createdBy.add(f.getId());
         }
 
-        Map  countsOfUserProvider =  adminStatsService.getSoldInstanceCount(softwareId);
+        Map countsOfUserProvider =  adminStatsService.countsOfInstsUserMonthly(createdBy);
         model.addAttribute("totalCountUserProviderInfo", commonService.getJsonStringFromMap(countsOfUserProvider));
         model.addAttribute("countsOfUserProviderMonthly", countsOfUserProvider.get("terms"));
         model.addAttribute("countsOfUserProviderCounts", countsOfUserProvider.get("counts"));

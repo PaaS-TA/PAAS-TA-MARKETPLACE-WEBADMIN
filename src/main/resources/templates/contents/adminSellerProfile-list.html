@@ -155,6 +155,10 @@
 
             if(listLength > 0){
                 for(var i = 0; i < listLength; i++){
+                	// Format Date
+                	var createdDateValue = new Date(content[i].createdDate);
+                	createdDate = getFormatDate(createdDateValue);
+                	
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i+1) + "</td>"
@@ -162,7 +166,7 @@
                         + "<td>" + content[i].id + "</td>"
                         + "<td>" + content[i].type+ "</td>"
                         + "<td>" + content[i].manager + "</td>"
-                        + "<td>" + content[i].createdDate + "</td>"
+                        + "<td>" + createdDate + "</td>"
                         + "</tr>"
                     );
                 }

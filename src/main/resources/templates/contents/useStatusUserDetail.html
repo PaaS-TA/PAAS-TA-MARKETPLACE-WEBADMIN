@@ -318,13 +318,11 @@
                     $("#totalCount").text(" (" + data.totalElements + " / " + content[i].software.pricePerDay +" 원)");
 
                     //이용기간(YYYY-MM-DD)
-                    var createdDateValue =  content[i].createdDate;
-                    var idx = createdDateValue.indexOf("T");
-                    var createdDate = createdDateValue.substring(0, idx);
+                    var createdDateValue =  new Date(content[i].createdDate);
+                    var createdDate = getFormatDate(createdDateValue);
 
-                    var lastModifiedDateValue =  content[i].lastModifiedDate;
-                    var idx = lastModifiedDateValue.indexOf("T");
-                    var lastModifiedDate = lastModifiedDateValue.substring(0, idx);
+                    var lastModifiedDateValue =  new Date(content[i].lastModifiedDate);
+                    var lastModifiedDate = getFormatDate(lastModifiedDateValue);
 
                     //이용 월(일)수
                     var stDate = new Date(createdDate);

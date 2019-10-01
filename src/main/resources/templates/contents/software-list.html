@@ -267,16 +267,21 @@
                     if(content[i].statusModifiedDate == null){
                         statusModifiedDate = '';
                     }else{
-                        statusModifiedDate = content[i].statusModifiedDate;
+                    	statusModifiedDateValue = new Date(content[i].statusModifiedDate);
+                        statusModifiedDate = getFormatDate(statusModifiedDateValue);
                     }
-
+                    
+                    // Format Date
+                    var createdDateValue = new Date(content[i].createdDate);
+                    createdDate = getFormatDate(createdDateValue);
+                    
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
                         + "<td><a href='javascript:void(0);' onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].createdBy + "</td>"
-                        + "<td>" + content[i].createdDate + "</td>"
+                        + "<td>" + createdDate + "</td>"
                         + "<td>" + content[i].inUse + "</td>"
                         + "<td>" + content[i].status + "</td>"
                         + "<td>" + statusModifiedDate + "</td>"

@@ -44,6 +44,18 @@ public class AdminStatsService {
         return paasApiRest.getForObject("/admin/stats/providers/instances/counts", Map.class);
     }
 
+
+    public Map<Long, Object> countsOfInstsProviderMonthly(List<Long> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/my/counts/months");
+        for (Long id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
+
     // 판매자 승인(status = Approval)상품 수
     public Map<Long, Object> getUsingPerInstanceByProvider(String providerId, List<Long> idIn) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/usingCount/provider/" + providerId);

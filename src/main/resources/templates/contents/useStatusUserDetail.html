@@ -227,16 +227,17 @@
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
+                    var createdBy = map.software.createdBy;
 
-                    if(countUserProvider.counts) {
-                        dataPerMonth = countUserProvider.counts;
+                    if(countUserProvider.counts[createdBy]) {
+                        dataPerMonth = countUserProvider.counts[createdBy];
                         console.log("[dataPerMonth]: "+dataPerMonth);
                     } else {
                         dataPerMonth = 0;
                     }
 
                     //dataJson(softwareName,series)
-                    lineItem = {name:userId , data: dataPerMonth};
+                    lineItem = {name: userId , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
                 }
             }

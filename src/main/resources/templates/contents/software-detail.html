@@ -124,7 +124,7 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">등록일자</th>
-                                    <td th:text="${software.createdDate}"></td>
+									<td th:text="${#temporals.format(software.createdDate, 'yyyy-MM-dd')}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -154,7 +154,7 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">처리일자</th>
-                                    <td th:text="${software.statusModifiedDate}"></td>
+									<td th:text="${#temporals.format(software.statusModifiedDate, 'yyyy-MM-dd')}"></td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -256,10 +256,14 @@
 
             if(data.length > 0){
                 for(var i = 0; i < data.length; i++){
+                	// Format Date
+                	var lastModifiedDateValue = new Date(data[i].lastModifiedDate);
+                	lastModifiedDate = getFormatDate(lastModifiedDateValue);
+                                    	
                     htmlString.push(
                         '<tr>'
                         + '<td>' + (i+1) + '</td>'
-                        + '<td>' + data[i].lastModifiedDate + '</td>'
+                        + '<td>' + lastModifiedDate + '</td>'
                         + '<td>' + data[i].lastModifiedBy + '</td>'
                         + '</tr>'
                     );

@@ -362,14 +362,11 @@
                     }else{
                         instanceUserCount = 0;
                     }
-
-                    var createdDateValue =  content[i].createdDate;
-                    var idx = createdDateValue.indexOf("T");
-                    var createdDate = createdDateValue.substring(0, idx);
-
-                    var lastModifiedDateValue =  content[i].lastModifiedDate;
-                    var idx = lastModifiedDateValue.indexOf("T");
-                    var lastModifiedDate = lastModifiedDateValue.substring(0, idx);
+                   
+                    var createdDateValue = new Date(content[i].createdDate);
+                    createdDate = getFormatDate(createdDateValue);
+                    var lastModifiedDateValue = new Date(content[i].lastModifiedDate);
+                    lastModifiedDate = getFormatDate(lastModifiedDateValue);                     
 
                     htmlString.push(
                         "<tr>"

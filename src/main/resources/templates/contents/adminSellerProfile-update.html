@@ -80,7 +80,7 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">등록일</th>
-                                    <td th:text="${profiles.createdDate}"></td>
+                                    <td th:text="${#temporals.format(profiles.createdDate, 'yyyy-MM-dd')}"></td>
                                 </tr>
 <!--                                 <tr>
                                     <th scope="row">상태</th>

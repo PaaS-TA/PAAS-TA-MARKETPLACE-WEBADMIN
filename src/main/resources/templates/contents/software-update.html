@@ -142,7 +142,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">등록일자</th>
-                                <td><input class="form-control" type="text" th:value="${software.createdDate}" id="softwareCreatedDate" readonly></td>
+                                <td><input class="form-control" type="text" th:value="${#temporals.format(software.createdDate, 'yyyy-MM-dd')}" id="softwareCreatedDate" readonly></td>
                             </tr>
                             </tbody>
                         </table>
@@ -178,7 +178,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">처리일자</th>
-                                <td><input class="form-control" type="text" th:value="${software.statusModifiedDate}" id="softwareStatusModifiedDate" readonly></td>
+                                <td><input class="form-control" type="text" th:value="${#temporals.format(software.statusModifiedDate, 'yyyy-MM-dd')}" id="softwareStatusModifiedDate" readonly></td>
                             </tr>
                             </tbody>
                         </table>

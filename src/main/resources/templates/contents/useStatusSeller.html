@@ -146,7 +146,7 @@
             getProfileStatsList();
         });
 
-        //차트(pie.line)
+        //차트(pie,line)
         var getSoftwareStatsChart = function(data) {
             pieChart(data);
             lineChart(data);
@@ -230,28 +230,25 @@
                 var lineSeriesData = [];
                 var lineItem = [];
                 var dataPerMonth = [];
-                var soldSWCount;
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
+                    console.log(map);
+                    console.log(countsCountInstsProvider.counts[map.name]);
 
-                    if(countsCountInstsProvider.counts[map.id]) {
-                        dataPerMonth = countsCountInstsProvider.counts[map.id];
+                    if(countsCountInstsProvider.counts) {
+                        console.log("[dataPerMonth]: "+ dataPerMonth);
+                        dataPerMonth = countsCountInstsProvider.counts;
                     } else {
+                        console.log("[dataPerMonth]: 0");
                         dataPerMonth = 0;
                     }
 
-                    for(key in soldSoftwareCount) {
-                        if(lineChartData[i].id == key){
-                            soldSWCount = soldSoftwareCount[key];
-                        }
-                    }
                     //dataJson(softwareName,series)
-                    lineItem = {name: map.name , data: soldSWCount};
+                    lineItem = {name: map.name , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
                 }
             }
-
 
             var data = {
                 categories: categoriesData,
@@ -345,7 +342,7 @@
                     // Format Date
                     var createdDateValue = new Date(content[i].createdDate);
                     createdDate = getFormatDate(createdDateValue);
-                    
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i+1) + "</td>"

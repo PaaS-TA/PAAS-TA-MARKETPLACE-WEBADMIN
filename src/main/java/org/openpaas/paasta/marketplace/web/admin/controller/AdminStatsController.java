@@ -268,20 +268,20 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/users/{id}")
     public String getUserStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
-
         model.addAttribute("userStat", adminStatsService.getUser(id));
         model.addAttribute("categories", adminCategoryService.getCategoryList());
         model.addAttribute("spec", new SoftwareSpecification());
         model.addAttribute("status", Software.Status.values());
         model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
 
-        CustomPage<Profile> profiles = adminSellerProfileService.getProfileList("?createdBy=" + id);
+        CustomPage<Instance> instances = adminStatsService.getInstanceListBySwInId("");
         List<String> createdBy = new ArrayList<>();
-        for (Profile f:profiles.getContent()) {
-            createdBy.add(f.getId());
+        for (Instance i:instances.getContent()) {
+            createdBy.add(i.getCreatedBy());
         }
 
-        Map countsOfUserProvider =  adminStatsService.countsOfInstsUserMonthly(createdBy);
+        //사용량 추이
+        Map  countsOfUserProvider =  adminStatsService.countsOfInstsUserMonthly(createdBy);
         model.addAttribute("totalCountUserProviderInfo", commonService.getJsonStringFromMap(countsOfUserProvider));
         model.addAttribute("countsOfUserProviderMonthly", countsOfUserProvider.get("terms"));
         model.addAttribute("countsOfUserProviderCounts", countsOfUserProvider.get("counts"));

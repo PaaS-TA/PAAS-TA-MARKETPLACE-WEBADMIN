@@ -227,12 +227,14 @@
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
-                    var createdBy = map.software.createdBy;
 
-                    if(countUserProvider.counts[createdBy]) {
-                        dataPerMonth = countUserProvider.counts[createdBy];
-                        console.log("[dataPerMonth]: "+dataPerMonth);
-                    } else {
+                    console.log(countUserProvider.counts[map.software.createdBy]);
+
+                    if(map.software.createdBy == userId){
+                        console.log("[map.software.createdBy]: " + map.software.createdBy +" == "+"[userId]: " +userId);
+                        dataPerMonth = countUserProvider.counts[map.software.id];
+                    }else {
+                        console.log("[map.software.createdBy]: " + map.software.createdBy +" ≠ "+"[userId]: " +userId);
                         dataPerMonth = 0;
                     }
 

@@ -122,19 +122,23 @@
     </div>
     <!-- //content -->
 
-    <input type="hidden" id="profile" th:value="${profiles}">
     <script type="text/javascript">
-        var profiles  = "[[${profiles}]]";
 
         var PAGING_SIZE = 10;
         var SORT = "id,asc";
 
-        // 판매자별 승인 상품 수
+        //승인상품 수
         var approvalSoftwareCount = JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
-        // 판매자별 총 판매량 수
+
+        //판매상품 수
+        var InstanceCount ="[[${getSoldInstanceCount}]]";
+
+        //판매량 수
         var soldSoftwareCount = JSON.parse("[[${soldSoftwareCount}]]".replace(/&quot;/g,'"'));
+
         // 판매 상품 총 개수
         var soldSoftwareTotal = "[[${instanceCountSum}]]";
+
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
@@ -233,8 +237,6 @@
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
-                    console.log(map);
-                    console.log(countsCountInstsProvider.counts[map.name]);
 
                     if(countsCountInstsProvider.counts) {
                         console.log("[dataPerMonth]: "+ dataPerMonth);
@@ -315,7 +317,7 @@
             if(listLength > 0){
                 var approvalSWCount;
                 var soldSWCount;
-                var totalElements;
+                var productsCount;
 
                     for(var i = 0; i < listLength; i++){
                         for(key in approvalSoftwareCount) {
@@ -330,12 +332,14 @@
                         }
                     }
 
-                    for(key in profiles) {
+                    console.log("[InstanceCount]: " +  InstanceCount);
+                    console.log(key);
+
+                    for(key in InstanceCount) {
                         if(content[i].id == key){
-                            totalElements = profiles[key];
-                        }
-                        else{
-                            totalElements = 0;
+                            productsCount = InstanceCount[key];
+                        }else{
+                            productsCount = 0;
                         }
                     }
 
@@ -351,7 +355,7 @@
                         + "<td>" + content[i].type+ "</td>"
                         + "<td>" + createdDate + "</td>"
                         + "<td>" + approvalSWCount + "</td>"
-                        + "<td>" + totalElements + "</td>"
+                        + "<td>" + productsCount + "</td>"
                         + "<td>" + soldSWCount + "</td>"
                         + "</tr>"
                     );

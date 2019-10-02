@@ -156,17 +156,24 @@ public class AdminStatsController {
             idIn.add(f.getId());
         }
 
-        model.addAttribute("profiles",adminSellerProfileService.getProfiles());
-
-        // 판매자 총 건수
+        // 판매자 총 건수(table Num)
         Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
         model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
 
-        // 승인 상품 수
+        // 승인상품 수
         Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
         model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
 
-        // 총 판매량
+        // 판매상품 수
+        CustomPage<Software> softwares = adminSoftwareService.getAdminSoftwareList("?createdBy=" + idIn);
+        List<Long> softwareId = new ArrayList<>();
+        for (Software s:softwares.getContent()) {
+            softwareId.add(s.getId());
+        }
+        model.addAttribute("getSoldInstanceCount", adminStatsService.getSoldInstanceCount(softwareId));
+
+
+        // 판매량
         model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
 
         //사용량 추이(month)

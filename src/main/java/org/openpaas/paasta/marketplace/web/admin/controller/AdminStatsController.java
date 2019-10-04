@@ -170,12 +170,30 @@ public class AdminStatsController {
         model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
 
         // 판매상품 수
-        CustomPage<Software> softwares = adminSoftwareService.getAdminSoftwareList("?createdBy=" + idIn);
-        List<Long> softwareId = new ArrayList<>();
-        for (Software s:softwares.getContent()) {
-            softwareId.add(s.getId());
+        Map<String, Object> map = new LinkedHashMap<>();
+        for (String id:idIn) {
+            // 본인이 등록한 승인된 상품 목록
+            CustomPage<Software> softwares = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id + "&status=" + Software.Status.Approval);
+
+            // 구매된 상품 전체 목록
+            CustomPage<Instance> instances = adminStatsService.getInstanceListBySwId("");
+
+            int count = 0;
+
+            for(int i = 0; i < softwares.getContent().size(); i++) {
+                for(int j = 0; j < instances.getContent().size(); j++) {
+                    if(instances.getContent().get(i).getSoftware().getId().equals(softwares.getContent().get(j).getId())) {
+                        count++;
+                        break;
+                    } else {
+                        count = 0;
+                        break;
+                    }
+                }
+            }
+            map.put(id, count);
         }
-        model.addAttribute("getSoldInstanceCount", adminStatsService.getSoldInstanceCount(softwareId));
+        model.addAttribute("getSoldSoftwareCount", commonService.getJsonStringFromMap(map));
 
 
         // 판매량

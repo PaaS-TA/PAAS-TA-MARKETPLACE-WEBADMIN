@@ -137,7 +137,7 @@
         var approvalSoftwareCount = JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
 
         //판매상품 수
-        var InstanceCount ="[[${getSoldInstanceCount}]]";
+        var instanceCount = JSON.parse("[[${getSoldSoftwareCount}]]".replace(/&quot;/g,'"'));
 
         //판매량 수
         var soldSoftwareCount = JSON.parse("[[${soldSoftwareCount}]]".replace(/&quot;/g,'"'));
@@ -322,14 +322,6 @@
                         }
                     }
 
-                    for(key in InstanceCount) {
-                        if(content[i].id == key){
-                            productsCount = InstanceCount[key];
-                        }else{
-                            productsCount = 0;
-                        }
-                    }
-
                     // Format Date
                     var createdDateValue = new Date(content[i].createdDate);
                     createdDate = getFormatDate(createdDateValue);
@@ -342,7 +334,7 @@
                         + "<td>" + content[i].type+ "</td>"
                         + "<td>" + createdDate + "</td>"
                         + "<td>" + approvalSWCount + "</td>"
-                        + "<td>" + productsCount + "</td>"
+                        + "<td>" + instanceCount[content[i].id] + "</td>"
                         + "<td>" + soldSWCount + "</td>"
                         + "</tr>"
                     );

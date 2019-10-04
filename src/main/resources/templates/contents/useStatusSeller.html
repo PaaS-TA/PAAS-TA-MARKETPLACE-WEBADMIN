@@ -146,15 +146,9 @@
         var soldSoftwareTotal = "[[${instanceCountSum}]]";
 
         //사용량 추이(terms,counts)
-        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
-        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
         var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
         var countsCountInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
 
-        // ON LOAD
-        $(document).ready(function() {
-            getProfileStatsList();
-        });
 
         //차트(pie,line)
         var getSoftwareStatsChart = function(data) {
@@ -164,7 +158,6 @@
 
         var pieChart = function(contentData) {
             var pieChartData = contentData.content;
-            console.log(pieChartData);
 
             if(pieChartData.length == 0){
                 return;
@@ -229,8 +222,7 @@
 
         var lineChart = function (contentData) {
             var lineChartData = contentData.content;
-
-            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
+            var categoriesData = countsCountInstsProvider.terms;
 
             var container = document.getElementById('lineChartArea');
 
@@ -243,16 +235,8 @@
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
+                    dataPerMonth = countsCountInstsProvider.counts[map.id];
 
-                    if(countsCountInstsProvider.counts) {
-                        console.log("[dataPerMonth]: "+ dataPerMonth);
-                        dataPerMonth = countsCountInstsProvider.counts;
-                    } else {
-                        console.log("[dataPerMonth]: 0");
-                        dataPerMonth = 0;
-                    }
-
-                    //dataJson(softwareName,series)
                     lineItem = {name: map.name , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
                 }
@@ -276,7 +260,7 @@
                     pointOnColumn: true,
                     tickInterval: 'auto',
                     type: 'datetime',
-                    dateFormat: 'yyyy-MMM'
+                    dateFormat: 'yyyy-MM'
                 },
                 series: {
                     showDot: false,
@@ -338,9 +322,6 @@
                         }
                     }
 
-                    console.log("[InstanceCount]: " +  InstanceCount);
-                    console.log(key);
-
                     for(key in InstanceCount) {
                         if(content[i].id == key){
                             productsCount = InstanceCount[key];
@@ -400,6 +381,11 @@
         var moveProfileStatsDetail = function(id) {
             procMovePage("/admin/stats/sellers/{id}".replace("{id}", id));
         };
+
+        // ON LOAD
+        $(document).ready(function() {
+            getProfileStatsList();
+        });
     </script>
 </div>
 

@@ -181,11 +181,9 @@ public class AdminStatsController {
         // 판매량
         model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
 
-        //사용량 추이(month)
-        Map countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
+        // 판매자별 상품 월 별 사용량 추이(month)
+        Map countsOfInstsProvider =  adminStatsService.countsOfInstsStatsMonthly(idIn);
         model.addAttribute("totalCountInstsProviderInfo", commonService.getJsonStringFromMap(countsOfInstsProvider));
-        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
-        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
         return "contents/useStatusSeller";
     }

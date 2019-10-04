@@ -146,7 +146,7 @@ public class AdminStatsService {
 
     //라인 그래프 [판매자별 현황] 과거 사용량 추이 조회
     public Map<String, Object> countsOfInstsStatsMonthly(List<String> idIn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months");
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months/ids");
         for (String id : idIn) {
             builder.queryParam("idIn", id);
         }

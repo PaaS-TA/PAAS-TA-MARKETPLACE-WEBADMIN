@@ -127,6 +127,12 @@
         var PAGING_SIZE = 10;
         var SORT = "id,asc";
 
+        // 판매자별 등록한 총 상품 수
+        var totalSwCountByProvider = JSON.parse("[[${totalSwCountByProvider}]]".replace(/&quot;/g,'"'));
+
+        // 등록된 총 상품 수
+        var totalSwCount = "[[${totalSwCount}]]";
+
         //승인상품 수
         var approvalSoftwareCount = JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
 
@@ -158,6 +164,7 @@
 
         var pieChart = function(contentData) {
             var pieChartData = contentData.content;
+            console.log(pieChartData);
 
             if(pieChartData.length == 0){
                 return;
@@ -165,21 +172,20 @@
                 var seriesData = [];
                 var item = [];
                 var soldSWCount;
-                var soldSWCountPercent;  //전체값(soldSoftwareTotal) X 퍼센트 ÷ 100
+                var soldSWCountPercent;  //전체값(totalSwCount) X 퍼센트 ÷ 100
                 var soldSWCountPercentFixed;
 
                 for (var i = 0; i < pieChartData.length; i++) {
-
                     var map = pieChartData[i];
 
-                    for(key in soldSoftwareCount) {
-                        if(pieChartData[i].id == key){
-                            soldSWCount = soldSoftwareCount[key];
-                            soldSWCountPercent = soldSWCount/soldSoftwareTotal*100;
+                    for(key in totalSwCountByProvider) {
+                        if(map.id == key){
+                            soldSWCount = totalSwCountByProvider[key];
+                            soldSWCountPercent = soldSWCount/totalSwCount*100;
                             soldSWCountPercentFixed = soldSWCountPercent.toFixed(2);
                         }
                     }
-                    //dataJson(softwareName,userCount)
+
                     item = {name: map.name + '(' + soldSWCountPercentFixed + '%)'   , data: soldSWCountPercentFixed};
                     seriesData.push(item);
                 }

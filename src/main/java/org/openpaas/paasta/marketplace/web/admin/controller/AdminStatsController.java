@@ -160,6 +160,11 @@ public class AdminStatsController {
         Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
         model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
 
+        // 판매자가 등록한 총 상품 수
+        Map<String, Long> totalSwCountByProvider = adminStatsService.getCountsOfTotalSwsProvider();
+        model.addAttribute("totalSwCountByProvider", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSwCountByProvider)));
+        model.addAttribute("totalSwCount", adminStatsService.getCountOfTotalSw());
+
         // 승인상품 수
         Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
         model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));

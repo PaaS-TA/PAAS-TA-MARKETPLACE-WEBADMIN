@@ -31,6 +31,11 @@ public class AdminStatsService {
         return paasApiRest.getForObject("/admin/stats/users/instances/counts", Map.class);
     }
 
+    //판매자별 총 등록 상품(승인/대기/반려) 수 조회
+    public Map<String, Long> getCountsOfTotalSwsProvider() {
+        return paasApiRest.getForObject("/admin/stats/providers/total/softwares/counts", Map.class);
+    }
+
     //판매자별 승인 상품 수 조회
     public Map<String, Long> getCountsOfSwsProvider() {
         return paasApiRest.getForObject("/admin/stats/providers/softwares/counts", Map.class);
@@ -111,6 +116,11 @@ public class AdminStatsService {
         }
         String url = builder.buildAndExpand().toUriString();
         return paasApiRest.getForObject(url, Map.class);
+    }
+
+    // 등록된 상품 총 개수 조회
+    public long getCountOfTotalSw() {
+        return paasApiRest.getForObject("/admin/stats/softwares/counts/total/sum", long.class);
     }
 
 

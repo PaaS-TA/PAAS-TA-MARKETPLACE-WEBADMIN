@@ -182,11 +182,8 @@ public class AdminStatsController {
 
             for(int i = 0; i < softwares.getContent().size(); i++) {
                 for(int j = 0; j < instances.getContent().size(); j++) {
-                    if(instances.getContent().get(i).getSoftware().getId().equals(softwares.getContent().get(j).getId())) {
+                    if(softwares.getContent().get(i).getId().equals(instances.getContent().get(j).getSoftware().getId())) {
                         count++;
-                        break;
-                    } else {
-                        count = 0;
                         break;
                     }
                 }

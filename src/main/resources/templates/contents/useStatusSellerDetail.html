@@ -60,11 +60,11 @@
                                 <th scope="row">판매자</th>
                                 <td th:text="${sellerStat.name}"></td>
                                 <th scope="row">승인상품 수</th>
-                                <td>1</td>
+                                <td th:text="${approvalSwOfProvider}"></td>
                                 <th scope="row">판매상품 수</th>
-                                <td>2</td>
+                                <td th:text="${mySoldSoftwareCount}"></td>
                                 <th scope="row">판매량</th>
-                                <td>1</td>
+                                <td th:text="${mySoldInstanceCount}"></td>
                             </tr>
                             </tbody>
                         </table>

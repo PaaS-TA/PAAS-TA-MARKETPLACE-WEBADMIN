@@ -172,23 +172,7 @@ public class AdminStatsController {
         // 판매상품 수
         Map<String, Object> map = new LinkedHashMap<>();
         for (String id:idIn) {
-            // 본인이 등록한 승인된 상품 목록
-            CustomPage<Software> softwares = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id + "&status=" + Software.Status.Approval);
-
-            // 구매된 상품 전체 목록
-            CustomPage<Instance> instances = adminStatsService.getInstanceListBySwId("");
-
-            int count = 0;
-
-            for(int i = 0; i < softwares.getContent().size(); i++) {
-                for(int j = 0; j < instances.getContent().size(); j++) {
-                    if(softwares.getContent().get(i).getId().equals(instances.getContent().get(j).getSoftware().getId())) {
-                        count++;
-                        break;
-                    }
-                }
-            }
-            map.put(id, count);
+            map.put(id, adminStatsService.countOfSoldSw(id));
         }
         model.addAttribute("getSoldSoftwareCount", commonService.getJsonStringFromMap(map));
 
@@ -222,10 +206,6 @@ public class AdminStatsController {
             idIn.add(f.getId());
         }
 
-        // 판매자 총 건수
-        Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
-        model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
-
         //승인(status = Approval)
         CustomPage<Software> sellerMySoftware = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id);
         List<Long> softwareId = new ArrayList<>();
@@ -233,6 +213,19 @@ public class AdminStatsController {
             softwareId.add(s.getId());
         }
         model.addAttribute("instanceUserCountProvider", adminStatsService.getUsingPerInstanceByProvider(id, softwareId));
+
+
+        // 판매자 본인의 승인된 총 상품 수
+        Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
+        log.info("{}의 승인 상품 수 ::: {}", id, totalApprovalSwCount.get(id));
+        model.addAttribute("approvalSwOfProvider", totalApprovalSwCount.get(id));
+
+        // 판매 상품 수
+        model.addAttribute("mySoldSoftwareCount", adminStatsService.countOfSoldSw(id));
+
+        // 판매량
+        Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
+        model.addAttribute("mySoldInstanceCount", totalSoldResult.get(id));
 
         //사용량 추이
         Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthlyTransition(softwareId);

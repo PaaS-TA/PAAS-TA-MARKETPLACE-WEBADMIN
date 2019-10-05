@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.openpaas.paasta.marketplace.api.domain.CustomPage;
 import org.openpaas.paasta.marketplace.api.domain.Instance;
+import org.openpaas.paasta.marketplace.api.domain.Software;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import java.util.Map;
 @Service
 public class AdminStatsService {
 
+    private final AdminSoftwareService adminSoftwareService;
     private final RestTemplate paasApiRest;
 
     //사용자별 구매 상품 수
@@ -227,4 +229,30 @@ public class AdminStatsService {
         return customPage;
     }
 
+
+    /**
+     * 판매자가 등록한 상품 중 1개 이상 판매된 상품들의 수
+     *
+     * @param id
+     * @return
+     */
+    public int countOfSoldSw(String id) {
+        // 본인이 등록한 승인된 상품 목록
+        CustomPage<Software> softwares = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id + "&status=" + Software.Status.Approval);
+
+        // 구매된 상품 전체 목록
+        CustomPage<Instance> instances = getInstanceListBySwId("");
+
+        int count = 0;
+
+        for(int i = 0; i < softwares.getContent().size(); i++) {
+            for(int j = 0; j < instances.getContent().size(); j++) {
+                if(softwares.getContent().get(i).getId().equals(instances.getContent().get(j).getSoftware().getId())) {
+                    count++;
+                    break;
+                }
+            }
+        }
+        return count;
+    }
 }

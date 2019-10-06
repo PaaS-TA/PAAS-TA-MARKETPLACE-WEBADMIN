@@ -197,34 +197,52 @@ public class AdminStatsController {
             idIn.add(f.getId());
         }
 
-        //승인(status = Approval)
-        CustomPage<Software> sellerMySoftware = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id);
-        List<Long> softwareId = new ArrayList<>();
-        for (Software s:sellerMySoftware.getContent()) {
-            softwareId.add(s.getId());
-        }
-        model.addAttribute("instanceUserCountProvider", adminStatsService.getUsingPerInstanceByProvider(id, softwareId));
-
-
         // 판매자 본인의 승인된 총 상품 수
         Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
+        if(totalApprovalSwCount.get(id) != null) {
+            model.addAttribute("approvalSwOfProvider", totalApprovalSwCount.get(id));
+        } else {
+            model.addAttribute("approvalSwOfProvider", 0);
+        }
         log.info("{}의 승인 상품 수 ::: {}", id, totalApprovalSwCount.get(id));
-        model.addAttribute("approvalSwOfProvider", totalApprovalSwCount.get(id));
+
 
         // 판매 상품 수
         model.addAttribute("mySoldSoftwareCount", adminStatsService.countOfSoldSw(id));
 
         // 판매량
         Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
-        model.addAttribute("mySoldInstanceCount", totalSoldResult.get(id));
+        if(totalApprovalSwCount.get(id) != null) {
+            model.addAttribute("mySoldInstanceCount", totalSoldResult.get(id));
+        } else {
+            model.addAttribute("mySoldInstanceCount", 0);
+        }
 
-        // 상품별 판매량
-        Map<Long, Long> soldPerSwCount = adminStatsService.getSoldInstanceCount(softwareId);
-        model.addAttribute("soldPerSwCount", commonService.getResultMapInsertZero(softwareId, soldPerSwCount));
+        //승인(status = Approval)
+        CustomPage<Software> sellerMySoftware = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id);
+        if(sellerMySoftware.getTotalElements() > 0) {
+            List<Long> softwareId = new ArrayList<>();
+            for (Software s:sellerMySoftware.getContent()) {
+                softwareId.add(s.getId());
+            }
 
-        //사용량 추이
-        Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthlyTransition(softwareId);
-        model.addAttribute("totalCountInstsProviderInfo", commonService.getJsonStringFromMap(countsOfInstsProvider));
+            // 상품별 사용중인 개수
+            model.addAttribute("instanceUserCountProvider", adminStatsService.getUsingPerInstanceByProvider(id, softwareId));
+
+
+            // 상품별 판매량
+            Map<Long, Long> soldPerSwCount = adminStatsService.getSoldInstanceCount(softwareId);
+            model.addAttribute("soldPerSwCount", commonService.getResultMapInsertZero(softwareId, soldPerSwCount));
+
+            //사용량 추이
+            Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthlyTransition(softwareId);
+            model.addAttribute("totalCountInstsProviderInfo", commonService.getJsonStringFromMap(countsOfInstsProvider));
+
+        } else {
+            model.addAttribute("instanceUserCountProvider", null);
+            model.addAttribute("soldPerSwCount", null);
+            model.addAttribute("totalCountInstsProviderInfo", null);
+        }
 
         return "contents/useStatusSellerDetail";
     }

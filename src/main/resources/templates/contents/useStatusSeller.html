@@ -235,7 +235,13 @@
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
-                    dataPerMonth = countsCountInstsProvider.counts[map.id];
+
+                    if(countsCountInstsProvider.counts[map.id]) {
+                        dataPerMonth = countsCountInstsProvider.counts[map.id];
+                        console.log("[dataPerMonth]: "+dataPerMonth);
+                    } else {
+                        dataPerMonth = 0;
+                    }
 
                     lineItem = {name: map.name , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
@@ -295,7 +301,6 @@
 
 
         var callbackProfileStatsList = function(data){
-            getSoftwareStatsChart(data);
             $("#totalCount").text("(" + data.totalElements + ")");
 
             //::adminProfileList::
@@ -305,6 +310,8 @@
             var listLength = content.length;
 
             if(listLength > 0){
+                getSoftwareStatsChart(data);
+
                 var approvalSWCount;
                 var soldSWCount;
                 var productsCount;

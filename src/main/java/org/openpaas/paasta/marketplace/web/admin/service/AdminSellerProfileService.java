@@ -32,7 +32,7 @@ public class AdminSellerProfileService {
     //Page::Profile
     public CustomPage<Profile> getProfileList(String queryParamString) {
         ResponseEntity<CustomPage<Profile>> responseEntity = paasApiRest.exchange("/admin/profiles/page" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Profile>>() {});
-       CustomPage<Profile> customPage = responseEntity.getBody();
+        CustomPage<Profile> customPage = responseEntity.getBody();
         return customPage;
 
     }

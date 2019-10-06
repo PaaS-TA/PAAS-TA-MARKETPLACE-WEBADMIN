@@ -170,7 +170,7 @@
     <script type="text/javascript">
         var createdById = "[[${sellerStat.id}]]";
 
-        // 판매자별 승인 상품 수
+        // 승인 상품별 사용중인 개수
         var instanceUserCountProvider = "[[${instanceUserCountProvider}]]";
 
         // 등록한 상품별 판매된 총 개수
@@ -178,7 +178,10 @@
 
         //사용량 추이(terms,counts)
         var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
-        var countofInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
+        var countofInstsProvider = null;
+        if(totalCountInstsProviderInfo !== "") {
+            countofInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
+        }
 
 
         var getAdminStatsSellerChart = function(data){
@@ -338,8 +341,6 @@
         };
 
         var callbackGetSoftwaresPerSellerList = function(data) {
-            getAdminStatsSellerChart(data);
-
             $("#totalElements").text("(" + data.totalElements + ")");
 
             var softwareList = $("#softwareArea");
@@ -349,6 +350,8 @@
             var listLength = content.length;
 
             if(listLength > 0){
+                getAdminStatsSellerChart(data);
+
                 var instanceUserCount;
                 var instanceUserCountList = soldPerSwCount.replace("{", "").replace("}", "").split(",");
 

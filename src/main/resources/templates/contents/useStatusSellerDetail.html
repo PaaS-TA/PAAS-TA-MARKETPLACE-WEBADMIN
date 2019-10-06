@@ -75,7 +75,7 @@
                                     <!-- pieChart -->
                                     <div class="tbw type1" id ='inWrap_bg04'>
                                         <h2 class="h4">사용 앱</h2><br>
-                                        <div class="in_txtBox" id='pieChartArea'>
+                                        <div class="in_txtBox" id="pieChartArea">
                                         </div>
                                     </div>
                                     <!-- pieChart -->
@@ -84,7 +84,7 @@
                                     <!-- lineChart -->
                                     <div class="tbw type1">
                                         <h2 class="h4">사용 추이</h2><br>
-                                        <div class="in_txtBox" id='lineChartArea'></div>
+                                        <div class="in_txtBox" id="lineChartArea"></div>
                                     </div>
                                     <!-- lineChart -->
                                 </li>
@@ -365,11 +365,15 @@
                     }else{
                         instanceUserCount = 0;
                     }
-                   
+
                     var createdDateValue = new Date(content[i].createdDate);
-                    createdDate = getFormatDate(createdDateValue);
-                    var lastModifiedDateValue = new Date(content[i].lastModifiedDate);
-                    lastModifiedDate = getFormatDate(lastModifiedDateValue);                     
+                    var createdDate = getFormatDate(createdDateValue);
+
+                    var lastModifiedDateValue = "";
+                    if(content[i].statusModifiedDate != null) {
+                        lastModifiedDateValue = getFormatDate(new Date(content[i].statusModifiedDate));
+                    }
+
 
                     htmlString.push(
                         "<tr>"
@@ -378,7 +382,7 @@
                         + "<td>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].version + "</td>"
                         + "<td>" + createdDate + "</td>"
-                        + "<td>" + lastModifiedDate + "</td>"
+                        + "<td>" + lastModifiedDateValue + "</td>"
                         + "<td>" + instanceUserCount + "</td>"
                         + "</tr>"
                     );
@@ -409,9 +413,9 @@
 
         //eventBtn
         $("#searchBtn").on("click", function () {
-            getSoftwaresPerSellerList();
             $("#pieChartArea").empty();
             $("#lineChartArea").empty();
+            getSoftwaresPerSellerList();
         });
 
 

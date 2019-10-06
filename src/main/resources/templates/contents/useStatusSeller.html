@@ -43,7 +43,7 @@
                     <!-- pieChart -->
                     <div class="inWrap bg01">
                         <span class="tit">등록 앱</span>
-                        <div class="in_txtBox" id='pieChartArea'>
+                        <div class="in_txtBox" id="pieChartArea">
                         </div>
                     </div>
                     <!-- pieChart -->
@@ -51,7 +51,7 @@
                     <!-- lineChart -->
                     <div class="inWrap bg01">
                         <span class="tit">사용 앱</span>
-                        <div class="in_txtBox" id='lineChartArea'></div>
+                        <div class="in_txtBox" id="lineChartArea"></div>
                     </div>
                     <!-- lineChart -->
                 </li>
@@ -373,6 +373,8 @@
 
         //eventNameLike
         var search = function() {
+            $("#pieChartArea").empty();
+            $("#lineChartArea").empty();
             getProfileStatsList();
         };
 

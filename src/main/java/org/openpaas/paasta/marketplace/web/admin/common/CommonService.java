@@ -231,4 +231,19 @@ public class CommonService {
         
         return finalResultMap;
     }
+
+    public Map getResultMapInsertZero(List<Long> idIn, Map<Long, Long> result) {
+        Map finalResultMap = new HashMap();
+
+        for (Long id : idIn) {
+            String mapId = "" + id;
+            if(result.get(mapId) != null){
+                finalResultMap.put(mapId, result.get(mapId));
+            }else{
+                finalResultMap.put(mapId, 0);
+            }
+        }
+
+        return finalResultMap;
+    }
 }

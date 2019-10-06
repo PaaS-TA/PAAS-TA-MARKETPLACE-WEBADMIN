@@ -177,8 +177,6 @@
         var soldPerSwCount = "[[${soldPerSwCount}]]";
 
         //사용량 추이(terms,counts)
-        var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
-        var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
         var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
         var countofInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
 
@@ -261,8 +259,7 @@
         };
 
         var lineChart = function(contentData) {
-            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countOfInstsProviderCounts;
+            var categoriesData = countofInstsProvider.terms;
             var lineChartData = contentData.content;
 
             var container = document.getElementById('lineChartArea');
@@ -308,7 +305,7 @@
                     pointOnColumn: true,
                     tickInterval: 'auto',
                     type: 'datetime',
-                    dateFormat: 'yyyy-MMM'
+                    dateFormat: 'yyyy-MM'
                 },
                 series: {
                     showDot: false,

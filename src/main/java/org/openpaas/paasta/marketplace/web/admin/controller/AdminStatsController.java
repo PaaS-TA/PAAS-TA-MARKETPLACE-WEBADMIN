@@ -54,16 +54,7 @@ public class AdminStatsController {
         model.addAttribute("spec", new SoftwareSpecification());
 
         Map<Long, Long> result = adminStatsService.getCountsOfInsts(idIn);
-        Map newResult = new HashMap();
-
-        for (Long id:idIn) {
-            String mapId = "" + id;
-            if(result.get(mapId) != null){
-                newResult.put(mapId, result.get(mapId));
-            }else{
-                newResult.put(mapId, 0);
-            }
-        }
+        Map newResult = commonService.getResultMapInsertZero(idIn, result);
 
         //사용량 추이
         Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthlyTransition(idIn);
@@ -229,13 +220,11 @@ public class AdminStatsController {
 
         // 상품별 판매량
         Map<Long, Long> soldPerSwCount = adminStatsService.getSoldInstanceCount(softwareId);
-        model.addAttribute("soldPerSwCount", soldPerSwCount);
+        model.addAttribute("soldPerSwCount", commonService.getResultMapInsertZero(softwareId, soldPerSwCount));
 
         //사용량 추이
         Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthlyTransition(softwareId);
         model.addAttribute("totalCountInstsProviderInfo", commonService.getJsonStringFromMap(countsOfInstsProvider));
-        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
-        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
 
         return "contents/useStatusSellerDetail";
     }

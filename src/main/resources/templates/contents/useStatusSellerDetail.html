@@ -74,7 +74,7 @@
                                 <li>
                                     <!-- pieChart -->
                                     <div class="tbw type1" id ='inWrap_bg04'>
-                                        <h2 class="h4">등록 앱</h2><br>
+                                        <h2 class="h4">사용 앱</h2><br>
                                         <div class="in_txtBox" id='pieChartArea'>
                                         </div>
                                     </div>
@@ -83,7 +83,7 @@
                                 <li>
                                     <!-- lineChart -->
                                     <div class="tbw type1">
-                                        <h2 class="h4">사용 앱</h2><br>
+                                        <h2 class="h4">사용 추이</h2><br>
                                         <div class="in_txtBox" id='lineChartArea'></div>
                                     </div>
                                     <!-- lineChart -->
@@ -172,6 +172,9 @@
 
         // 판매자별 승인 상품 수
         var instanceUserCountProvider = "[[${instanceUserCountProvider}]]";
+
+        // 등록한 상품별 판매된 총 개수
+        var soldPerSwCount = "[[${soldPerSwCount}]]";
 
         //사용량 추이(terms,counts)
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
@@ -350,7 +353,7 @@
 
             if(listLength > 0){
                 var instanceUserCount;
-                var instanceUserCountList = instanceUserCountProvider.replace("{", "").replace("}", "").split(",");
+                var instanceUserCountList = soldPerSwCount.replace("{", "").replace("}", "").split(",");
 
                 for(var i = 0; i < listLength; i++){
 

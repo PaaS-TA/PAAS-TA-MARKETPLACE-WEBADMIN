@@ -147,6 +147,18 @@ public class AdminStatsService {
     }
 
     //라인 그래프 [판매자별 현황] 과거 사용량 추이 조회
+    //12개월
+    public Map<String, Object> countsOfInstSumMonthly(List<String> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months");
+        for (String id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
+    //6개월
     public Map<String, Object> countsOfInstsStatsMonthly(List<String> idIn) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months/ids");
         for (String id : idIn) {

@@ -191,8 +191,6 @@
         var resultCountList = JSON.parse(userCountPerInstance.replace(/&quot;/g,'"'));
 
         //사용량 추이(Monthly::terms,counts)
-        var countsOfUserProviderMonthly = "[[${countsOfUserProviderMonthly}]]";
-        var countsOfUserProviderCounts = "[[${countsOfUserProviderCounts}]]";
         var totalCountUserProviderInfo = "[[${totalCountUserProviderInfo}]]";
         var countUserProvider = JSON.parse(totalCountUserProviderInfo.replace(/&quot;/g,'"'));
 
@@ -214,8 +212,7 @@
         var lineChart = function (contentData) {
             console.log(">> lineChart init");
             var lineChartData = contentData.content;
-            var categoriesData = countsOfUserProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countsOfUserProviderCounts;
+            var categoriesData = countUserProvider.terms;
             var userId = $("#userId").val();
 
             if (lineChartData.length == 0) {
@@ -225,23 +222,16 @@
                 var lineItem = [];
                 var dataPerMonth = [];
 
-                for (var i = 0; i < lineChartData.length; i++) {
-                    var map = lineChartData[i];
-
-                    console.log(countUserProvider.counts[map.software.createdBy]);
-
-                    if(map.software.createdBy == userId){
-                        console.log("[map.software.createdBy]: " + map.software.createdBy +" == "+"[userId]: " +userId);
-                        dataPerMonth = countUserProvider.counts[map.software.id];
-                    }else {
-                        console.log("[map.software.createdBy]: " + map.software.createdBy +" ≠ "+"[userId]: " +userId);
-                        dataPerMonth = 0;
-                    }
-
-                    //dataJson(softwareName,series)
-                    lineItem = {name: userId , data: dataPerMonth};
-                    lineSeriesData.push(lineItem);
+                if(countUserProvider.counts[userId]) {
+                    dataPerMonth = countUserProvider.counts[userId];
+                    console.log("[dataPerMonth]: "+dataPerMonth);
+                } else {
+                    dataPerMonth = 0;
                 }
+
+                lineItem = {name: userId , data: dataPerMonth};
+                lineSeriesData.push(lineItem);
+
             }
 
             var container = document.getElementById('lineChartArea');
@@ -297,8 +287,6 @@
         };
 
         var callbackGetInstanceList = function(data) {
-            getAdminStatsUserChart(data);
-
             var userList = $("#userListArea");
             var htmlString = [];
             var instanceCount;
@@ -306,6 +294,8 @@
             var listLength = content.length;
 
             if(listLength > 0){
+                getAdminStatsUserChart(data);
+
                 for(var i = 0; i < listLength; i++){
 
                     for(key in resultCountList) {
@@ -375,6 +365,7 @@
 
         //eventBtn
         $("#searchBtn").on("click", function () {
+            $("#lineChartArea").empty();
             getInstanceList();
         });
 

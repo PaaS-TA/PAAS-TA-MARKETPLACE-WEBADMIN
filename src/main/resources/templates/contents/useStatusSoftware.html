@@ -143,6 +143,9 @@
         var PAGING_SIZE = 10;
         var SORT = "id,asc";
 
+        // 등록한 상품별 판매된 총 개수
+        var soldPerSwCount = "[[${soldPerSwCount}]]";
+
         // 상품별 사용자 수
         var userCountPerSoftware = "[[${instanceUserCount}]]";
         var resultCountList = JSON.parse(userCountPerSoftware.replace(/&quot;/g,'"'));
@@ -334,8 +337,6 @@
         };
 
         var callbackSoftwareList = function(data) {
-            getSoftwareStatsChart(data);
-
             $("#totalCount").text(" (" + data.totalElements + " / " + soldSoftwareTotal + " / " + usingSWUserTotal +")");
 
             var softwareList = $("#softwareArea");
@@ -345,13 +346,19 @@
             var listLength = content.length;
 
             if(listLength > 0){
-                var userCount;
+                getSoftwareStatsChart(data);
 
                 for(var i = 0; i < listLength; i++){
-                    for(key in resultCountList) {
-                        if(content[i].id == key){
-                            userCount = resultCountList[key];
-                        }
+                    var instanceUserCount;
+                    var instanceUserCountList = soldPerSwCount.replace("{", "").replace("}", "").split(",");
+
+                    var instanceRate = instanceUserCountList[i];
+                    var value = instanceRate.split("=");
+
+                    if (content[i].id == value[0]) {
+                        instanceUserCount = value[1];
+                    }else{
+                        instanceUserCount = 0;
                     }
 
                     var statusModifiedDate = '';
@@ -365,7 +372,7 @@
                     // Format Date
                     var createdDateValue = new Date(content[i].createdDate);
                     createdDate = getFormatDate(createdDateValue);
-                    
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
@@ -374,7 +381,7 @@
                         + "<td>" + content[i].version + "</td>"
                         + "<td>" + createdDate + "</td>"
                         + "<td>" + statusModifiedDate + "</td>"
-                        + "<td>" + userCount + "</td>"
+                        + "<td>" + instanceUserCount + "</td>"
                         + "</tr>"
                     );
                 }
@@ -414,6 +421,8 @@
 
         //eventBtn
         $("#searchBtn").on("click", function () {
+            $("#pieChartArea").empty();
+            $("#lineChartArea").empty();
             getSoftwareList();
         });
 

@@ -83,43 +83,17 @@
                     <div class="form-group-area">
                         <div class="fm_label"><label for="" class="label">이용기간</label></div>
                         <div class="fm_box w_auto pr10">
-                            <select name="selectDateYear1" id="selectDateYear1" th:onchange="selectYear()">
-<!--                            <select id="" name="">-->
-<!--                                <option value="">2019</option>-->
-<!--                                <option value="">2018</option>-->
-<!--                                <option value="">2017</option>-->
-<!--                                <option value="">2016</option>-->
-                            </select>
+                            <select name="selectDateYear1" id="selectDateYear1" th:onchange="selectYear()"></select>
                         </div>
                         <div class="fm_box w_auto">
-                            <select name="selectDateMonth1" id="selectDateMonth1" th:onchange="selectMonth()">
-<!--                            <select id="" name="">-->
-<!--                                <option value="">05</option>-->
-<!--                                <option value="">04</option>-->
-<!--                                <option value="">03</option>-->
-<!--                                <option value="">02</option>-->
-<!--                                <option value="">01</option>-->
-                            </select>
+                            <select name="selectDateMonth1" id="selectDateMonth1" th:onchange="selectMonth()"></select>
                         </div>
                        ~
                         <div class="fm_box w_auto pr10">
-                            <select name="selectDateYear2" id="selectDateYear2" th:onchange="selectYear()">
-<!--                            <select id="" name="">-->
-<!--                                <option value="">2019</option>-->
-<!--                                <option value="">2018</option>-->
-<!--                                <option value="">2017</option>-->
-<!--                                <option value="">2016</option>-->
-                            </select>
+                            <select name="selectDateYear2" id="selectDateYear2" th:onchange="selectYear()"></select>
                         </div>
                         <div class="fm_box w_auto">
-                            <select name="selectDateMonth2" id="selectDateMonth2" th:onchange="selectMonth()">
-                            <select id="" name="">
-<!--                                <option value="">05</option>-->
-<!--                                <option value="">04</option>-->
-<!--                                <option value="">03</option>-->
-<!--                                <option value="">02</option>-->
-<!--                                <option value="">01</option>-->
-                            </select>
+                            <select name="selectDateMonth2" id="selectDateMonth2" th:onchange="selectMonth()"></select>
                         </div>
                     </div>
                 </div>
@@ -292,8 +266,8 @@
             }
 
             //[이용기간] 검색조건
-            console.log("[이용기간] yearValueF: " + yearValueF + "& monthValueF: " + monthValueF);
-            console.log("[이용기간] yearValueS: " + yearValueF + "& monthValueS: " + monthValueF);
+            console.log("[이용기간] yearValueF: " + yearValueF + "/" + monthValueF);
+            console.log("[이용기간] yearValueS: " + yearValueS + "/" + monthValueS);
 
             var yy = yearValueF; // 이번 해
             var yy2 = yearValueF; // 다음 해
@@ -452,7 +426,7 @@
             monthValueF = (today.getMonth() + 1);
 
             yearValueS = today.getFullYear();
-            monthValueS = (today.getMonth());
+            monthValueS = (today.getMonth() + 1);
 
             for (var i = 1; i < 13; i++) {
                 if ((today.getMonth() + 1) == i) $("#" + monthfieldF).append("<option value='" + i + "' selected='selected'>" + i + "</option>");
@@ -491,6 +465,7 @@
             var selectedMonthValueS = $("#selectDateMonth2 option:selected").val();
             console.log("Month ::: " + selectedMonthValue +"/"+ selectedMonthValueS);
             monthValueF = selectedMonthValue;
+            monthValueS = selectedMonthValueS;
         };
 
     </script>

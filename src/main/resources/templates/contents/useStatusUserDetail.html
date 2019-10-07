@@ -83,38 +83,42 @@
                     <div class="form-group-area">
                         <div class="fm_label"><label for="" class="label">이용기간</label></div>
                         <div class="fm_box w_auto pr10">
-                            <select id="" name="">
-                                <option value="">2019</option>
-                                <option value="">2018</option>
-                                <option value="">2017</option>
-                                <option value="">2016</option>
+                            <select name="selectDateYear1" id="selectDateYear1" th:onchange="selectYear()">
+<!--                            <select id="" name="">-->
+<!--                                <option value="">2019</option>-->
+<!--                                <option value="">2018</option>-->
+<!--                                <option value="">2017</option>-->
+<!--                                <option value="">2016</option>-->
                             </select>
                         </div>
                         <div class="fm_box w_auto">
-                            <select id="" name="">
-                                <option value="">05</option>
-                                <option value="">04</option>
-                                <option value="">03</option>
-                                <option value="">02</option>
-                                <option value="">01</option>
+                            <select name="selectDateMonth1" id="selectDateMonth1" th:onchange="selectMonth()">
+<!--                            <select id="" name="">-->
+<!--                                <option value="">05</option>-->
+<!--                                <option value="">04</option>-->
+<!--                                <option value="">03</option>-->
+<!--                                <option value="">02</option>-->
+<!--                                <option value="">01</option>-->
                             </select>
                         </div>
-                        ~
+                       ~
                         <div class="fm_box w_auto pr10">
-                            <select id="" name="">
-                                <option value="">2019</option>
-                                <option value="">2018</option>
-                                <option value="">2017</option>
-                                <option value="">2016</option>
+                            <select name="selectDateYear2" id="selectDateYear2" th:onchange="selectYear()">
+<!--                            <select id="" name="">-->
+<!--                                <option value="">2019</option>-->
+<!--                                <option value="">2018</option>-->
+<!--                                <option value="">2017</option>-->
+<!--                                <option value="">2016</option>-->
                             </select>
                         </div>
                         <div class="fm_box w_auto">
+                            <select name="selectDateMonth2" id="selectDateMonth2" th:onchange="selectMonth()">
                             <select id="" name="">
-                                <option value="">05</option>
-                                <option value="">04</option>
-                                <option value="">03</option>
-                                <option value="">02</option>
-                                <option value="">01</option>
+<!--                                <option value="">05</option>-->
+<!--                                <option value="">04</option>-->
+<!--                                <option value="">03</option>-->
+<!--                                <option value="">02</option>-->
+<!--                                <option value="">01</option>-->
                             </select>
                         </div>
                     </div>
@@ -194,15 +198,20 @@
         var totalCountUserProviderInfo = "[[${totalCountUserProviderInfo}]]";
         var countUserProvider = JSON.parse(totalCountUserProviderInfo.replace(/&quot;/g,'"'));
 
+        //년/월
+        var yearValueF = $("#selectDateYear1 option:selected").val();
+        var monthValueF = $("#selectDateMonth1 option:selected").val();
+        var yearValueS = $("#selectDateYear2 option:selected").val();
+        var monthValueS = $("#selectDateMonth2 option:selected").val();
+
         //page&sort
         var PAGING_SIZE = 10;
         var SORT = "id,asc";
 
         // ON LOAD
         $(document.body).ready(function () {
-            // getInstanceList();
-            console.log('[userId]: ' + $("#userId").val());
             getInstanceList();
+            selectCal('selectDateMonth1', 'selectDateYear1', 'selectDateMonth2', 'selectDateYear2');
         });
 
         var getAdminStatsUserChart =function(data){
@@ -275,12 +284,76 @@
         };
 
         var getInstanceList = function(pageNum) {
-            //카테고리
+            //[카테고리] 검색조건
             var categoryId = $("#categoryId option:selected").val();
 
             if (categoryId === 'ALL' || categoryId === '') {
                 categoryId = '';
             }
+
+            //[이용기간] 검색조건
+            console.log("[이용기간] yearValueF: " + yearValueF + "& monthValueF: " + monthValueF);
+            console.log("[이용기간] yearValueS: " + yearValueF + "& monthValueS: " + monthValueF);
+
+            var yy = yearValueF; // 이번 해
+            var yy2 = yearValueF; // 다음 해
+            var mm = monthValueF; // 이번 달
+            var mm2 = monthValueF; // 다음 달
+
+            if (monthValueF < 10) {
+                mm = '0' + monthValueF;
+                if((parseInt(monthValueF) + 1) >= 10) {
+                    mm2 = (parseInt(monthValueF) + 1);
+                } else {
+                    mm2 = '0' + (parseInt(monthValueF) + 1);
+                }
+            }else if(monthValueF >= 10 && monthValueF < 12) {
+                mm = monthValueF;
+                mm2 = parseInt(monthValueF) + 1;
+            }
+
+
+            if(monthValueF > 11) {
+                console.log(">> " + yearValueF + "-" + monthValueF);
+                console.log(parseInt(yearValueF) + 1);
+                yy = yearValueF;
+                yy2 = parseInt(yearValueF) + 1;
+                mm = monthValueF;
+                mm2 = "01";
+            }
+
+            var currentYearMonth = yy + "-" + mm + "-01";
+            var nextYearMonth = yy2 + "-" + mm2 + "-01";
+
+            var yy_s= yearValueS;
+            var yy2_s = yearValueS;
+            var mm_s = monthValueS;
+            var mm2_s = monthValueS;
+
+            if (monthValueS < 10) {
+                mm_s = '0' + monthValueS;
+                if((parseInt(monthValueS) + 1) >= 10) {
+                    mm2_s = (parseInt(monthValueS) + 1);
+                } else {
+                    mm2_s = '0' + (parseInt(monthValueS) + 1);
+                }
+            }else if(monthValueS >= 10 && monthValueS < 12) {
+                mm_s = monthValueS;
+                mm2_s = parseInt(monthValueS) + 1;
+            }
+
+
+            if(monthValueS > 11) {
+                console.log(">> " + yearValueS + "-" + monthValueS);
+                console.log(parseInt(yearValueS) + 1);
+                yy_s = yearValueS;
+                yy2_s = parseInt(yearValueS) + 1;
+                mm_s = monthValueF;
+                mm2_s = "01";
+            }
+
+            var currentYearMonthS = yy_s + "-" + mm_s + "-01";
+            var nextYearMonthS = yy2_s + "-" + mm2_s + "-01";
 
             var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + PAGING_SIZE + "&sort=" + SORT;
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
@@ -369,6 +442,56 @@
             getInstanceList();
         });
 
+
+        //[공통] 년,월(select box)
+        function selectCal(monthfieldF, yearfieldF, monthfieldS, yearfieldS) {
+            console.log(">>selectCal init");
+            var today = new Date();
+
+            yearValueF = today.getFullYear();
+            monthValueF = (today.getMonth() + 1);
+
+            yearValueS = today.getFullYear();
+            monthValueS = (today.getMonth());
+
+            for (var i = 1; i < 13; i++) {
+                if ((today.getMonth() + 1) == i) $("#" + monthfieldF).append("<option value='" + i + "' selected='selected'>" + i + "</option>");
+                else $("#" + monthfieldF).append("<option value='" + i + "'>" + i + "</option>");
+            }
+
+            for (var i = 1; i < 13; i++) {
+                if ((today.getMonth() + 1) == i) $("#" + monthfieldS).append("<option value='" + i + "' selected='selected'>" + i + "</option>");
+                else $("#" + monthfieldS).append("<option value='" + i + "'>" + i + "</option>");
+            }
+
+            var thisyear = today.getFullYear();
+            for (var y = thisyear - 10; y < thisyear + 10; y++) {
+
+                if (thisyear == y) $("#" + yearfieldF).append("<option value='" + y + "' selected='selected'>" + y + "</option>");
+                else $("#" + yearfieldF).append("<option value='" + y + "'>" + y + "</option>");
+            }
+
+            for (var y = thisyear - 10; y < thisyear + 10; y++) {
+                if (thisyear == y) $("#" + yearfieldS).append("<option value='" + y + "' selected='selected'>" + y + "</option>");
+                else $("#" + yearfieldS).append("<option value='" + y + "'>" + y + "</option>");
+            }
+
+        }
+
+        var selectYear = function() {
+            var selectedYearValue = $("#selectDateYear1 option:selected").val();
+            var selectedYearValueS = $("#selectDateYear2 option:selected").val();
+            console.log("Year ::: " + selectedYearValue +"/"+ selectedYearValueS);
+            yearValueF = selectedYearValue;
+            yearValueS = selectedYearValueS;
+        };
+
+        var selectMonth = function() {
+            var selectedMonthValue = $("#selectDateMonth1 option:selected").val();
+            var selectedMonthValueS = $("#selectDateMonth2 option:selected").val();
+            console.log("Month ::: " + selectedMonthValue +"/"+ selectedMonthValueS);
+            monthValueF = selectedMonthValue;
+        };
 
     </script>
 </div>

@@ -14,7 +14,7 @@
 <!-- index.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.js'></script>
-    `<script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
+    <script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
     <script type='text/javascript' src='https://uicdn.toast.com/tui.chart/latest/raphael.js'></script>
     <script src='/static/js/tui-chart.js'></script>
 </th:block>
@@ -200,10 +200,8 @@
             var categoriesData = countUserProvider.terms;
             var userId = $("#userId").val();
 
-            console.log(contentData);
-
             if (lineChartData.length == 0) {
-                return;instancesCount
+                return;
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
@@ -346,7 +344,6 @@
 
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
-
 
         var callbackGetInstanceList = function(data) {
             var userList = $("#userListArea");

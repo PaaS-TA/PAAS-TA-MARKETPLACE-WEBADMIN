@@ -305,21 +305,21 @@ public class AdminStatsController {
         model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
 
         CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
-
         List<String> idIn = new ArrayList<>();
         for (Profile f:profileList.getContent()) {
             idIn.add(f.getCreatedBy());
         }
 
-        // 판매상품 수
         Map<String, Object> map = new LinkedHashMap<>();
         for (String ids:idIn) {
             map.put(ids, adminStatsService.countOfSoldSw(ids));
         }
+
+        // 판매상품 수
         model.addAttribute("getSoldSoftwareCount", commonService.getJsonStringFromMap(map));
 
         //사용량 추이(12개월 추이)
-        Map countsOfUserProvider =  adminStatsService.countsOfInstCountMonthlyProvider(idIn);
+        Map countsOfUserProvider =  adminStatsService.countsOfInstsSingleUserMonthly(id);
         model.addAttribute("totalCountUserProviderInfo", commonService.getJsonStringFromMap(countsOfUserProvider));
 
         return "contents/useStatusUserDetail";

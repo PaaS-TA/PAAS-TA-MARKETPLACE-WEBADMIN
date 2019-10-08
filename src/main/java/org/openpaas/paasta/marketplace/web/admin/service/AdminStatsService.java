@@ -9,7 +9,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -60,17 +59,6 @@ public class AdminStatsService {
         return paasApiRest.getForObject(url, Map.class);
     }
 
-
-    public Map<Long, Object> getUsingPerAllInstanceByProvider(String providerId, List<Long> idIn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/instances/usingAllCount/provider/providerId/" + providerId);
-        for (Long id : idIn) {
-            builder.queryParam("idIn", id);
-        }
-        String url = builder.buildAndExpand().toUriString();
-
-        return paasApiRest.getForObject(url, Map.class);
-    }
-
     // 판매자 승인(status = Approval)상품 수
     public Map<Long, Object> getUsingPerInstanceByProvider(String providerId, List<Long> idIn) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/usingCount/provider/" + providerId);
@@ -112,20 +100,10 @@ public class AdminStatsService {
         return paasApiRest.getForObject(url, Map.class);
     }
 
-    public Map sellerCountsOfInstsProviderMonthly(List<String> idIn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months");
-        for (String id : idIn) {
-            builder.queryParam("idIn", id);
-        }
-        String url = builder.buildAndExpand().toUriString();
-        return paasApiRest.getForObject(url, Map.class);
-    }
-
     // 등록된 상품 총 개수 조회
     public long getCountOfTotalSw() {
         return paasApiRest.getForObject("/admin/stats/softwares/counts/total/sum", long.class);
     }
-
 
     //판매된 상품 총 개수 조회
     public long getCountOfInstsUsing() {
@@ -147,29 +125,6 @@ public class AdminStatsService {
         return paasApiRest.getForObject("/admin/stats/instances/sum/months", Map.class);
     }
 
-    //라인 그래프 [판매자별 현황] 과거 사용량 추이 조회
-    /*12개월*/
-    public Map<String, Object> countsOfInstCountMonthlyProvider(List<String> idIn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats//instances/counts/months/ids");
-        for (String id : idIn) {
-            builder.queryParam("idIn", id);
-        }
-        String url = builder.buildAndExpand().toUriString();
-
-        return paasApiRest.getForObject(url, Map.class);
-    }
-
-    /*6개월*/
-    public Map<String, Object> countsOfInstsStatsMonthly(List<String> idIn) {
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months/ids");
-        for (String id : idIn) {
-            builder.queryParam("idIn", id);
-        }
-        String url = builder.buildAndExpand().toUriString();
-
-        return paasApiRest.getForObject(url, Map.class);
-    }
-
     //라인 그래프 [상품별 현황] 과거 사용량 추이 조회
     public Map<String, Object> countsOfInstsProviderMonthlyTransition(List<Long> idIn) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/counts/months");
@@ -182,6 +137,17 @@ public class AdminStatsService {
     }
 
     //라인 그래프 [판매자별 현황] 과거 사용량 추이 조회
+    public Map<String, Object> countsOfInstsStatsMonthly(List<String> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months/ids");
+        for (String id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
+    //라인 그래프 [사용자 현황] 과거 사용량 추이 조회
     public Map<String, Object> countsOfInstsUserMonthly(List<String> createdBy) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/user/months");
         for (String id : createdBy) {
@@ -190,6 +156,11 @@ public class AdminStatsService {
         String url = builder.buildAndExpand().toUriString();
 
         return paasApiRest.getForObject(url, Map.class);
+    }
+
+    //라인 그래프 [사용자별 현황] 과거 사용량 추이 조회
+    public Map<String, Object> countsOfInstsSingleUserMonthly(String id) {
+        return paasApiRest.getForObject("/admin/stats/instances/sum/user/months"+"?createdBy="+id, Map.class);
     }
 
     //총 사용자 수 조회
@@ -242,13 +213,7 @@ public class AdminStatsService {
         return customPage;
     }
 
-
-    /**
-     * 판매자가 등록한 상품 중 1개 이상 판매된 상품들의 수
-     *
-     * @param id
-     * @return
-     */
+    //판매자가 등록한 상품 중 1개 이상 판매된 상품들의 수
     public int countOfSoldSw(String id) {
         // 본인이 등록한 승인된 상품 목록
         CustomPage<Software> softwares = adminSoftwareService.getAdminSoftwareList("?createdBy=" + id + "&status=" + Software.Status.Approval);

@@ -200,23 +200,19 @@
             var categoriesData = countUserProvider.terms;
             var userId = $("#userId").val();
 
+            console.log(contentData);
+
             if (lineChartData.length == 0) {
-                return;
+                return;instancesCount
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
                 var dataPerMonth = [];
 
-                if(countUserProvider.counts[userId]) {
-                    dataPerMonth = countUserProvider.counts[userId];
-                    console.log("[dataPerMonth]: "+dataPerMonth);
-                } else {
-                    dataPerMonth = 0;
-                }
+                dataPerMonth = countUserProvider.counts;
 
                 lineItem = {name: userId , data: dataPerMonth};
                 lineSeriesData.push(lineItem);
-
             }
 
             var container = document.getElementById('lineChartArea');
@@ -272,13 +268,10 @@
             }
 
             //[이용기간] 검색조건
-            console.log("[이용기간] yearValueF: " + yearValueF + "/" + monthValueF);
-            console.log("[이용기간] yearValueS: " + yearValueS + "/" + monthValueS);
-
-            var yy = yearValueF; // 이번 해
-            var yy2 = yearValueF; // 다음 해
-            var mm = monthValueF; // 이번 달
-            var mm2 = monthValueF; // 다음 달
+            var yy = yearValueF;        // 이번 해
+            var yy2 = yearValueF;       // 다음 해
+            var mm = monthValueF;       // 이번 달
+            var mm2 = monthValueF;      // 다음 달
 
             if (monthValueF < 10) {
                 mm = '0' + monthValueF;
@@ -419,7 +412,6 @@
 
 
             function paging(pageTotalNumber, pageSize, PAGING_SIZE, currentPage){
-            	console.log("currentPage : " + currentPage);
             	currentPage = parseInt(currentPage);
 
             	var totalPage = Math.ceil(pageTotalNumber/pageSize);           // 총 페이지 수
@@ -427,7 +419,6 @@
             		var pageGroup = Math.ceil((currentPage+1)/PAGING_SIZE);    // 페이지 그룹
             	else var pageGroup = 1;
 
-                console.log("pageGroup : " + pageGroup);
 
                 var last = pageGroup * PAGING_SIZE;        // 화면에 보여질 마지막 페이지 번호 (실제 페이지와 -1 차이)
                 if(last > totalPage)
@@ -437,11 +428,6 @@
                     first = 0;
                 var next = currentPage + 1;                // 다음 페이지
                 var prev = currentPage - 1;                // 이전 페이지
-
-                console.log("last : " + last);
-                console.log("first : " + first);
-                console.log("next : " + next);
-                console.log("prev : " + prev);
 
                 var htmlStringPage = "";
 

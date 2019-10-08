@@ -189,8 +189,15 @@ public class CommonService {
         /**
          * Parameters end date parameters list.
          */
-        PARAMETERS_LAST_MODIFIED_DATE("lastModifiedDate");
-
+        PARAMETERS_LAST_MODIFIED_DATE("lastModifiedDate"),
+        /**
+         * Parameters start date parameters list.
+         */
+        PARAMETERS_USAGE_START_DATE("usageStartDate"),
+        /**
+         * Parameters start date parameters list.
+         */
+        PARAMETERS_USAGE_END_DATE("usageEndDate");
         private String actualValue;
 
 
@@ -217,7 +224,7 @@ public class CommonService {
 
         return jsonObject;
     }
-    
+
     public Map getResultMap(List<String> idIn, Map<String, Long> result) {
         Map finalResultMap = new HashMap();
 
@@ -228,7 +235,7 @@ public class CommonService {
                 finalResultMap.put(id, 0);
             }
         }
-        
+
         return finalResultMap;
     }
 

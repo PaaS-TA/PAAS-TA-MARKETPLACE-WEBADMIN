@@ -14,7 +14,7 @@
 <!-- index.html 고유 스크립트 추가 -->
 <th:block layout:fragment="script">
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/core-js/2.5.7/core.js'></script>
-    <script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
+    `<script type='text/javascript' src='https://uicdn.toast.com/tui.code-snippet/v1.5.0/tui-code-snippet.min.js'></script>
     <script type='text/javascript' src='https://uicdn.toast.com/tui.chart/latest/raphael.js'></script>
     <script src='/static/js/tui-chart.js'></script>
 </th:block>
@@ -188,6 +188,7 @@
             selectCal('selectDateMonth1', 'selectDateYear1', 'selectDateMonth2', 'selectDateYear2');
         });
 
+
         var getAdminStatsUserChart =function(data){
             lineChart(data);
         };
@@ -260,6 +261,10 @@
         var getInstanceList = function(pageNum) {
             //[카테고리] 검색조건
             var categoryId = $("#categoryId option:selected").val();
+            var yearValueF = $("#selectDateYear1 option:selected").val();
+            var monthValueF = $("#selectDateMonth1 option:selected").val();
+            var yearValueS = $("#selectDateYear2 option:selected").val();
+            var monthValueS = $("#selectDateMonth2 option:selected").val();
 
             if (categoryId === 'ALL' || categoryId === '') {
                 categoryId = '';
@@ -329,9 +334,21 @@
             var currentYearMonthS = yy_s + "-" + mm_s + "-01";
             var nextYearMonthS = yy2_s + "-" + mm2_s + "-01";
 
-            var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + PAGING_SIZE + "&sort=" + SORT;
+            if(currentYearMonth == 'undefined-undefined-01' || currentYearMonth == 'undefined-undefined-01' ){
+                currentYearMonth = '';
+                nextYearMonth = '';
+            }
+
+            if(currentYearMonthS == 'undefined-undefined-01' || currentYearMonthS == 'undefined-undefined-01' ){
+                currentYearMonthS = '';
+                nextYearMonthS = '';
+            }
+            var dateUrl = "&usageStartDate=" + currentYearMonth +"&usageStartDate=" + nextYearMonth  + "&usageStartDate=" + currentYearMonthS +"&usageEndDate=" + nextYearMonthS;
+
+            var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + PAGING_SIZE + "&sort=" + SORT + dateUrl;
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
+
 
         var callbackGetInstanceList = function(data) {
             var userList = $("#userListArea");
@@ -344,6 +361,8 @@
                 getAdminStatsUserChart(data);
 
                 for(var i = 0; i < listLength; i++){
+                    //총 건수 / 총 금액
+                    $("#totalCount").text(" (" + data.totalElements + " / " + content[i].software.pricePerDay +" 원)");
 
                     for(key in resultCountList) {
                         if(content[i].id == key){
@@ -353,9 +372,6 @@
                             instanceCount = 0;
                         }
                     }
-
-                    //총 건수 / 총 금액
-                    $("#totalCount").text(" (" + data.totalElements + " / " + content[i].software.pricePerDay +" 원)");
 
                     //이용기간(YYYY-MM-DD)
                     var createdDateValue =  new Date(content[i].createdDate);
@@ -369,7 +385,7 @@
                     var endDate = new Date(lastModifiedDate);
                     var btMs = endDate.getTime() - stDate.getTime();
                     var btDay = btMs / (1000*60*60*24);
-                    var btMonth = btDay *30;
+                    var btMonth = btDay *30 + 1;
 
                     var software = content[i].software;
 

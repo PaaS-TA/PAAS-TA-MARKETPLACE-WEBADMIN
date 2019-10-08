@@ -368,21 +368,62 @@
                         }
                     }
 
-                    //이용기간(YYYY-MM-DD)
-                    var createdDateValue =  new Date(content[i].createdDate);
-                    var createdDate = getFormatDate(createdDateValue);
+                    var software = content[i].software;
 
-                    var lastModifiedDateValue =  new Date(content[i].lastModifiedDate);
-                    var lastModifiedDate = getFormatDate(lastModifiedDateValue);
+                    //이용기간(YYYY-MM-DD)
+                    if(content[i].usageEndDate === null){
+                        var usageEndDate = ''
+                    } else {
+                        var usageEndDateValue = new Date(content[i].usageEndDate);
+                        usageEndDate = getFormatDate(usageEndDateValue);
+                    }
+
+                    var usageStartDateValue = new Date(content[i].usageStartDate);
+                    usageStartDate = getFormatDate(usageStartDateValue);
+
+                    var currentDateValue = new Date();
+                    var currentDate = getFormatDate(currentDateValue);
+
+
+                    console.log('[currentDate]: '+ currentDate);
+
+                    /*
+                     //이용 월(일)수
+                     var stDate = new Date(createdDate);
+                     var endDate = new Date(lastModifiedDate);
+                     var btMs = endDate.getTime() - stDate.getTime();
+                     var btDay = btMs / (1000*60*60*24);
+                     var btMonth = btDay *30;
+                     */
+
+                    console.log("[usageStartDate]: "+usageStartDate+ "[usageEndDate]: "+usageEndDate);
 
                     //이용 월(일)수
-                    var stDate = new Date(createdDate);
-                    var endDate = new Date(lastModifiedDate);
-                    var btMs = endDate.getTime() - stDate.getTime();
-                    var btDay = btMs / (1000*60*60*24);
-                    var btMonth = btDay *30 + 1;
+                    var arr1 = usageStartDate.split('-');
+                    var arr2 = currentDate.split('-');
+                    var arr3 = usageEndDate.split('-');
 
-                    var software = content[i].software;
+                    var dt1 = new Date(arr1[0],arr1[1],arr1[2]);
+                    var dt2 = new Date(arr2[0],arr2[1],arr2[2]);
+                    var dt3 = new Date(arr3[0],arr2[1],arr2[2]);
+
+                    var diffCurrent  = dt2-dt1;            //이용기간(현재) - 이용기간
+                    var diffEnd = dt3-dt1;                 //이용기간(End) - 이용기간
+                    var day = 1000*60*60*24;
+                    var month = day*30;
+                    var year = month *12;
+                    var btMonth;
+                    var btMonthRounds;             //반올림 값(Math.round(n))
+
+                    if(usageEndDate ==null || usageEndDate === ''){
+                        btMonth = diffCurrent/month;
+                        btMonthRounds = Math.round(btMonth);
+                        console.log("[btMonthRounds]:"+btMonthRounds);
+                    }else{
+                        var btMonth = diffEnd/month;
+                        btMonthRounds = Math.round(btMonth);
+                        console.log("[diffEnd]:"+btMonthRounds);
+                    }
 
                     htmlString.push(
                         "<tr>"
@@ -390,13 +431,14 @@
                         + "<td><span class=\"pn_cate type"+ software.category.id +"\">" + software.category.name + "</span></td>"
                         + "<td>" + software.name + "</td>"
                         + "<td>" + content[i].software.version + "</td>"
-                        + "<td>" + createdDate+ " ~ "+ lastModifiedDate +"</td>"
-                        + "<td>" + btMonth +"</td>"
+                        + "<td>" + usageStartDate+ " ~ "+ usageEndDate +"</td>"
+                        + "<td>" + btMonthRounds +"</td>"
                         + "<td>" + content[i].status + "</td>"
                         + "</tr>"
                     );
                 }
             }else{
+                $("#totalCount").text(" (" + 0 + " / " + 0 +" 원)");
                 htmlString = "<tr>"
                     + "<td colspan='7'><p class='user_p'>상품이 존재하지 않습니다.</p></td>" + "</tr>"
             }

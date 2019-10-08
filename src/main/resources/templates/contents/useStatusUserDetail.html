@@ -330,11 +330,15 @@
             var currentYearMonthS = yy_s + "-" + mm_s + "-01";
             var nextYearMonthS = yy2_s + "-" + mm2_s + "-01";
 
+<<<<<<< HEAD
             var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT;
             
             if (pageNum != null) 
             	pageNumSave = pageNum;
             
+=======
+            var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + PAGING_SIZE + "&sort=" + SORT;
+>>>>>>> refs/remotes/origin/master
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
 

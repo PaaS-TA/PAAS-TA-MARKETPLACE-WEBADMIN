@@ -140,8 +140,12 @@
     <!-- //content -->
 
     <script type="text/javascript">
-        var PAGING_SIZE = 10;
+        var PAGING_SIZE = 10;  
+        var pageNumSave = 0;
         var SORT = "id,asc";
+
+        // 등록한 상품별 판매된 총 개수
+        var soldPerSwCount = "[[${soldPerSwCount}]]";
 
         // 상품별 사용자 수
         var userCountPerSoftware = "[[${instanceUserCount}]]";
@@ -287,7 +291,7 @@
                     pointOnColumn: true,
                     tickInterval: 'auto',
                     type: 'datetime',
-                    dateFormat: 'yyyy-MMM'
+                    dateFormat: 'yyyy-MM'
                 },
                 series: {
                     showDot: false,
@@ -329,15 +333,21 @@
 
 
             var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
+            
+            if (pageNum != null)
+            	pageNumSave = pageNum;
 
             procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
         };
 
         var callbackSoftwareList = function(data) {
-            getSoftwareStatsChart(data);
-
             $("#totalCount").text(" (" + data.totalElements + " / " + soldSoftwareTotal + " / " + usingSWUserTotal +")");
-
+            
+            //::page:: 
+            var pageTotalNumber = data.totalElements;   // 총 데이터 수
+        	var pageSize = data.size;                   // 한 페이지에 나타낼 데이터 수        	
+        	paging(pageTotalNumber, pageSize, PAGING_SIZE, pageNumSave);
+        
             var softwareList = $("#softwareArea");
             var htmlString = [];
             var content = data.content;
@@ -345,13 +355,19 @@
             var listLength = content.length;
 
             if(listLength > 0){
-                var userCount;
+                getSoftwareStatsChart(data);
 
                 for(var i = 0; i < listLength; i++){
-                    for(key in resultCountList) {
-                        if(content[i].id == key){
-                            userCount = resultCountList[key];
-                        }
+                    var instanceUserCount;
+                    var instanceUserCountList = soldPerSwCount.replace("{", "").replace("}", "").split(",");
+
+                    var instanceRate = instanceUserCountList[i];
+                    var value = instanceRate.split("=");
+
+                    if (content[i].id == value[0]) {
+                        instanceUserCount = value[1];
+                    }else{
+                        instanceUserCount = 0;
                     }
 
                     var statusModifiedDate = '';
@@ -374,7 +390,7 @@
                         + "<td>" + content[i].version + "</td>"
                         + "<td>" + createdDate + "</td>"
                         + "<td>" + statusModifiedDate + "</td>"
-                        + "<td>" + userCount + "</td>"
+                        + "<td>" + instanceUserCount + "</td>"
                         + "</tr>"
                     );
                 }
@@ -386,20 +402,63 @@
             softwareList.html(htmlString);
 
             //::page::
-            var pageNumberList = $("#pageNumberList");
-            var htmlStringPage = "<li class='first disabled'><a href='#'>맨 처음</a></li>" + "<li class='prev'><a href='#'>이전</a></li>";
-            var pageTotalNumber = data.totalElements;
-            var pageSize = data.size;
-
-            var pageCount = Math.ceil(pageTotalNumber/pageSize);
-
-            if(pageCount > 0){
-                for(var page = 0; page < pageCount; page++){
-                    htmlStringPage += "<li class='active'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ page +"')>" + (page + 1) + "<span class='sr-only'>(current)</span></a></li>"
+            function paging(pageTotalNumber, pageSize, PAGING_SIZE, currentPage){
+            	console.log("currentPage : " + currentPage);
+            	currentPage = parseInt(currentPage);
+                
+            	var totalPage = Math.ceil(pageTotalNumber/pageSize);           // 총 페이지 수
+            	if (currentPage)
+            		var pageGroup = Math.ceil((currentPage+1)/PAGING_SIZE);    // 페이지 그룹
+            	else var pageGroup = 1;
+                
+                console.log("pageGroup : " + pageGroup);
+                
+                var last = pageGroup * PAGING_SIZE;        // 화면에 보여질 마지막 페이지 번호 (실제 페이지와 -1 차이)
+                if(last > totalPage)
+                    last = totalPage;
+                var first = last - (PAGING_SIZE-1)-1;      // 화면에 보여질 첫번째 페이지
+                if(first < 0)
+                    first = 0;                               
+                var next = currentPage + 1;                // 다음 페이지
+                var prev = currentPage - 1;                // 이전 페이지
+                
+                console.log("last : " + last);
+                console.log("first : " + first);
+                console.log("next : " + next);
+                console.log("prev : " + prev);
+                 
+                var htmlStringPage = "";
+                
+                if(currentPage==0) {
+                	htmlStringPage += "<li class='first disabled' id='first'><a href='#'>맨 처음</a></li>";                    
+                } else {
+                	htmlStringPage += "<li class='first' id='first'><a href='javascript:void(0);' onclick=moveSoftwareListPage('0')>맨 처음</a></li>";
                 }
+                
+                if(prev < 0) {
+                	htmlStringPage += "<li class='prev disabled' id='prev'><a href='#'>이전</a> </li>";                    
+                } else {
+                	htmlStringPage += "<li class='prev' id='prev'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ prev +"')>이전</a> </li>";
+                }
+                                    
+                for(var i=first; i < last; i++){
+                    htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                }
+                
+                if(next > totalPage-1) {
+                	htmlStringPage += "<li class='next disabled' id='next'><a href='#'>다음</a></li>";                   
+                } else {
+                	htmlStringPage += "<li class='next' id='next'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ next +"')>다음</a></li>";
+                }
+                
+                if(currentPage==totalPage-1) {
+                	htmlStringPage += "<li class='end disabled'><a href='#'>맨 끝</a></li>";            
+                } else {
+                	htmlStringPage += "<li class='end'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ (totalPage-1) +"')>맨 끝</a></li>";
+                }
+                                
+                $("#pageNumberList").html(htmlStringPage);                      // 페이지 목록 생성                                     
             }
-            htmlStringPage += "<li class='next'><a href='#'>다음</a></li>" + "<li class='end'><a href='#'>맨 끝</a></li>";
-            pageNumberList.html(htmlStringPage);
 
         };
 
@@ -414,6 +473,8 @@
 
         //eventBtn
         $("#searchBtn").on("click", function () {
+            $("#pieChartArea").empty();
+            $("#lineChartArea").empty();
             getSoftwareList();
         });
 

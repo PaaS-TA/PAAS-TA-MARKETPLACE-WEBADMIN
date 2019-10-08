@@ -118,7 +118,7 @@
     <!-- //content -->
 
     <script type="text/javascript">
-        var PAGING_SIZE = 3;
+        var PAGING_SIZE = 5;
         var pageNumSave = 0;
         var SORT = "id,asc";
 
@@ -245,7 +245,7 @@
                     pointOnColumn: true,
                     tickInterval: 'auto',
                     type: 'datetime',
-                    dateFormat: 'yyyy-MMM'
+                    dateFormat: 'yyyy-MM'
                 },
                 series: {
                     showDot: false,
@@ -303,7 +303,6 @@
         };
 
         var callbackUserList = function(data) {
-            getSoftwareStatsChart(data);
             $("#totalCount").text(" (" + data.totalElements +")");
             
             //::page::
@@ -318,6 +317,7 @@
             var listLength = content.length;
 
             if(listLength > 0){
+                getSoftwareStatsChart(data);
 
                 for(var i = 0; i < listLength; i++){
                     var instanceCount;
@@ -370,7 +370,7 @@
                     last = totalPage;
                 var first = last - (PAGING_SIZE-1)-1;      // 화면에 보여질 첫번째 페이지
                 if(first < 0)
-                    first = 0;                               
+                    first = 0;
                 var next = currentPage + 1;                // 다음 페이지
                 var prev = currentPage - 1;                // 이전 페이지
                 
@@ -409,8 +409,8 @@
                 	htmlStringPage += "<li class='end'><a href='javascript:void(0);' onclick=moveUserListPage('"+ (totalPage-1) +"')>맨 끝</a></li>";
                 }
                                 
-                $("#pageNumberList").html(htmlStringPage);                      // 페이지 목록 생성
-                $("#pageNumberList a#" + currentPage).css({"color":"blue"});    // 현재 페이지 표시                                                   
+                $("#pageNumberList").html(htmlStringPage);                      // 페이지 목록 생성  
+                
             }
             
         };
@@ -421,18 +421,22 @@
 
         // search enter
         var search = function() {
+            $("#pieChartArea").empty();
+            $("#lineChartArea").empty();
             getUserList();
         };
+
+        //eventBtn
+        $("#searchBtn").on("click", function () {
+            $("#pieChartArea").empty();
+            $("#lineChartArea").empty();
+            getUserList();
+        });
 
         // 페이지 이동
         var moveUserListPage = function(page) {
             getUserList(page);
         };
-
-        //eventBtn
-        $("#searchBtn").on("click", function () {
-            getUserList();
-        });
 
         // ON LOAD
         $(document).ready(function() {

@@ -45,7 +45,6 @@ public class AdminStatsController {
         CustomPage<Software> software = adminSoftwareService.getAdminSoftwareList(commonService.setParameters(httpServletRequest));
 
         List<Long> idIn = new ArrayList<>();
-
         for (Software s:software.getContent()) {
             idIn.add(s.getId());
         }
@@ -65,6 +64,11 @@ public class AdminStatsController {
         model.addAttribute("instanceUserCount", commonService.getJsonStringFromMap(newResult));
         model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
         model.addAttribute("instanceUsingUserSum", adminStatsService.getCountOfUsersUsing());
+
+        //판매량(status=Approval,Pending)
+        Map<Long, Long> soldPerSwCount = adminStatsService.getSoldInstanceCount(idIn);
+        model.addAttribute("soldPerSwCount", commonService.getResultMapInsertZero(idIn, soldPerSwCount));
+
         return "contents/useStatusSoftware";
     }
 
@@ -96,8 +100,9 @@ public class AdminStatsController {
         }else {
             usedSwCount = 0;
         }
+        model.addAttribute("usedSwCountSum", usedSwCount);
 
-        //사용량 추이
+        //상품별 현황 상세 그래프 추이
         CustomPage<Software> software = adminSoftwareService.getAdminSoftwareList(commonService.setParameters(httpServletRequest));
         List<Long> softwareId = new ArrayList<>();
         for (Software s:software.getContent()) {
@@ -108,8 +113,6 @@ public class AdminStatsController {
         model.addAttribute("totalCountsOfInstsMonthlyInfo", commonService.getJsonStringFromMap(countsOfInstsMonthly));
         model.addAttribute("countsOfInstsMonthly", countsOfInstsMonthly.get("terms"));
         model.addAttribute("ccountsOfInstsMonthlyCounts", countsOfInstsMonthly.get("counts"));
-
-        model.addAttribute("usedSwCountSum", usedSwCount);
 
         return "contents/useStatusSoftwareDetail";
     }
@@ -166,7 +169,6 @@ public class AdminStatsController {
             map.put(id, adminStatsService.countOfSoldSw(id));
         }
         model.addAttribute("getSoldSoftwareCount", commonService.getJsonStringFromMap(map));
-
 
         // 판매량
         model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
@@ -228,7 +230,6 @@ public class AdminStatsController {
 
             // 상품별 사용중인 개수
             model.addAttribute("instanceUserCountProvider", adminStatsService.getUsingPerInstanceByProvider(id, softwareId));
-
 
             // 상품별 판매량
             Map<Long, Long> soldPerSwCount = adminStatsService.getSoldInstanceCount(softwareId);
@@ -303,17 +304,23 @@ public class AdminStatsController {
         model.addAttribute("status", Software.Status.values());
         model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
 
-        CustomPage<Instance> instances = adminStatsService.getInstanceListBySwInId("");
-        List<String> createdBy = new ArrayList<>();
-        for (Instance i:instances.getContent()) {
-            createdBy.add(i.getCreatedBy());
+        CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
+
+        List<String> idIn = new ArrayList<>();
+        for (Profile f:profileList.getContent()) {
+            idIn.add(f.getCreatedBy());
         }
 
-        //사용량 추이
-        Map  countsOfUserProvider =  adminStatsService.countsOfInstsUserMonthly(createdBy);
+        // 판매상품 수
+        Map<String, Object> map = new LinkedHashMap<>();
+        for (String ids:idIn) {
+            map.put(ids, adminStatsService.countOfSoldSw(ids));
+        }
+        model.addAttribute("getSoldSoftwareCount", commonService.getJsonStringFromMap(map));
+
+        //사용량 추이(12개월 추이)
+        Map countsOfUserProvider =  adminStatsService.countsOfInstCountMonthlyProvider(idIn);
         model.addAttribute("totalCountUserProviderInfo", commonService.getJsonStringFromMap(countsOfUserProvider));
-        model.addAttribute("countsOfUserProviderMonthly", countsOfUserProvider.get("terms"));
-        model.addAttribute("countsOfUserProviderCounts", countsOfUserProvider.get("counts"));
 
         return "contents/useStatusUserDetail";
     }
@@ -356,6 +363,5 @@ public class AdminStatsController {
     public CustomPage<Object> getUserStatList(HttpServletRequest httpServletRequest) {
         return adminStatsService.getUserList(commonService.setParameters(httpServletRequest));
     }
-
 
 }

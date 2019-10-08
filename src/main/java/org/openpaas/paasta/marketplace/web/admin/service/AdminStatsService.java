@@ -9,6 +9,7 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -147,6 +148,18 @@ public class AdminStatsService {
     }
 
     //라인 그래프 [판매자별 현황] 과거 사용량 추이 조회
+    /*12개월*/
+    public Map<String, Object> countsOfInstCountMonthlyProvider(List<String> idIn) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats//instances/counts/months/ids");
+        for (String id : idIn) {
+            builder.queryParam("idIn", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
+
+    /*6개월*/
     public Map<String, Object> countsOfInstsStatsMonthly(List<String> idIn) {
         UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/months/ids");
         for (String id : idIn) {

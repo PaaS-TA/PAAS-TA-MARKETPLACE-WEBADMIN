@@ -179,7 +179,7 @@
         var monthValueS = $("#selectDateMonth2 option:selected").val();
 
         //page&sort
-        var PAGING_SIZE = 10; //10
+        var PAGING_SIZE = 10;
         var pageNumSave = 0;
         var SORT = "id,asc";
 
@@ -340,7 +340,7 @@
             if (pageNum != null)
                 pageNumSave = pageNum;
 
-            var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + PAGING_SIZE + "&sort=" + SORT + dateUrl;
+            var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateUrl;
 
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
@@ -448,7 +448,6 @@
             var pageTotalNumber = data.totalElements;   // 총 데이터 수
         	var pageSize = data.size;                   // 한 페이지에 나타낼 데이터 수
         	paging(pageTotalNumber, pageSize, PAGING_SIZE, pageNumSave);
-
 
             function paging(pageTotalNumber, pageSize, PAGING_SIZE, currentPage){
             	currentPage = parseInt(currentPage);

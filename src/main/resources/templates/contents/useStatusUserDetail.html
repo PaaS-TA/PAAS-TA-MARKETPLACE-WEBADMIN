@@ -178,6 +178,7 @@
         var yearValueS = $("#selectDateYear2 option:selected").val();
         var monthValueS = $("#selectDateMonth2 option:selected").val();
 
+
         //page&sort
         var PAGING_SIZE = 10;
         var pageNumSave = 0;
@@ -340,7 +341,9 @@
             if (pageNum != null)
                 pageNumSave = pageNum;
 
-            var reqUrl = "/admin/stats/instances/users" + "?id=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateUrl;
+            var reqUrl = "/admin/stats/instances" + "?createdBy=" + $("#userId").val() + "&categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateUrl;
+            console.log("[reqUrl]: "+ reqUrl);
+
 
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
@@ -351,6 +354,9 @@
             var instanceCount;
             var content = data.content;
             var listLength = content.length;
+
+            console.log(content);
+
 
             if(listLength > 0){
                 getAdminStatsUserChart(data);
@@ -386,16 +392,6 @@
 
 
                     console.log('[currentDate]: '+ currentDate);
-
-                    /*
-                     //이용 월(일)수
-                     var stDate = new Date(createdDate);
-                     var endDate = new Date(lastModifiedDate);
-                     var btMs = endDate.getTime() - stDate.getTime();
-                     var btDay = btMs / (1000*60*60*24);
-                     var btMonth = btDay *30;
-                     */
-
                     console.log("[usageStartDate]: "+usageStartDate+ "[usageEndDate]: "+usageEndDate);
 
                     //이용 월(일)수

@@ -97,7 +97,7 @@
                     <th scope="col">No.</th>
                     <th scope="col">사용자명</th>
                     <th scope="col">ID</th>
-                    <th scope="col">이용 기간</th>
+                    <th scope="col">등록 일</th>
                     <th scope="col">구매상품 수</th>
                 </tr>
                 </thead>
@@ -333,8 +333,6 @@
 
                     var createdDateValue = new Date(content[i].createdDate);
                     createdDate = getFormatDate(createdDateValue);
-                    var lastModifiedDateValue = new Date(content[i].lastModifiedDate);
-                    lastModifiedDate = getFormatDate(lastModifiedDateValue);
 
 
                     htmlString.push(
@@ -342,7 +340,7 @@
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><a href='javascript:void(0);' onclick=moveUserStatsDetail('"+content[i].id+"')>" + content[i].name + "</a></td>"
                         + "<td>" + content[i].id + "</td>"
-                        + "<td>" + createdDate+ " ~ "+ lastModifiedDate +"</td>"
+                        + "<td>" + createdDate + "</td>"
                         + "<td>" + instanceCount + "</td>"
                         + "</tr>"
                     );

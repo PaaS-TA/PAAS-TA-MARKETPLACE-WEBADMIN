@@ -28,9 +28,14 @@ public class AdminStatsService {
     private final AdminSoftwareService adminSoftwareService;
     private final RestTemplate paasApiRest;
 
-    //사용자별 구매 상품 수
+    //사용자별 구매 상품 수(status = Approval)
     public Map<String, Object> countsOfInstsUser() {
         return paasApiRest.getForObject("/admin/stats/users/instances/counts", Map.class);
+    }
+
+    //사용자별 구매 상품 수(status = Approval,Deleted)
+    public Map<String, Object> countsOfInstsSumUser() {
+        return paasApiRest.getForObject("/admin/stats/users/sum/instances/counts", Map.class);
     }
 
     //판매자별 총 등록 상품(승인/대기/반려) 수 조회

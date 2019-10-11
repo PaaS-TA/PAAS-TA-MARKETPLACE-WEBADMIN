@@ -283,7 +283,7 @@ public class AdminStatsController {
         model.addAttribute("countsOfUserProviderCounts", countsOfUserProvider.get("counts"));
 
         // 사용자별 구매 상품 수
-        model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsUser()));
+        model.addAttribute("instancesCount", commonService.getJsonStringFromMap(adminStatsService.countsOfInstsSumUser()));
 
         return "contents/useStatusUser";
     }

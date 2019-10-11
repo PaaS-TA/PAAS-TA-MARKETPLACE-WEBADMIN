@@ -125,7 +125,7 @@
                             </tr>
                             <tr>
                                 <th scope="row">판매가격</th>
-                                <td><input class="form-control" style="width:100px;" type="text" th:value="${software.pricePerDay + ' 원'}" id="softwarePricePerDay" readonly></td>
+                                <td><input class="form-control" style="width:100px;" type="text" th:value="${software.pricePerMonth + ' 원'}" id="softwarePricePerMonth" readonly></td>
                             </tr>
                             <tr>
                                 <th scope="row">전시여부</th>
@@ -255,7 +255,7 @@
             //환경파일
             var softwareManifest  = $("#softwareManifest").val();
             //판매가격
-            var pricePerDay = $("#pricePerDay").val();
+            var pricePerMonth = $("#pricePerMonth").val();
             //전시여부
             var softwareInUse  = $('input:radio[name="softwareInUse"]:checked').val();
             //버전

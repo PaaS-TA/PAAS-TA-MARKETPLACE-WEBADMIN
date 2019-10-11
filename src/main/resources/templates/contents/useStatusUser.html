@@ -118,7 +118,7 @@
     <!-- //content -->
 
     <script type="text/javascript">
-        var PAGING_SIZE = 5; 
+        var PAGING_SIZE = 5;
         var pageNumSave = 0;
         var SORT = "id,asc";
 
@@ -211,8 +211,12 @@
                 var lineItem = [];
                 var dataPerMonth = [];
 
+                console.log(lineChartData);
+
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
+
+                    console.log("[map.id]"+map.id);
 
                     if(countsOfUserProvider.counts[map.id]) {
                         dataPerMonth = countsOfUserProvider.counts[map.id];
@@ -303,8 +307,6 @@
         };
 
         var callbackUserList = function(data) {
-            $("#totalCount").text(" (" + data.totalElements +")");
-
             var userList = $("#userListArea");
             var htmlString = [];
             var content = data.content;
@@ -314,6 +316,10 @@
                 getSoftwareStatsChart(data);
 
                 for(var i = 0; i < listLength; i++){
+
+                    //총 건수
+                    $("#totalCount").text(" (" + data.totalElements +")");
+
                     var instanceCount;
 
                     for(key in resultCountList) {
@@ -330,12 +336,13 @@
                     var lastModifiedDateValue = new Date(content[i].lastModifiedDate);
                     lastModifiedDate = getFormatDate(lastModifiedDateValue);
 
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + (i + 1)  + "</td>"
                         + "<td><a href='javascript:void(0);' onclick=moveUserStatsDetail('"+content[i].id+"')>" + content[i].name + "</a></td>"
                         + "<td>" + content[i].id + "</td>"
-                        + "<td>" +createdDate+ " ~ "+ lastModifiedDate +"</td>"
+                        + "<td>" + createdDate+ " ~ "+ lastModifiedDate +"</td>"
                         + "<td>" + instanceCount + "</td>"
                         + "</tr>"
                     );
@@ -351,7 +358,7 @@
             var pageTotalNumber = data.totalElements;   // 총 데이터 수
         	var pageSize = data.size;                   // 한 페이지에 나타낼 데이터 수
         	paging(pageTotalNumber, pageSize, PAGING_SIZE, pageNumSave);
-        	
+
             function paging(pageTotalNumber, pageSize, PAGING_SIZE, currentPage){
             	console.log("currentPage : " + currentPage);
             	currentPage = parseInt(currentPage);

@@ -148,8 +148,8 @@ public class AdminStatsService {
     }
 
     //라인 그래프 [사용자 현황] 과거 사용량 추이 조회
-    public Map<String, Object> countsOfInstsUserMonthly(List<String> createdBy) {
-        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/user/months");
+    public Map<String, Object> countsOfInstsUsersMonthly(List<String> createdBy) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/admin/stats/instances/sum/users/months");
         for (String id : createdBy) {
             builder.queryParam("createdBy", id);
         }
@@ -162,6 +162,7 @@ public class AdminStatsService {
     public Map<String, Object> countsOfInstsSingleUserMonthly(String id) {
         return paasApiRest.getForObject("/admin/stats/instances/sum/user/months"+"?createdBy="+id, Map.class);
     }
+
 
     //총 사용자 수 조회
     public long getCountOfUsersUsing() {

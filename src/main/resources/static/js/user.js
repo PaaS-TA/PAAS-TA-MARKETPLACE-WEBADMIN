@@ -96,7 +96,17 @@ function depth3Leave (){
 	nowHrefFunction("dept2");
 }
 
+function currentMenu(id) {
+    var ids = id.split('_');
+    var depth = ids.length;
 
+    $('#' + id).addClass('on');
+
+    if (depth == 2) {
+        $('#' + ids[0]).addClass('on');
+        $('#' + ids[0] + '_').css('display', 'block');
+    }
+}
 
 // Mobile Menu Script <신규좌측메뉴 스크립트>
 // 현재 페이지의 메뉴에 class on
@@ -189,8 +199,6 @@ function depth3Leave_m (){
 	
 	nowHrefFunction("dept2");
 }
-
-
 
 jQuery(document).ready(function(){
 	var $ = jQuery;

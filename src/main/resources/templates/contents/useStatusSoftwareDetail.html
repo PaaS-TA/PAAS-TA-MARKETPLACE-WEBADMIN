@@ -344,9 +344,11 @@
             getInstanceList(page);
         };
 
+     	// ON LOAD
         $(document).ready(function () {
             console.log('software id ::: ' + $("#softwareId").val());
             getInstanceList();
+            currentMenu('3_1');
         });
 
 

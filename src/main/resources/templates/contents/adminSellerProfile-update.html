@@ -160,6 +160,11 @@
             console.log("::callbackModifyProfiles DATA:: " + data);
             procMovePage("/admin/profiles/{id}".replace("{id}", profileId));
         };
+        
+     	// ON LOAD
+        $(document).ready(function() {
+            currentMenu('4');
+        });
 
         /*]]>*/
     </script>

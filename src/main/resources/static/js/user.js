@@ -26,13 +26,13 @@ function depth1Click (evt) {
 	if (target.hasClass("open")) {
 		$("#leftMenu").find('a.dept1').removeClass("open on");
 		
-		nowHrefFunction("dept1");
+		//nowHrefFunction("dept1");
 		
 	} else {
 		$("#leftMenu").find('ul.dept2').hide(200);
 		$("#leftMenu").find('a.dept1').removeClass("open on");
 		
-		nowHrefFunction("dept1");
+		//nowHrefFunction("dept1");
 		
 		target.addClass("open on");
 		$(target).closest("li.dept1").find("ul.dept2").toggle(200);

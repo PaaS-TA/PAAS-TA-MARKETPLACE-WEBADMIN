@@ -48,6 +48,7 @@ public class AdminSellerProfileController {
     @GetMapping(value = "/update/{id}")
     public String getProfilesUpdatePage(Model model, @PathVariable String id) {
         model.addAttribute("types", Profile.Type.values());
+        model.addAttribute("status", Profile.Status.values());
         model.addAttribute("profiles", adminSellerProfileService.getProfiles(id));
         return "contents/adminSellerProfile-update";
     }

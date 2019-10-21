@@ -182,14 +182,19 @@
                                     <div class="tbl type1">
                                         <table class="table">
                                             <colgroup>
-                                                <col style="width:15%;">
-                                                <col style="width:30%;">
-                                                <col style="width:55%;">
+<!--                                                 <col style="width:15%;"> -->
+<!--                                                 <col style="width:30%;"> -->
+<!--                                                 <col style="width:55%;"> -->
+                                                <col style="width:10%;">
+												<col style="width:20%;">
+												<col style="width:40%;">
+												<col style="width:30%;">
                                             </colgroup>
                                             <thead>
                                             <tr>
                                                 <th scope="col">No.</th>
                                                 <th scope="col">수정일자</th>
+                                                <th scope="col">변경사항</th>
                                                 <th scope="col">처리자</th>
                                             </tr>
                                             </thead>
@@ -264,6 +269,7 @@
                         '<tr>'
                         + '<td>' + (i+1) + '</td>'
                         + '<td>' + lastModifiedDate + '</td>'
+                        + '<td>' + data[i].description + '</td>'
                         + '<td>' + data[i].lastModifiedBy + '</td>'
                         + '</tr>'
                     );

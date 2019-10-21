@@ -270,24 +270,27 @@
             //처리일자
             var softwareStatusModifiedDate = $("#softwareStatusModifiedDate").val();
 
-
             //TODO Rejected=>hidden
             if(softwareConfirmComment === null || softwareConfirmComment === '') {
                 softwareConfirmComment = '';
             }
 
+          	//수정이력
+			var softwareHistoryDescription = "전시여부: " + softwareInUse + ", 승인상태: " + softwareStatus + ", 반려사유: " + softwareConfirmComment;
+			console.log("변경이력>> " + softwareHistoryDescription);
+          
             var reqParam = {
                 "inUse" : softwareInUse,
                 "category" : {
                     "id" : softwareCategory
                 },
                 "status" : softwareStatus,
-                "confirmComment" : softwareConfirmComment
+                "confirmComment" : softwareConfirmComment,
+                "historyDescription" : softwareHistoryDescription
             };
 
             var reqUrl = "/admin/softwares/" + id;
 
-            //console.log
             console.log(JSON.stringify(reqParam));
             console.log("REST_URL " + reqUrl);
 

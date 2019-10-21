@@ -111,6 +111,7 @@ public class AdminSoftwareController {
         updateSoftware.setInUse(software.getInUse());
         updateSoftware.setStatus(software.getStatus());
         updateSoftware.setConfirmComment(software.getConfirmComment());
+        updateSoftware.setHistoryDescription(software.getHistoryDescription());
 
         return adminSoftwareService.updateAdminSoftware(id, updateSoftware);
     }

@@ -364,7 +364,7 @@
                     }else{
                         instanceUserCount = 0;
                     }
-
+                    console.log("value[0] =" + value[0] + ", content.id = " + content[i].id+ ", value[1] = " + value[1] );
                     var statusModifiedDate = '';
                     if(content[i].statusModifiedDate == null){
                         statusModifiedDate = '';
@@ -467,6 +467,8 @@
 
         // 페이지 이동
         var moveSoftwareListPage = function(page) {
+        	$("#pieChartArea").empty();
+            $("#lineChartArea").empty();
             getSoftwareList(page);
         };
 

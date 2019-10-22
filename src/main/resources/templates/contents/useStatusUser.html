@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <!-- //Form 그룹 -->
-                <button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+                <button type="button" name="button" class="btn btn-sch" title="검색" id="searchBtn"><span class="ico">검색</span></button>
             </div>
         </div>
         <!-- //검색 Form -->
@@ -437,6 +437,8 @@
 
         // 페이지 이동
         var moveUserListPage = function(page) {
+        	$("#pieChartArea").empty();
+            $("#lineChartArea").empty();
             getUserList(page);
         };
 

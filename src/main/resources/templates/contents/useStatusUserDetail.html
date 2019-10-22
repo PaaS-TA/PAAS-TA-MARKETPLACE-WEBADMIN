@@ -472,7 +472,8 @@
         };
 
      	// 페이지 이동
-        var moveSoftwareListPage = function(page) {
+        var moveSoftwareListPage = function(page) {        	
+            $("#lineChartArea").empty();
             getInstanceList(page);
         };
 

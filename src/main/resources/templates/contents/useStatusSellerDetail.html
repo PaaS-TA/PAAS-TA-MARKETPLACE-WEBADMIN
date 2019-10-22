@@ -473,6 +473,8 @@
 
      	// 페이지 이동
         var moveSoftwaresPerSellerListPage = function(page) {
+        	$("#pieChartArea").empty();
+            $("#lineChartArea").empty();
             getSoftwaresPerSellerList(page);
         };
 

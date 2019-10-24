@@ -3,10 +3,7 @@ package org.openpaas.paasta.marketplace.web.admin.service;
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
-import org.openpaas.paasta.marketplace.api.domain.Category;
-import org.openpaas.paasta.marketplace.api.domain.CustomPage;
-import org.openpaas.paasta.marketplace.api.domain.Software;
-import org.openpaas.paasta.marketplace.api.domain.SoftwareHistory;
+import org.openpaas.paasta.marketplace.api.domain.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -61,7 +58,21 @@ public class AdminSoftwareService {
         return getAdminSoftwares(id);
     }
 
+    public SoftwarePlan getSoftwarePlan(Long id) {
+        log.info("getSoftwarePlan :: " + id );
+        String url = UriComponentsBuilder.newInstance().path("/admin/softwares/plan/{id}")
+                .build()
+                .expand(id)
+                .toString();
+
+        return paasApiRest.getForObject(url, SoftwarePlan.class);
+    }
+
     public List<SoftwareHistory> getHistoryList(Long id, String queryParamString) {
         return paasApiRest.getForObject("/admin/softwares/" + id + "/histories" + queryParamString, List.class);
+    }
+
+    public List<SoftwarePlanHistory> getPlanHistoryList(Long id, String queryParamString) {
+        return paasApiRest.getForObject("/admin/softwares/plan/" + id + "/histories" + queryParamString, List.class);
     }
 }

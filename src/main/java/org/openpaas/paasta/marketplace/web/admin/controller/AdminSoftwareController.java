@@ -29,7 +29,7 @@ public class AdminSoftwareController {
 
     /**
      * Admin 상품 목록 조회
-     * 
+     *
      * @param httpServletRequest
      * @return
      */
@@ -42,7 +42,7 @@ public class AdminSoftwareController {
 
     /**
      * Admin 상품 목록 페이지 이동
-     * 
+     *
      * @param model
      * @param oauth2User
      * @param httpSession
@@ -64,7 +64,7 @@ public class AdminSoftwareController {
 
     /**
      * Admin 상품 페이지 이동 및 조회
-     * 
+     *
      * @param model
      * @param id
      * @return
@@ -72,6 +72,7 @@ public class AdminSoftwareController {
     @GetMapping(value = "/{id}")
     public String getAdminSoftware(Model model, @PathVariable Long id) {
         model.addAttribute("software", adminSoftwareService.getAdminSoftwares(id));
+        model.addAttribute("softwareplan", adminSoftwareService.getSoftwarePlan(id));
         adminSoftwareService.getAdminCategories();
         return "contents/software-detail";
     }
@@ -79,7 +80,7 @@ public class AdminSoftwareController {
 
     /**
      * Admin 상품 수정 페이지 이동
-     * 
+     *
      * @param model
      * @param id
      * @return
@@ -91,13 +92,14 @@ public class AdminSoftwareController {
         model.addAttribute("types", Software.Type.values());
         model.addAttribute("status", Software.Status.values());
         model.addAttribute("categories", adminSoftwareService.getAdminCategories());
+        model.addAttribute("softwareplan", adminSoftwareService.getSoftwarePlan(id));
         return "contents/software-update";
     }
 
 
     /**
      * Admin 상품 수정
-     * 
+     *
      * @param id
      * @param software
      * @return
@@ -119,7 +121,7 @@ public class AdminSoftwareController {
 
     /**
      * Admin 상품 수정이력 조회
-     * 
+     *
      * @param id
      * @param httpServletRequest
      * @return
@@ -130,5 +132,18 @@ public class AdminSoftwareController {
         return adminSoftwareService.getHistoryList(id, commonService.setParameters(httpServletRequest));
     }
 
+
+    /**
+     * Admin 상품 판매가격 수정이력 조회
+     *
+     * @param id
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/plan/{id}/histories")
+    @ResponseBody
+    public List<SoftwarePlanHistory> getPlanHistoryList(@NotNull @PathVariable Long id, HttpServletRequest httpServletRequest) {
+        return adminSoftwareService.getPlanHistoryList(id, commonService.setParameters(httpServletRequest));
+    }
 
 }

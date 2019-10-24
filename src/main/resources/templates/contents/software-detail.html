@@ -110,9 +110,37 @@
                                     <td th:text="${software.manifest}"></td>
                                 </tr>
                                 <tr>
-                                    <th scope="row">판매가격</th>
-                                    <td><span class="price" th:text="${software.pricePerMonth}"></span> 원
-<!--                                        /<span class="month"></span>일</td>-->
+                                    <th scope="row">판매금액
+                                        <br><button name="button" class="btn btn-color2 btn-md" type="button" data-toggle="modal" data-target="#myAmtModal" id="amtBtn">이력보기</button>
+                                    </th>
+                                    <td>
+                                        <table class="table" border="1">
+                                            <tr>
+                                                <th scope="row" rowspan="2">적용월</th>
+                                                <th scope="row" col style="width:auto;" colspan="3">Plan</th>
+                                                <th scope="row" col style="width:auto;" colspan="3">기준금액</th>
+                                                <th scope="row" rowspan="2">판매금액</th>
+                                            </tr>
+                                            <tr style="width:auto;" align=center>
+                                                <td >Name</td>
+                                                <td >Memory</td>
+                                                <td >Disk</td>
+                                                <td >CPU</td>
+                                                <td >Memory</td>
+                                                <td >Disk</td>
+                                            </tr>
+                                            <tr style="width:auto;" align=center>
+                                                <td th:text="${#temporals.format(software.createdDate, 'yyyy-MM')}"></td>
+                                                <td th:text="${softwareplan.name}"></td>
+                                                <td th:text="${softwareplan.memorySize}"></td>
+                                                <td th:text="${softwareplan.diskSize}"></td>
+                                                <td th:text="${softwareplan.cpuAmt}"></td>
+                                                <td th:text="${softwareplan.memoryAmt}"></td>
+                                                <td th:text="${softwareplan.diskAmt}">1000</td>
+                                                <td><span class="price" th:text="'￦ '+ ${software.pricePerMonth}"></span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
                                 </tr>
                                 <tr>
                                     <th scope="row">전시여부</th>
@@ -164,6 +192,50 @@
                     <!-- //inner -->
                 </div>
             </div>
+
+        <!-- amtModal -->
+        <div class="modal fade" id="myAmtModal" tabindex="-1" role="dialog" aria-labelledby="myAmtModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="myAmtModalLabel">판매금액 목록</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- table -->
+                        <div class="tbl type1">
+                            <td>
+                                <table class="table" border="1">
+                                    <tr>
+                                        <th scope="row" rowspan="2">적용월</th>
+                                        <th scope="row" col style="width:auto;" colspan="3">Plan</th>
+                                        <th scope="row" col style="width:auto;" colspan="3">기준금액</th>
+                                        <th scope="row" rowspan="2">판매금액</th>
+                                    </tr>
+                                    <tr style="width:auto;" align=center>
+                                        <td >Name</td>
+                                        <td >Memory</td>
+                                        <td >Disk</td>
+                                        <td >CPU</td>
+                                        <td >Memory</td>
+                                        <td >Disk</td>
+                                    </tr>
+                                    <tbody id="amtArea">
+                                    <tr style="width:auto;" align=center>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </div>
+                        <!--//table -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- amtModal -->
+
         <!-- //cBox1 -->
         <div class="cont_btnBox">
             <div class="pull-left">
@@ -264,7 +336,7 @@
                 	// Format Date
                 	var lastModifiedDateValue = new Date(data[i].lastModifiedDate);
                 	lastModifiedDate = getFormatDate(lastModifiedDateValue);
-                                    	
+
                     htmlString.push(
                         '<tr>'
                         + '<td>' + (i+1) + '</td>'
@@ -278,6 +350,44 @@
             }
         };
 
+        $("#amtBtn").on("click", function () {
+            var softwareId = "[[${software.id}]]";
+
+            var reqUrl = "/admin/softwares/plan/" + softwareId + "/histories"+ "?sort=lastModifiedDate,desc";
+            procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwarePlanHistoryList);
+        });
+
+        var callbackGetSoftwarePlanHistoryList = function (data) {
+
+            var amtArea = $("#amtArea");
+            var htmlString = [];
+
+            console.log(data);
+
+            if(data.length > 0){
+                for(var i = 0; i < data.length; i++){
+                    var totalAmt = data[i].cpuAmt+data[i].memoryAmt+data[i].diskAmt;
+
+                    htmlString.push(
+                        '<tr style="width:auto;" align=center>'
+                        + '<td>'+data[i].applyMonth+'</td>'
+                        + '<td>'+data[i].name+'</td>'
+                        + '<td>'+data[i].memorySize+'</td>'
+                        + '<td>'+data[i].diskSize+'</td>'
+                        + '<td>'+data[i].cpuAmt+'</td>'
+                        + '<td>'+data[i].memoryAmt+'</td>'
+                        + '<td>'+data[i].diskAmt+'</td>'
+                        + '<td>'+totalAmt+'</td>'
+                        + '</tr>'
+                    );
+                }
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='8'><p class='user_p'>판매금액 이력이 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+
+            amtArea.html(htmlString);
+        };
         /*]]>*/
     </script>
 </div>

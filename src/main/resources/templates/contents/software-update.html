@@ -122,10 +122,53 @@
                             <tr>
                                 <th scope="row">환경파일</th>
                                 <td><input class="form-control" type="text" th:value="${software.manifest}" id="softwareManifest" readonly></td>
+                            <tr>
+                                <th scope="row">판매금액 적용월</th>
+                                <td>
+                                    <div class="input-group">
+                                        <input class="form-control" style="width:100px;" type="text" th:value="${softwareplan.applyMonth}" id="applyMonth" name="applyMonth" readonly>
+                                        <span tabindex="0" class="group-span-filestyle input-group-btn">
+                                                <label class="btn btn-dfefault">
+                                                    <button name="button" class="btn btn-color2 btn-md" type="button" data-toggle="modal" data-target="#myAmtModal" id="amtBtn" th:onclick="'javascript:amtBtn(\''+${software.id} +'\');'">이력보기</button>
+                                                </label>
+                                            </span>
+                                    </div>
+                                </td>
                             </tr>
                             <tr>
-                                <th scope="row">판매가격</th>
-                                <td><input class="form-control" style="width:100px;" type="text" th:value="${software.pricePerMonth + ' 원'}" id="softwarePricePerMonth" readonly></td>
+                                <th scope="row">판매가격<i class="i_star">필수입력</i></th>
+                                <td>
+                                    <table>
+                                        <tr>
+                                            <th scope="row">
+                                                <input type="button" value="&nbsp; - &nbsp;">
+                                                &nbsp;플랜&nbsp;
+                                                <input type="button" value="&nbsp; + &nbsp;">
+                                            </th>
+                                            <th scope="row">설명</th>
+                                            <th scope="row">CPU</th>
+                                            <th scope="row">Memory</th>
+                                            <th scope="row">Disk</th>
+                                            <th scope="row">가격</th>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <input type="checkbox" th:name="checkRow"/><input type=hidden th:value="${softwareplan.id}" id="planid" name="planid">&nbsp;<input type=text th:value="${softwareplan.name}" name="name" placeholder="Small">
+                                            </td>
+                                            <td><input class="form-control" type="text" th:value="${softwareplan.description}" id="description" name="description" placeholder="1CPU/256M/1G"></td>
+
+                                            <td><input class="form-control" type="text" th:value="${softwareplan.cpuAmt}" id="cpuAmt" name="cpuAmt" onkeyup='amt()'></td>
+                                            <td>
+                                                <input class="form-control" type="text" th:value="${softwareplan.memorySize}" id="memorySize" name="memorySize" placeholder="256M"> &nbsp;<input class="form-control" type="text" th:value="${softwareplan.memoryAmt}" id="memoryAmt" name="memoryAmt" onkeyup='amt()'>
+                                            </td>
+                                            <td>
+                                                <input class="form-control" type="text" th:value="${softwareplan.diskSize}" id="diskSize" name="diskSize" placeholder="1G"> &nbsp;<input class="form-control" type="text" th:value="${softwareplan.diskAmt}" id="diskAmt" name="diskAmt" onkeyup='amt()'>
+                                            </td>
+                                            <td><input class="form-control" type="text" th:value="${software.pricePerMonth}" id="sumAmt" name="sumAmt" readonly></td>
+                                        </tr>
+                                        <tbody id="pricePerMonth-tbody"></tbody>
+                                    </table>
+                                </td>
                             </tr>
                             <tr>
                                 <th scope="row">전시여부</th>
@@ -188,6 +231,48 @@
                 <!-- //inner -->
             </div>
         </div>
+        <!-- amtModal -->
+        <div class="modal fade" id="myAmtModal" tabindex="-1" role="dialog" aria-labelledby="myAmtModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+                        <h4 class="modal-title" id="myAmtModalLabel">판매금액 목록</h4>
+                    </div>
+                    <div class="modal-body">
+                        <!-- table -->
+                        <div class="tbl type1">
+                            <td>
+                                <table class="table" border="1">
+                                    <tr>
+                                        <th scope="row" rowspan="2">적용월</th>
+                                        <th scope="row" col style="width:auto;" colspan="3">Plan</th>
+                                        <th scope="row" col style="width:auto;" colspan="3">기준금액</th>
+                                        <th scope="row" rowspan="2">판매금액</th>
+                                    </tr>
+                                    <tr style="width:auto;" align=center>
+                                        <td >Name</td>
+                                        <td >Memory</td>
+                                        <td >Disk</td>
+                                        <td >CPU</td>
+                                        <td >Memory</td>
+                                        <td >Disk</td>
+                                    </tr>
+                                    <tbody id="amtArea">
+                                    <tr style="width:auto;" align=center>
+                                    </tbody>
+                                </table>
+                            </td>
+                        </div>
+                        <!--//table -->
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- amtModal -->
         <!-- //cBox1 -->
         <div class="cont_btnBox">
             <div class="pull-right">
@@ -231,7 +316,7 @@
             currentMenu('1');
         });
 
-        // ::saveBtn::
+        //saveBtn
         var saveBtn = function(id) {
             modifyAdminSoftware(id);
         };
@@ -278,7 +363,7 @@
           	//수정이력
 			var softwareHistoryDescription = "전시여부: " + softwareInUse + ", 승인상태: " + softwareStatus + ", 반려사유: " + softwareConfirmComment;
 			console.log("변경이력>> " + softwareHistoryDescription);
-          
+
             var reqParam = {
                 "inUse" : softwareInUse,
                 "category" : {
@@ -305,7 +390,7 @@
         };
 
 
-        // ::icon::
+        //icon
         var getThumbnailPreview = function (html, $target) {
             if (html.files && html.files[0]) {
                 var reader = new FileReader();
@@ -318,7 +403,7 @@
 
         };
 
-        // ::screenshot::
+        //screenshot
         var getThumbnailPreviewScreenshot = function (html, $target) {
             if (html.files && html.files[0]) {
                 var reader = new FileReader();
@@ -331,7 +416,44 @@
 
         };
 
+        //amtBtn
+        var amtBtn = function(id) {
+            modifyAdminSoftwarePlan(id);
+        };
 
+        var modifyAdminSoftwarePlan = function (id) {
+            var reqUrl = "/admin/softwares/plan/" + id + "/histories" + "?sort=lastModifiedDate,desc";
+            procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwarePlanHistoryList);
+        };
+
+        var callbackGetSoftwarePlanHistoryList = function (data) {
+            var amtArea = $("#amtArea");
+            var htmlString = [];
+
+            if(data.length > 0){
+                for(var i = 0; i < data.length; i++){
+                    var totalAmt = data[i].cpuAmt+data[i].memoryAmt+data[i].diskAmt;
+
+                    htmlString.push(
+                        '<tr style="width:auto;" align=center>'
+                        + '<td>'+data[i].applyMonth+'</td>'
+                        + '<td>'+data[i].name+'</td>'
+                        + '<td>'+data[i].memorySize+'</td>'
+                        + '<td>'+data[i].diskSize+'</td>'
+                        + '<td>'+data[i].cpuAmt+'</td>'
+                        + '<td>'+data[i].memoryAmt+'</td>'
+                        + '<td>'+data[i].diskAmt+'</td>'
+                        + '<td>'+totalAmt+'</td>'
+                        + '</tr>'
+                    );
+                }
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='8'><p class='user_p'>판매금액 이력이 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+
+            amtArea.html(htmlString);
+        };
 
         /*]]>*/
     </script>

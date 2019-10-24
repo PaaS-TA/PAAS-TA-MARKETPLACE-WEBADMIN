@@ -256,8 +256,8 @@
 
         var getInstanceList = function(pageNum) {
 
-            console.log("[monthValueF]: " + yearValueF + "[monthValueF]: " + monthValueF
-                         + "[yearValueS]: " + yearValueS+ "[monthValueS]: " + monthValueS);
+            console.log("[monthValueF]: " + yearValueF + ", [monthValueF]: " + monthValueF
+                         + ", [yearValueS]: " + yearValueS+ ", [monthValueS]: " + monthValueS);
 
             // //[카테고리] 검색조건
             var categoryId = $("#categoryId option:selected").val();
@@ -271,31 +271,21 @@
                 pageNumSave = pageNum;
 
             //[이용기간] 검색조건
-            var yy = yearValueF;        // 이번 해
-            var yy2 = yearValueS;       // 다음 해
-            var mm = monthValueF;       // 이번 달
-            var mm2 = monthValueS;      // 다음 달
-
+            var yy = yearValueF;        			// 이전 해
+            var yy2 = yearValueS;       			// 다음 해
+            var mm = monthValueF;       			// 이전 달
+            var mm2 = parseInt(monthValueS) + 1;	// 다음 달
+            
             if (monthValueF < 10) {
                 mm = '0' + monthValueF;
-                if((parseInt(monthValueF) + 1) >= 10) {
-                    mm2 = (parseInt(monthValueF) + 1);
-                } else {
-                    mm2 = '0' + (parseInt(monthValueF) + 1);
-                }
             }else if(monthValueF >= 10 && monthValueF < 12) {
                 mm = monthValueF;
-                mm2 = parseInt(monthValueF) + 1;
             }
 
-
-            if(monthValueF > 11) {
-                console.log(">> " + yearValueF + "-" + monthValueF);
-                console.log(parseInt(yearValueF) + 1);
-                yy = yearValueF;
-                yy2 = parseInt(yearValueF) + 1;
-                mm = monthValueF;
-                mm2 = "01";
+            if (mm2 < 10) {
+                mm2 = '0' + mm2;
+            }else if(monthValueS >= 10 && monthValueS < 12) {
+                mm2 = mm2;
             }
 
             var currentYearMonth = yy + "-" + mm + "-01";
@@ -305,7 +295,7 @@
                 currentYearMonth = '';
                 nextYearMonth = '';
             }
-
+                                     
 
             var pageUrl = "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT;
             var dateUrl = "&usageStartDate=" + currentYearMonth +"&usageEndDate=" + nextYearMonth;

@@ -111,7 +111,7 @@
                                 </tr>
                                 <tr>
                                     <th scope="row">판매금액
-                                        <br><button name="button" class="btn btn-color2 btn-md" type="button" data-toggle="modal" data-target="#myAmtModal" id="amtBtn">이력보기</button>
+                                        <br><button name="button" class="btn btn-color2 btn-md" type="button" data-toggle="modal" data-target="#myAmtModal" id="amtHistoryBtn">이력보기</button>
                                     </th>
                                     <td>
                                         <table class="table" border="1">
@@ -129,16 +129,18 @@
                                                 <td >Memory</td>
                                                 <td >Disk</td>
                                             </tr>
-                                            <tr style="width:auto;" align=center>
-                                                <td th:text="${#temporals.format(software.createdDate, 'yyyy-MM')}"></td>
-                                                <td th:text="${softwareplan.name}"></td>
-                                                <td th:text="${softwareplan.memorySize}"></td>
-                                                <td th:text="${softwareplan.diskSize}"></td>
-                                                <td th:text="${softwareplan.cpuAmt}"></td>
-                                                <td th:text="${softwareplan.memoryAmt}"></td>
-                                                <td th:text="${softwareplan.diskAmt}">1000</td>
-                                                <td><span class="price" th:text="'￦ '+ ${software.pricePerMonth}"></span></td>
+                                            <tbody>
+                                            <tr th:each="softwarePlan,index : ${softwarePlanList}" style="width:auto;" align=center>
+                                                <td th:text="${softwarePlan.applyMonth}"></td>
+                                                <td th:text="${softwarePlan.name}"></td>
+                                                <td th:text="${softwarePlan.memorySize}"></td>
+                                                <td th:text="${softwarePlan.diskSize}"></td>
+                                                <td th:text="${#numbers.formatInteger(softwarePlan.cpuAmt, 0, 'COMMA')}"></td>
+                                                <td th:text="${#numbers.formatInteger(softwarePlan.memoryAmt, 0, 'COMMA')}"></td>
+                                                <td th:text="${#numbers.formatInteger(softwarePlan.diskAmt, 0, 'COMMA')}"></td>
+                                                <td th:text="${#numbers.formatInteger(softwarePlan.cpuAmt + softwarePlan.memoryAmt + softwarePlan.diskAmt , 0, 'COMMA')}"></td>
                                             </tr>
+                                            </tbody>
                                         </table>
                                     </td>
                                 </tr>
@@ -350,15 +352,14 @@
             }
         };
 
-        $("#amtBtn").on("click", function () {
+        $("#amtHistoryBtn").on("click", function () {
             var softwareId = "[[${software.id}]]";
 
-            var reqUrl = "/admin/softwares/plan/" + softwareId + "/histories"+ "?sort=lastModifiedDate,desc";
+            var reqUrl = "/admin/softwares/plan/" + softwareId + "/histories" + "?sort=lastModifiedDate,desc";
             procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwarePlanHistoryList);
         });
 
         var callbackGetSoftwarePlanHistoryList = function (data) {
-
             var amtArea = $("#amtArea");
             var htmlString = [];
 
@@ -388,6 +389,7 @@
 
             amtArea.html(htmlString);
         };
+
         /*]]>*/
     </script>
 </div>

@@ -125,25 +125,39 @@
                             <tr>
                                 <th scope="row">판매금액 적용월</th>
                                 <td>
-                                    <div class="input-group">
-                                        <input class="form-control" style="width:100px;" type="text" th:value="${softwareplan.applyMonth}" id="applyMonth" name="applyMonth" readonly>
-                                        <span tabindex="0" class="group-span-filestyle input-group-btn">
-                                                <label class="btn btn-dfefault">
-                                                    <button name="button" class="btn btn-color2 btn-md" type="button" data-toggle="modal" data-target="#myAmtModal" id="amtBtn" th:onclick="'javascript:amtBtn(\''+${software.id} +'\');'">이력보기</button>
-                                                </label>
-                                            </span>
+                                    <div class="searchBox"><!--검색폼 두줄일 때 class="fm-row-2"-->
+                                        <!-- Form 날짜 -->
+                                        <div class="form-group">
+                                            <div class="form-group-area">
+                                                <div class="fm_box w_auto pr10">
+                                                    <select name="selectDateYear" id="selectDateYear" th:onchange="selectYear()"></select>
+                                                </div>
+                                                <div class="fm_box w_auto">
+                                                    <select name="selectDateMonth" id="selectDateMonth" th:onchange="selectMonth()"></select>
+                                                </div>
+                                                <button type="button" name="searchBtn" class="btn btn-sch" title="검색" id="searchBtn"><span class="ico">검색</span></button>
+                                            </div>
+                                        </div>
+                                        <!-- //Form 날짜 -->
+                                        <!-- Form 이력보기 -->
+                                        <div class="form-group" style="float:right">
+                                            <div class="form-group-area">
+                                                <button name="button" class="btn btn-color2 btn-md" type="button" data-toggle="modal" data-target="#myAmtModal" id="amtHistoryBtn">이력보기</button>
+                                            </div>
+                                        </div>
+                                        <!-- Form 이력보기 -->
                                     </div>
                                 </td>
                             </tr>
                             <tr>
-                                <th scope="row">판매가격<i class="i_star">필수입력</i></th>
+                                <th scope="row">판매금액<i class="i_star">필수입력</i></th>
                                 <td>
-                                    <table>
+                                    <table id="pricePerMonth-table">
                                         <tr>
                                             <th scope="row">
-                                                <input type="button" value="&nbsp; - &nbsp;">
+                                                <input type="button" value="&nbsp; - &nbsp;" onclick="delRow();">
                                                 &nbsp;플랜&nbsp;
-                                                <input type="button" value="&nbsp; + &nbsp;">
+                                                <input type="button" value="&nbsp; + &nbsp;" onclick="addRow();">
                                             </th>
                                             <th scope="row">설명</th>
                                             <th scope="row">CPU</th>
@@ -151,22 +165,23 @@
                                             <th scope="row">Disk</th>
                                             <th scope="row">가격</th>
                                         </tr>
-                                        <tr>
+                                        <tbody id="pricePerMonth-tbody">
+                                        <tr th:each="softwarePlan, stat : ${softwarePlanList}">
                                             <td>
-                                                <input type="checkbox" th:name="checkRow"/><input type=hidden th:value="${softwareplan.id}" id="planid" name="planid">&nbsp;<input type=text th:value="${softwareplan.name}" name="name" placeholder="Small">
+                                                <input type="checkbox" th:name="checkRow"/><input type=hidden th:value="${softwarePlan.id}" th:id="'planid_'+ ${stat.index}" name="planid">&nbsp;<input type=text th:value="${softwarePlan.name}" th:id="'name_'+ ${stat.index}" name="planName" placeholder="Small">
                                             </td>
-                                            <td><input class="form-control" type="text" th:value="${softwareplan.description}" id="description" name="description" placeholder="1CPU/256M/1G"></td>
+                                            <td><input class="form-control" type="text" th:value="${softwarePlan.description}" th:id="'description_'+ ${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].description'" placeholder="1CPU/256M/1G"></td>
 
-                                            <td><input class="form-control" type="text" th:value="${softwareplan.cpuAmt}" id="cpuAmt" name="cpuAmt" onkeyup='amt()'></td>
+                                            <td><input class="form-control" type="text" th:value="${softwarePlan.cpuAmt}" th:id="'cpuAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].cpu'" th:onkeyup="'amt('+${stat.index}+')'"></td>
                                             <td>
-                                                <input class="form-control" type="text" th:value="${softwareplan.memorySize}" id="memorySize" name="memorySize" placeholder="256M"> &nbsp;<input class="form-control" type="text" th:value="${softwareplan.memoryAmt}" id="memoryAmt" name="memoryAmt" onkeyup='amt()'>
+                                                <input class="form-control" type="text" th:value="${softwarePlan.memorySize}" th:id="'memorySize_'+ ${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].memorySize'" placeholder="256M"> &nbsp;<input class="form-control" type="text" th:value="${softwarePlan.memoryAmt}" th:id="'memoryAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].memoryAmt'" th:onkeyup="'amt('+${stat.index}+')'">
                                             </td>
                                             <td>
-                                                <input class="form-control" type="text" th:value="${softwareplan.diskSize}" id="diskSize" name="diskSize" placeholder="1G"> &nbsp;<input class="form-control" type="text" th:value="${softwareplan.diskAmt}" id="diskAmt" name="diskAmt" onkeyup='amt()'>
+                                                <input class="form-control" type="text" th:value="${softwarePlan.diskSize}" th:id="'diskSize_'+ ${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].diskSize'" placeholder="1G">&nbsp;<input class="form-control" type="text" th:value="${softwarePlan.diskAmt}" th:id="'diskAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].diskAmt'"  th:onkeyup="'amt('+${stat.index}+')'">
                                             </td>
-                                            <td><input class="form-control" type="text" th:value="${software.pricePerMonth}" id="sumAmt" name="sumAmt" readonly></td>
+                                            <td><input class="form-control" th:value="${#numbers.formatInteger(softwarePlan.memoryAmt + softwarePlan.diskAmt + softwarePlan.memoryAmt , 0, 'COMMA')}" th:id="'sumAmt_' +${stat.index}" name="sumAmt" readonly></td>
                                         </tr>
-                                        <tbody id="pricePerMonth-tbody"></tbody>
+                                        </tbody>
                                     </table>
                                 </td>
                             </tr>
@@ -314,7 +329,21 @@
         $(document).ready(function() {
             console.log("admin-software-update init");
             currentMenu('1');
+
+            selectCal('selectDateMonth', 'selectDateYear');
+            nameIndex = $("#pricePerMonth-tbody tr").length;
+
+            var softwarePlaneOriginalList = "";
+            for (var idx=0; idx<nameIndex ;idx++) {
+                if (idx == 0) {
+                    softwarePlaneOriginalList += $("#planid_"+idx).val();
+                } else {
+                    softwarePlaneOriginalList += "^"+ $("#planid_"+idx).val();
+                }
+            }
+            $("#softwarePlaneOriginalList").val(softwarePlaneOriginalList);
         });
+
 
         //saveBtn
         var saveBtn = function(id) {
@@ -416,19 +445,19 @@
 
         };
 
-        //amtBtn
-        var amtBtn = function(id) {
-            modifyAdminSoftwarePlan(id);
-        };
+        //amtHistoryBtn
+        $("#amtHistoryBtn").on("click", function () {
+            var softwareId = "[[${software.id}]]";
 
-        var modifyAdminSoftwarePlan = function (id) {
-            var reqUrl = "/admin/softwares/plan/" + id + "/histories" + "?sort=lastModifiedDate,desc";
+            var reqUrl = "/admin/softwares/plan/" + softwareId + "/histories" + "?sort=lastModifiedDate,desc";
             procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwarePlanHistoryList);
-        };
+        });
 
         var callbackGetSoftwarePlanHistoryList = function (data) {
             var amtArea = $("#amtArea");
             var htmlString = [];
+
+            console.log(data);
 
             if(data.length > 0){
                 for(var i = 0; i < data.length; i++){
@@ -454,6 +483,153 @@
 
             amtArea.html(htmlString);
         };
+
+        //[공통] 2019-00
+        function fncDateValueDigit(value) {
+            var result = value;
+            if (value < 10) {
+                result = '0' + value;
+            }
+            return result;
+        }
+
+
+        //searchBtn
+        $("#searchBtn").on("click", function () {
+            console.log("searchBtn Event");
+            var softwareId = "[[${software.id}]]";
+            var selectDateYear = $("#selectDateYear").val();
+            var selectDateMonth = $("#selectDateMonth").val();
+            var applyMonth = selectDateYear +  fncDateValueDigit(selectDateMonth);
+
+            var url = encodeURI("/admin/softwares/plan/" + softwareId + "/applyMonth");
+            procCallAjax(url+"?applyMonth="+ applyMonth, "GET", "", null, callbackRow);
+        });
+
+
+        var callbackRow  = function (data) {
+            $('#pricePerMonth-tbody').html("");
+
+            index = 1000;
+            nameIndex = 0;
+
+            if(data.length > 0){
+                for(var i = 0; i < data.length; i++){
+                    $('#pricePerMonth-tbody').append(
+                        "<tr>"
+                        +"	<td>"
+                        +"		<input type='checkbox' id='checkRow' name='checkRow'><input type=hidden id='planid_"+index+"'name='softwarePlanList["+nameIndex+"].planid' value='"+data[i].index+"'>&nbsp;<input type='text' id='name_"+index+"' name='softwarePlanList["+nameIndex+"].name' value='"+data[i].name+"' placeholder='Small'>"
+                        +"	</td>"
+                        +"	<td><input class='form-control' type='text' name='softwarePlanList["+nameIndex+"].description' value='"+data[i].description+"' placeholder='1CPU/256M/1G'></td>"
+                        +"	<td><input class='form-control' type='text' id='cpuAmt_"+index+"' name='softwarePlanList["+nameIndex+"].cpuAmt' value='"+data[i].cpuAmt+"' onkeyup='amt("+index +")'></td>"
+                        +"	<td>"
+                        +"		<input class='form-control' type='text' id='memorySize' name='softwarePlanList["+nameIndex+"].memorySize' value='"+data[i].memorySize+"' placeholder='256M'>"
+                        +"		<input class='form-control' type='text' id='memoryAmt_"+index+"' name='softwarePlanList["+nameIndex+"].memoryAmt' value='"+data[i].memoryAmt+"' onkeyup='amt("+index+")'>"
+                        +"	</td>"
+                        +"	<td>"
+                        +"		<input class='form-control' type='text' id='diskSize' name='softwarePlanList["+nameIndex+"].diskSize'value='"+data[i].diskSize+"' placeholder='1G'>"
+                        +"		<input class='form-control' type='text' id='diskAmt_"+index+"' name='softwarePlanList["+nameIndex+"].diskAmt' value='"+data[i].diskAmt+"'onkeyup='amt("+index+")'>"
+                        +"	</td>"
+                        +"	<td>"
+                        +"		<input class='form-control' type='text' id='sumAmt_"+index+"' name='sumAmt' readonly>"
+                        +"		<input type='hidden' name='softwarePlanList["+nameIndex+"].applyMonth' value='"+data[i].applyMonth+"'>"
+                        +"	</td>"
+                        +"</tr>"
+                    );
+
+                    nameIndex++;
+                }
+            }
+        };
+
+        //[테이블] 가격
+        function amt(id){
+            $("#sumAmt_"+id).val(Number($("#cpuAmt_"+id).val())+ Number($("#memoryAmt_"+id).val())+ Number($("#diskAmt_"+id).val()));
+        };
+
+
+        //[테이블] 행 삭제
+        function delRow(){
+            var checkbox = $("input[name='checkRow']");
+            var checkCount = checkbox.size();
+            var swpId =  $("#planid").val();
+
+            console.log(swpId);
+
+            for (var i=0; i<checkCount; i++) {
+                if (checkbox.eq(i).is(":checked")) {
+                    checkbox.eq(i).parent().parent().remove();
+                }
+            }
+        };
+
+        //[테이블] 행 추가
+        var index = 1000;
+        var nameIndex = 0;
+        function addRow() {
+            index++;
+            nameIndex++;
+            console.log("[index]: "+index);
+
+            var toDayValue = $('#applyMonth').val();
+
+            document.getElementById("pricePerMonth-tbody").insertRow(-1).innerHTML =
+                "<tr>"
+                +"	<td>"
+                +"		<input type='checkbox' id='checkRow' name='checkRow'><input type=hidden id='planid_"+index+"'name='softwarePlanList["+nameIndex+"].planid'>&nbsp;<input type='text' id='name_"+index+"' name='softwarePlanList["+nameIndex+"].name' placeholder='Small'>"
+                +"	</td>"
+                +"	<td><input class='form-control' type='text' name='softwarePlanList["+nameIndex+"].description' placeholder='1CPU/256M/1G'></td>"
+                +"	<td><input class='form-control' type='text' id='cpuAmt_"+index+"' name='softwarePlanList["+nameIndex+"].cpuAmt' onkeyup='amt("+index +")'></td>"
+                +"	<td>"
+                +"		<input class='form-control' type='text' id='memorySize' name='softwarePlanList["+nameIndex+"].memorySize' placeholder='256M'>"
+                +"		<input class='form-control' type='text' id='memoryAmt_"+index+"' name='softwarePlanList["+nameIndex+"].memoryAmt' onkeyup='amt("+index+")'>"
+                +"	</td>"
+                +"	<td>"
+                +"		<input class='form-control' type='text' id='diskSize' name='softwarePlanList["+nameIndex+"].diskSize' placeholder='1G'>"
+                +"		<input class='form-control' type='text' id='diskAmt_"+index+"' name='softwarePlanList["+nameIndex+"].diskAmt' onkeyup='amt("+index+")'>"
+                +"	</td>"
+                +"	<td>"
+                +"		<input class='form-control' type='text' id='sumAmt_"+index+"' name='sumAmt' readonly>"
+                +"		<input type='hidden' name='softwarePlanList["+nameIndex+"].applyMonth' value='"+toDayValue+"'>"
+                +"	</td>"
+                +"</tr>";
+        };
+
+        //[공통] 년,월(select box)
+        function selectCal(monthfield, yearfield) {
+
+            var today = new Date();
+            yearValue = today.getFullYear();
+            monthValue = (today.getMonth() + 1);
+
+            for (var i = 1; i < 13; i++) {
+                if ((today.getMonth() + 1) == i) $("#" + monthfield).append("<option value='" + i + "' selected='selected'>" + i + "</option>");
+                else $("#" + monthfield).append("<option value='" + i + "'>" + i + "</option>");
+            }
+
+            var thisyear = today.getFullYear();
+            for (var y = thisyear - 10; y < thisyear + 10; y++) {
+
+                if (thisyear == y) $("#" + yearfield).append("<option value='" + y + "' selected='selected'>" + y + "</option>");
+                else $("#" + yearfield).append("<option value='" + y + "'>" + y + "</option>");
+            }
+        }
+
+        var selectYear = function() {
+            var selectedYearValue = $("#selectDateYear option:selected").val();
+            yearValue = selectedYearValue;
+            console.log("Year ::: " + selectedYearValue);
+        };
+
+        var selectMonth = function() {
+            var selectedMonthValue = $("#selectDateMonth option:selected").val();
+            monthValue = selectedMonthValue;
+            console.log("Month ::: " + selectedMonthValue);
+        };
+
+        //년/월
+        var yearValue = $("#selectDateYear option:selected").val();
+        var monthValue = $("#selectDateMonth option:selected").val();
 
         /*]]>*/
     </script>

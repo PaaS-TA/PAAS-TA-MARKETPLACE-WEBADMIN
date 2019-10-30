@@ -68,11 +68,21 @@ public class AdminSoftwareService {
         return paasApiRest.getForObject(url, SoftwarePlan.class);
     }
 
-    public List<SoftwareHistory> getHistoryList(Long id, String queryParamString) {
-        return paasApiRest.getForObject("/admin/softwares/" + id + "/histories" + queryParamString, List.class);
+    public List<SoftwarePlan> getSoftwarePlanList(Long id) {
+        String url = UriComponentsBuilder.newInstance().path("/admin/softwares/plan/{id}/list?sort=name,asc")
+                .build()
+                .expand(id)
+                .toString();
+        return paasApiRest.getForObject(url, List.class);
     }
 
-    public List<SoftwarePlanHistory> getPlanHistoryList(Long id, String queryParamString) {
+
+    public List<SoftwarePlan> getPlanHistoryList(Long id, String queryParamString) {
         return paasApiRest.getForObject("/admin/softwares/plan/" + id + "/histories" + queryParamString, List.class);
     }
+
+    public List<SoftwarePlan> getApplyMonth(Long id, String applyMonth) {
+        return paasApiRest.getForObject("/admin/softwares/plan/" + id + "/applyMonth?applyMonth=" + applyMonth, List.class);
+    }
+
 }

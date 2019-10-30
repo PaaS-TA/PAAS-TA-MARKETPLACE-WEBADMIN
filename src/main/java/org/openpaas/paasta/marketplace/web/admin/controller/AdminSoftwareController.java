@@ -72,7 +72,7 @@ public class AdminSoftwareController {
     @GetMapping(value = "/{id}")
     public String getAdminSoftware(Model model, @PathVariable Long id) {
         model.addAttribute("software", adminSoftwareService.getAdminSoftwares(id));
-        model.addAttribute("softwareplan", adminSoftwareService.getSoftwarePlan(id));
+        model.addAttribute("softwarePlanList", adminSoftwareService.getSoftwarePlanList(id));
         adminSoftwareService.getAdminCategories();
         return "contents/software-detail";
     }
@@ -92,7 +92,7 @@ public class AdminSoftwareController {
         model.addAttribute("types", Software.Type.values());
         model.addAttribute("status", Software.Status.values());
         model.addAttribute("categories", adminSoftwareService.getAdminCategories());
-        model.addAttribute("softwareplan", adminSoftwareService.getSoftwarePlan(id));
+        model.addAttribute("softwarePlanList", adminSoftwareService.getSoftwarePlanList(id));
         return "contents/software-update";
     }
 
@@ -118,21 +118,6 @@ public class AdminSoftwareController {
         return adminSoftwareService.updateAdminSoftware(id, updateSoftware);
     }
 
-
-    /**
-     * Admin 상품 수정이력 조회
-     *
-     * @param id
-     * @param httpServletRequest
-     * @return
-     */
-    @GetMapping(value = "/{id}/histories")
-    @ResponseBody
-    public List<SoftwareHistory> getHistoryList(@NotNull @PathVariable Long id, HttpServletRequest httpServletRequest) {
-        return adminSoftwareService.getHistoryList(id, commonService.setParameters(httpServletRequest));
-    }
-
-
     /**
      * Admin 상품 판매가격 수정이력 조회
      *
@@ -142,8 +127,20 @@ public class AdminSoftwareController {
      */
     @GetMapping(value = "/plan/{id}/histories")
     @ResponseBody
-    public List<SoftwarePlanHistory> getPlanHistoryList(@NotNull @PathVariable Long id, HttpServletRequest httpServletRequest) {
+    public List<SoftwarePlan> getPlanHistoryList(@NotNull @PathVariable Long id, HttpServletRequest httpServletRequest) {
         return adminSoftwareService.getPlanHistoryList(id, commonService.setParameters(httpServletRequest));
+    }
+
+    /**
+     * Admin 상품 판매금액 적용월 검색조회
+     *
+     * @param id
+     * @return
+     */
+    @GetMapping(value = "/plan/{id}/applyMonth")
+    @ResponseBody
+    public List<SoftwarePlan> getApplyMonth(@NotNull @PathVariable Long id,@RequestParam (name="applyMonth") String applyMonth) {
+        return adminSoftwareService.getApplyMonth(id, applyMonth);
     }
 
 }

@@ -239,7 +239,7 @@
 
             if(listLength > 0){
                 for(var i = 0; i < listLength; i++){
-
+                	var index = (i+1) + pageNumSave * data.size;
                     if(content[i].usageEndDate === null){
                         var usageEndDate = ''
                     } else {
@@ -259,7 +259,7 @@
                                         
                     htmlString.push(
                         "<tr>"
-                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td>" + index + "</td>"
                         + "<td>" + content[i].appName + "</td>"
                         + "<td>" + content[i].createdBy + "</td>"
                         + "<td>" + content[i].createdBy + "</td>"
@@ -320,7 +320,12 @@
                 }
                                     
                 for(var i=first; i < last; i++){
-                    htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveInstanceListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	if (i==currentPage) {
+                		htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveInstanceListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
+                	else {
+                    	htmlStringPage += "<li id='" + i + "'><a href='javascript:void(0);' onclick=moveInstanceListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
                 }
                 
                 if(next > totalPage-1) {
@@ -341,6 +346,7 @@
 
         // 페이지 이동
         var moveInstanceListPage = function(page) {
+        	$("#lineChartArea").empty();
             getInstanceList(page);
         };
 

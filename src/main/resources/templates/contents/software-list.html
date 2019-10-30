@@ -282,9 +282,11 @@
                     var createdDateValue = new Date(content[i].createdDate);
                     createdDate = getFormatDate(createdDateValue);
                     
+                    var index = (i+1) + pageNumSave * data.size;
+                    
                     htmlString.push(
                         "<tr>"
-                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td>" + index  + "</td>"
                         + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
                         + "<td><a href='javascript:void(0);' onclick=moveSoftwareDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].createdBy + "</td>"
@@ -346,7 +348,12 @@
                 }
                                     
                 for(var i=first; i < last; i++){
-                    htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	if (i==currentPage) {
+                		htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
+                	else {
+                    	htmlStringPage += "<li id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
                 }
                 
                 if(next > totalPage-1) {

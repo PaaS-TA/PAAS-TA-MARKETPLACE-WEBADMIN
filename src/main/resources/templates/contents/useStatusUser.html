@@ -73,7 +73,7 @@
                     </div>
                 </div>
                 <!-- //Form 그룹 -->
-                <button type="button" name="button" class="btn btn-sch" title="검색"><span class="ico">검색</span></button>
+                <button type="button" name="button" class="btn btn-sch" title="검색" id="searchBtn"><span class="ico">검색</span></button>
             </div>
         </div>
         <!-- //검색 Form -->
@@ -316,7 +316,7 @@
                 getSoftwareStatsChart(data);
 
                 for(var i = 0; i < listLength; i++){
-
+					var index = (i+1) + pageNumSave * data.size;
                     //총 건수
                     $("#totalCount").text(" (" + data.totalElements +")");
 
@@ -337,7 +337,7 @@
 
                     htmlString.push(
                         "<tr>"
-                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td>" + index  + "</td>"
                         + "<td><a href='javascript:void(0);' onclick=moveUserStatsDetail('"+content[i].id+"')>" + content[i].name + "</a></td>"
                         + "<td>" + content[i].id + "</td>"
                         + "<td>" + createdDate + "</td>"
@@ -397,7 +397,12 @@
                 }
 
                 for(var i=first; i < last; i++){
-                    htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveUserListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	if (i==currentPage) {
+                		htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveUserListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
+                	else {
+                    	htmlStringPage += "<li id='" + i + "'><a href='javascript:void(0);' onclick=moveUserListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
                 }
 
                 if(next > totalPage-1) {
@@ -437,6 +442,8 @@
 
         // 페이지 이동
         var moveUserListPage = function(page) {
+        	$("#pieChartArea").empty();
+            $("#lineChartArea").empty();
             getUserList(page);
         };
 

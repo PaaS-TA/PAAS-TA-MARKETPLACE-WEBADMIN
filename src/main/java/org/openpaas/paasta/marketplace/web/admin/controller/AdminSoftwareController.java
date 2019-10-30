@@ -118,32 +118,4 @@ public class AdminSoftwareController {
         return adminSoftwareService.updateAdminSoftware(id, updateSoftware);
     }
 
-
-    /**
-     * Admin 상품 수정이력 조회
-     *
-     * @param id
-     * @param httpServletRequest
-     * @return
-     */
-    @GetMapping(value = "/{id}/histories")
-    @ResponseBody
-    public List<SoftwareHistory> getHistoryList(@NotNull @PathVariable Long id, HttpServletRequest httpServletRequest) {
-        return adminSoftwareService.getHistoryList(id, commonService.setParameters(httpServletRequest));
-    }
-
-
-    /**
-     * Admin 상품 판매가격 수정이력 조회
-     *
-     * @param id
-     * @param httpServletRequest
-     * @return
-     */
-    @GetMapping(value = "/plan/{id}/histories")
-    @ResponseBody
-    public List<SoftwarePlanHistory> getPlanHistoryList(@NotNull @PathVariable Long id, HttpServletRequest httpServletRequest) {
-        return adminSoftwareService.getPlanHistoryList(id, commonService.setParameters(httpServletRequest));
-    }
-
 }

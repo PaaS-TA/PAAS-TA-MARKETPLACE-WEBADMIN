@@ -68,11 +68,4 @@ public class AdminSoftwareService {
         return paasApiRest.getForObject(url, SoftwarePlan.class);
     }
 
-    public List<SoftwareHistory> getHistoryList(Long id, String queryParamString) {
-        return paasApiRest.getForObject("/admin/softwares/" + id + "/histories" + queryParamString, List.class);
-    }
-
-    public List<SoftwarePlanHistory> getPlanHistoryList(Long id, String queryParamString) {
-        return paasApiRest.getForObject("/admin/softwares/plan/" + id + "/histories" + queryParamString, List.class);
-    }
 }

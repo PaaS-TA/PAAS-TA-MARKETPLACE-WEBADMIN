@@ -351,19 +351,26 @@
 
             if(listLength > 0){
                 getSoftwareStatsChart(data);
-
+                
+                var instanceUserCountList = soldPerSwCount.replace("{", "").replace("}", "").split(",");
+    			console.log("userCountList = " + instanceUserCountList);
+    			
                 for(var i = 0; i < listLength; i++){
+                	var index = (i+1) + pageNumSave * data.size;
                     var instanceUserCount;
-                    var instanceUserCountList = soldPerSwCount.replace("{", "").replace("}", "").split(",");
+                    
+					for (var j = 0; j < instanceUserCountList.length; j++) {
+						var instanceRate = instanceUserCountList[j];
+	                    var value = instanceRate.split("=");
 
-                    var instanceRate = instanceUserCountList[i];
-                    var value = instanceRate.split("=");
-
-                    if (content[i].id == value[0]) {
-                        instanceUserCount = value[1];
-                    }else{
-                        instanceUserCount = 0;
-                    }
+	                    if (content[i].id == value[0]) {
+	                        instanceUserCount = value[1];
+	                        break;
+	                    }else{
+	                        instanceUserCount = 0;
+	                    }
+					}
+                    
                     console.log("value[0] =" + value[0] + ", content.id = " + content[i].id+ ", value[1] = " + value[1] );
                     var statusModifiedDate = '';
                     if(content[i].statusModifiedDate == null){
@@ -379,7 +386,7 @@
 
                     htmlString.push(
                         "<tr>"
-                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td>" + index + "</td>"
                         + "<td><span class=\"pn_cate type"+ content[i].category.id +"\">" + content[i].category.name + "</span></td>"
                         + "<td><a href='javascript:void(0);' onclick=moveSoftwareStatsDetail('"+content[i].id+"')>" + content[i].name+ "</a></td>"
                         + "<td>" + content[i].version + "</td>"
@@ -389,7 +396,7 @@
                         + "</tr>"
                     );
                 }
-            }else{
+            } else {
                 htmlString = "<tr>"
                     + "<td colspan='7'><p class='user_p'>상품이 존재하지 않습니다.</p></td>" + "</tr>"
             }
@@ -441,7 +448,12 @@
                 }
                                     
                 for(var i=first; i < last; i++){
-                    htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	if (i==currentPage) {
+                		htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
+                	else {
+                    	htmlStringPage += "<li id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
                 }
                 
                 if(next > totalPage-1) {

@@ -316,6 +316,7 @@
                 getAdminStatsUserChart(data);
 
                 for(var i = 0; i < listLength; i++){
+                	var index = (i+1) + pageNumSave * data.size;
                     var software = content[i].software;
 
                     //총 금액
@@ -386,7 +387,7 @@
 
                     htmlString.push(
                         "<tr>"
-                        + "<td>" + (i + 1)  + "</td>"
+                        + "<td>" + index  + "</td>"
                         + "<td><span class=\"pn_cate type"+ software.category.id +"\">" + software.category.name + "</span></td>"
                         + "<td>" + software.name + "</td>"
                         + "<td>" + content[i].software.version + "</td>"
@@ -441,7 +442,12 @@
                 }
 
                 for(var i=first; i < last; i++){
-                    htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	if (i==currentPage) {
+                		htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
+                	else {
+                    	htmlStringPage += "<li id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
+                	}
                 }
 
                 if(next > totalPage-1) {

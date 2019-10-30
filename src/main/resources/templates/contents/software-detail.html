@@ -148,7 +148,7 @@
                                     <th scope="row">반려사유</th>
                                     <td>
                                         <div class="tbw_inner_txt">
-                                            <pre th:text="${software.confirmComment}"></pre>
+                                            <pre th:text="${software.confirmComment}" th:if="${software.status.equals('Rejected')}"></pre>
                                         </div>
                                     </td>
                                 </tr>

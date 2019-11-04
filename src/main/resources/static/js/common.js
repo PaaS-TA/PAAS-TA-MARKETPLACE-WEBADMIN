@@ -10,17 +10,22 @@
  * @author hrjin
  * @since 2019.05.07
  */
-var procCallAjax = function(reqUrl, reqMethod, param, preFunc, callback) {
+var procCallAjax = function(reqUrl, reqMethod, param, preFunc, callback, useAsync) {
     var reqData = "";
     if (param != null) {
         reqData = param;
     }
+
+    if(useAsync == null) {
+        useAsync = false;
+    }
+
     $.ajax({
         url: reqUrl,
         method: reqMethod,
         data: reqData,
         dataType: 'json',
-        async: false,
+        async: useAsync,
         contentType: "application/json",
         beforeSend: function(xhr){
             // preFunc

@@ -412,6 +412,21 @@
             </div>
         </div>
         <!-- //배포 테스트 대기 팝업 Modal -->
+
+        <!-- 배포 로그 팝업 Modal -->
+        <div class="modal fade" id="deployLogModal" tabindex="-1" role="dialog" aria-labelledby="deployLogModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-md">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="deployLog">배포 로그</h4>
+                    </div>
+                    <div class="modal-body" id="logArea">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //배포 테스트 대기 팝업 Modal -->
     </div>
 <!-- //content -->
     <input type="hidden" id="id" name="softwareId" th:value="${software.id}">
@@ -421,7 +436,7 @@
 
         // ON LOAD
         $(document.body).ready(function () {
-            console.log('::softwares/{id} init::');
+            console.log('::softwares/{id} init::' + $("#id").val());
             currentMenu('1');
 
             var id = $("#id").val();
@@ -446,9 +461,9 @@
                     htmlString.push(
                         '<tr>'
                         + '<td>' + data[i].name + '</td>'
-                        + '<td>' + 'STAGED' + '</td>'
+                        + '<td>' + data[i].status + '</td>'
                         + '<td>' + createdDateValue + '</td>'
-                        + '<td>' + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='showLog();'>로그 확인</button><button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn'>삭제</button>" + '</td>'
+                        + '<td>' + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='showLog(\"" + data[i].appGuid + "\")'>로그 확인</button><button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn'>삭제</button>" + '</td>'
                         + '</tr>'
                     );
                 }
@@ -460,12 +475,24 @@
 
             deployedInfoArea.html(htmlString);
 
-            $("#deployedInfo").show();
+            //$("#deployedInfo").show();
 
         };
 
-        var showLog = function () {
-            alert("까꿍~");
+        var showLog = function (appGuid) {
+            var reqUrl = "/admin/softwares/app/" + appGuid;
+            procCallAjax(reqUrl, "GET", null, null, callbackGetRecentAppLog)
+
+        };
+
+        var callbackGetRecentAppLog = function (data) {
+          var html = [];
+          for(var i = 0; i < data.log.length; i++) {
+              html.push("<p>" + data.log[i].logMessage.message + "</p>");
+          }
+
+          $("#logArea").html(html);
+          $("#deployLogModal").modal('show');
         };
 
         var moveSoftwaresPage = function() {
@@ -584,7 +611,7 @@
             console.log(JSON.stringify(data));
             console.log(data.name);
 
-            getTestSoftwareInfoList(data.id);
+            getTestSoftwareInfoList(data.softwareId);
         };
 
         // if($("#deleteDeployBtn").length > 0) {

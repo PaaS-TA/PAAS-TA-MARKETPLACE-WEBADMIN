@@ -38,6 +38,7 @@
 .modal-content.modal-sm .modal-footer .btn{min-width: 80px; height: 32px;}
 /*.modal-content.modal-sm .only-text{line-height: 20px; padding:10px 15px; border-radius:5px; background:#edf5fc;}*/
 .modal-content.modal-sm .only-text{line-height: 20px; padding:10px 0px 10px; color:#6e6e6e;}/*180404 스타일 갱신*/
+.modal-content.modal-md{width: 800px;margin:0 auto; overflow-y: auto;}/*191104 추가*/
 
 .modal-content.type2 {border:0; background-color: rgba(0,0,0,.49);}
 .modal-content.type2 .close{right:10px; top:10px; opacity:1; z-index: 1; text-shadow:none;}

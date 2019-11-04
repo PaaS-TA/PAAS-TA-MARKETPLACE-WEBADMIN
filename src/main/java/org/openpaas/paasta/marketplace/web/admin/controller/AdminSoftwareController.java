@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
 import java.util.List;
+import java.util.Map;
 
 @Controller
 @RequestMapping(value = "/admin/softwares")
@@ -166,5 +167,12 @@ public class AdminSoftwareController {
     @ResponseBody
     public List<TestSoftwareInfo> getTestSwInfoList(@PathVariable Long id) {
         return adminSoftwareService.getAdminTestSwInfoList(id);
+    }
+
+
+    @GetMapping(value = "/app/{appGuid}")
+    @ResponseBody
+    public Map getRecentAppLog(@PathVariable String appGuid) {
+        return adminSoftwareService.getRecentAppLog(appGuid);
     }
 }

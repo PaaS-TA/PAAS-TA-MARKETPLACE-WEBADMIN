@@ -13,6 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -95,5 +96,9 @@ public class AdminSoftwareService {
 
     public List<TestSoftwareInfo> getAdminTestSwInfoList(Long id) {
         return paasApiRest.getForObject("/admin/softwares/" + id + "/testSwInfo", List.class);
+    }
+
+    public Map getRecentAppLog(String appGuid) {
+        return paasApiRest.getForObject("/admin/apps/" + appGuid + "/recentLogs", Map.class);
     }
 }

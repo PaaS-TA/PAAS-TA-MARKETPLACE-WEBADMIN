@@ -85,4 +85,15 @@ public class AdminSoftwareService {
         return paasApiRest.getForObject("/admin/softwares/plan/" + id + "/applyMonth?applyMonth=" + applyMonth, List.class);
     }
 
+    public List<SoftwareHistory> getHistoryList(Long id, String queryParamString) {
+        return paasApiRest.getForObject("/admin/softwares/" + id + "/histories" + queryParamString, List.class);
+    }
+
+    public TestSoftwareInfo deployTestSoftware(Long id, Long planId, TestSoftwareInfo testSoftwareInfo) {
+        return paasApiRest.postForObject("/admin/softwares/" + id + "/plan/" + planId, testSoftwareInfo, TestSoftwareInfo.class);
+    }
+
+    public List<TestSoftwareInfo> getAdminTestSwInfoList(Long id) {
+        return paasApiRest.getForObject("/admin/softwares/" + id + "/testSwInfo", List.class);
+    }
 }

@@ -143,4 +143,28 @@ public class AdminSoftwareController {
         return adminSoftwareService.getApplyMonth(id, applyMonth);
     }
 
+    /**
+     * Admin 상품 수정이력 조회
+     *
+     * @param id
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/{id}/histories")
+    @ResponseBody
+    public List<SoftwareHistory> getHistoryList(@NotNull @PathVariable Long id, HttpServletRequest httpServletRequest) {
+        return adminSoftwareService.getHistoryList(id, commonService.setParameters(httpServletRequest));
+    }
+
+    @PostMapping(value = "/{id}/plan/{planId}")
+    @ResponseBody
+    public TestSoftwareInfo deployTestSoftware(@PathVariable Long id, @PathVariable Long planId, @RequestBody TestSoftwareInfo testSoftwareInfo) {
+        return adminSoftwareService.deployTestSoftware(id, planId, testSoftwareInfo);
+    }
+
+    @GetMapping(value = "/{id}/testSwInfo")
+    @ResponseBody
+    public List<TestSoftwareInfo> getTestSwInfoList(@PathVariable Long id) {
+        return adminSoftwareService.getAdminTestSwInfoList(id);
+    }
 }

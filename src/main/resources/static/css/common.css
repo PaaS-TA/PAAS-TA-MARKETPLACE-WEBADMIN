@@ -207,6 +207,10 @@ select.has-error, input.has-error{border-color:#ff0740;}
 .btn-color6:hover, .btn-color6:focus{color:#fff; background: #2196f3;}
 .btn-color7{color:#fff; background: #333;}
 .btn-color7:hover, .btn-color7:focus{color:#fff; background: #686868;}
+.btn-color8{color: #fff; background: #ac6730;}
+.btn-color8:hover, .btn-color7:focus{color:#fff; background: #686868;}
+.btn-color9{color: #fff; background: #ff0740;}
+.btn-color9:hover, .btn-color7:focus{color:#fff; background: #686868;}
 
 .btn-sch{font-size: 16px; min-width:110px; height: 40px; padding:0 15px; margin-left: 10px;}
 .btn-sch.btn-md{font-size: 16px; line-height:1;}

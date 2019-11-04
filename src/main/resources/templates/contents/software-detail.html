@@ -190,6 +190,44 @@
                             </table>
                         </div>
                         <!-- //table -->
+
+                        <!--style="display: none"-->
+                        <div id="deployedInfo">
+                            <h4 class="c-tit-in">배포 테스트 정보</h4>
+                            <!-- table -->
+                            <div class="tbw type1">
+                                <table class="table">
+                                    <colgroup>
+                                        <col style="width:15%;">
+                                        <col style="width:auto;">
+                                        <col style="width:auto;">
+                                        <col style="width:auto;">
+                                    </colgroup>
+                                    <tr>
+                                        <th scope="row">이름</th>
+                                        <th scope="row">상태</th>
+                                        <th scope="row">생성일자</th>
+                                        <th scope="row">제어</th>
+                                    </tr>
+                                    <tbody id="deployedInfoArea">
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    <tr>
+                                        <td></td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- //table -->
+                        </div>
+
                     </div>
                     <!-- //inner -->
                 </div>
@@ -241,8 +279,9 @@
         <!-- //cBox1 -->
         <div class="cont_btnBox">
             <div class="pull-left">
-                    <button name="button" class="btn btn-color1 btn-md" type="button" data-toggle="modal" data-target="#myModal" id="historyBtn">수정이력</button>
-
+                    <button name="button" class="btn btn-color7 btn-md" type="button" data-toggle="modal" data-target="#myModal" id="historyBtn">수정이력</button>
+                    <button name="button" class="btn btn-color8 btn-md" type="button" data-toggle="modal" id="deployTestAppBtn" >배포 테스트</button>
+                    <!--<button name="button" class="btn btn-color1 btn-md" type="button" data-toggle="modal" id="deployLogBtn" >배포 로그</button>-->
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
@@ -273,21 +312,6 @@
                                             </tr>
                                             </thead>
                                             <tbody id="historyArea">
-                                            <!--<tr>
-                                                <td>3</td>
-                                                <td>2019-03-30</td>
-                                                <td>관리자</td>
-                                            </tr>
-                                            <tr>
-                                                <td>2</td>
-                                                <td>2019-01-15</td>
-                                                <td>홍길동</td>
-                                            </tr>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>2018-11-21</td>
-                                                <td>홍길동</td>
-                                            </tr>-->
                                             </tbody>
                                         </table>
                                     </div>
@@ -306,8 +330,91 @@
                 <button name="button" class="btn btn-color1 btn-md" type="button" onclick="moveSoftwaresPage()">목록</button>
             </div>
         </div>
+
+        <!-- 알림 팝업 Modal -->
+        <div class="modal fade" id="alertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-sm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">알림!</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="popTxt" id="alertModal-text">테스트할 상품의 가격 정보가 없습니다.</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //알림 팝업 Modal -->
+
+        <!-- 배포 테스트 팝업 Modal -->
+        <div class="modal fade bd-example-modal-lg" id="softwarePriceModal" tabindex="-1" role="dialog" aria-labelledby="myDeployTestModalLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="myDeployTestModalLabel">상품 배포 테스트</h4>
+                    </div>
+                    <div class="modal-body">
+                        <table class="table" id="instancePriceModal_table">
+                            <thead class="thead-dark">
+                            <tr>
+                                <th scope="col" class="text-center" style="width: 10%"></th>
+                                <th scope="col" class="text-center" style="width: 10%">Plan</th>
+                                <th scope="col" class="text-center" style="width: 50%">Desc</th>
+                                <th scope="col" class="text-center" style="width: 30%">Price</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="softwarePlan,index : ${softwarePlanList}">
+                                <th:block th:if="${index.index} == 0">
+                                    <th class="text-center" scope="row"><input type="radio" name="instancePriceModal_selectedPlan" th:value="${softwarePlan.id}" checked></th>
+                                </th:block>
+                                <th:block th:if="${index.index} > 0">
+                                    <th class="text-center" scope="row"><input type="radio" name="instancePriceModal_selectedPlan" th:value="${softwarePlan.id}"></th>
+                                </th:block>
+                                <td class="text-center" th:text="${softwarePlan.name}"></td>
+                                <td class="text-center" th:text="${softwarePlan.description}"></td>
+                                <td class="text-center" th:text="${softwarePlan.cpuAmt}+${softwarePlan.memoryAmt}+${softwarePlan.diskAmt} + ' 원/월'"></td>
+                            </tr>
+                            <tr>
+                                <th colspan="2">테스트할 이름 : </th>
+                                <td colspan="2"><input type="text" id="testSwName" class="form-control validate" value="" placeholder="영문 5자 이내로 입력바랍니다."></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" name="button" class="btn btn-color1" data-dismiss="modal" id="deployConfirmBtn">배포</button>
+                        <button type="button" name="button" class="btn btn-color2" data-dismiss="modal" id="deployCancel">취소</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //배포 테스트 팝업 Modal -->
+
+
+        <!-- 배포 테스트 대기 팝업 Modal -->
+        <div class="modal fade" id="hihihi" tabindex="-1" role="dialog" aria-labelledby="hihihi" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-sm">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title" id="ddd">생성 중...</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p class="popTxt">생성 중</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //배포 테스트 대기 팝업 Modal -->
     </div>
 <!-- //content -->
+    <input type="hidden" id="id" name="softwareId" th:value="${software.id}">
 
     <script th:inline="javascript" type="text/javascript" layout:fragment="custom-script">
         /*<![CDATA[*/
@@ -316,7 +423,50 @@
         $(document.body).ready(function () {
             console.log('::softwares/{id} init::');
             currentMenu('1');
+
+            var id = $("#id").val();
+            getTestSoftwareInfoList(id);
         });
+
+        var getTestSoftwareInfoList = function (id) {
+          procCallAjax("/admin/softwares/" + id + "/testSwInfo", "GET", null, null, callbackTestSoftwareInfoList);
+        };
+
+        var callbackTestSoftwareInfoList = function (data) {
+            console.log(data);
+
+            var deployedInfoArea = $("#deployedInfoArea");
+            var htmlString = [];
+
+            if(data.length > 0){
+                for(var i = 0; i < data.length; i++){
+                    // Format Date
+                    var createdDateValue = getFormatDate(new Date(data[i].createdDate));
+
+                    htmlString.push(
+                        '<tr>'
+                        + '<td>' + data[i].name + '</td>'
+                        + '<td>' + 'STAGED' + '</td>'
+                        + '<td>' + createdDateValue + '</td>'
+                        + '<td>' + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='showLog();'>로그 확인</button><button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn'>삭제</button>" + '</td>'
+                        + '</tr>'
+                    );
+                }
+
+            }else{
+                htmlString = "<tr>"
+                    + "<td colspan='4'><p class='user_p'>배포한 상품이 존재하지 않습니다.</p></td>" + "</tr>"
+            }
+
+            deployedInfoArea.html(htmlString);
+
+            $("#deployedInfo").show();
+
+        };
+
+        var showLog = function () {
+            alert("까꿍~");
+        };
 
         var moveSoftwaresPage = function() {
             procMovePage("/admin/softwares/page");
@@ -389,6 +539,67 @@
 
             amtArea.html(htmlString);
         };
+
+
+        // 배포 테스트 Modal
+        $("#deployTestAppBtn").on("click", function () {
+            var rows = $('#instancePriceModal_table').children('tbody').children('tr');
+            if (rows.length <= 0) {
+                $("#alertModal-text").text("테스트할 상품의 가격 정보가 없습니다.");
+                $("#alertModal").modal("show");
+                return;
+            }
+            $("#softwarePriceModal").modal("show");
+        });
+
+
+        $("#deployCancel").on("click", function () {
+            $("#testSwName").val('');
+        });
+
+
+        // 배포 테스트 Btn
+        $("#deployConfirmBtn").on("click", function () {
+            var softwareId = "[[${software.id}]]";
+
+            // 선택한 plan id
+            var selectedPlanValue = $("#instancePriceModal_table :input:radio[name=instancePriceModal_selectedPlan]:checked").val();
+            //alert("software id ::: " + softwareId + "selected plan id ::: " + selectedPlanValue);
+
+            var testName = $("#testSwName").val();
+
+            var reqParam = {
+                "name": testName
+            };
+
+            var reqUrl = "/admin/softwares/"+ softwareId + "/plan/" + selectedPlanValue;
+            procCallAjax(reqUrl, "POST", JSON.stringify(reqParam), null, callbackDeployTestResult, true);
+            first();
+        });
+
+
+        var callbackDeployTestResult = function (data) {
+            $("#hihihi").modal('hide');
+
+            console.log(JSON.stringify(data));
+            console.log(data.name);
+
+            getTestSoftwareInfoList(data.id);
+        };
+
+        // if($("#deleteDeployBtn").length > 0) {
+        //     $("#deployTestAppBtn")
+        //         .click(function () {alert("지금 안댜!!!")})
+        //         .attr("disabled", "disabled");
+        // }
+
+        var first = function () {
+            $("#hihihi").modal('show');
+        };
+
+        // $("#deployLogBtn").on("click", function () {
+        //
+        // });
 
         /*]]>*/
     </script>

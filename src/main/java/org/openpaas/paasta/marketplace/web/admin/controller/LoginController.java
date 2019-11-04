@@ -41,7 +41,7 @@ public class LoginController {
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
-    @GetMapping(value = "/login")
+    @GetMapping(value = {"/", "/login"})
     public String getLoginPage(Model model) {
         Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
         Iterable<ClientRegistration> clientRegistrations = null;

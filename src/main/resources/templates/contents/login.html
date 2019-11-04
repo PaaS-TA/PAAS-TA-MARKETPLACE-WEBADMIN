@@ -37,8 +37,8 @@
 
         <div class="cBox-cnt">
             <div class="cont_btnBox">
-                <button name="button" class="btn btn-color1 btn-md" type="button" th:each="url : ${urls}" th:text="${url.key}" onclick="location.href='/oauth2/authorization/cf'"></button>
-                <button name="button" class="btn btn-color7 btn-md" type="button" onclick="location.href='/logout'">로그아웃</button>
+                <button name="button" class="btn btn-color1 btn-md" type="button" th:each="url : ${urls}" onclick="location.href='/oauth2/authorization/cf'">로그인</button>
+                <!--<button name="button" class="btn btn-color7 btn-md" type="button" onclick="location.href='/logout'">로그아웃</button>-->
             </div>
         </div>
     <!-- //content -->

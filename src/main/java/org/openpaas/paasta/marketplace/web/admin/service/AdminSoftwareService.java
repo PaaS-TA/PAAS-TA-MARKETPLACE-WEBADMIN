@@ -101,4 +101,16 @@ public class AdminSoftwareService {
     public Map getRecentAppLog(String appGuid) {
         return paasApiRest.getForObject("/admin/apps/" + appGuid + "/recentLogs", Map.class);
     }
+
+    public Map deleteDeployTestApp(Long swId, Long id, String appGuid) {
+        ResponseEntity<Map> resEntity = paasApiRest.exchange("/admin/softwares/" + swId + "/testSwInfo/" + id + "/app/" + appGuid, HttpMethod.DELETE, null, Map.class);
+
+        if (resEntity.getBody() != null) {
+            log.info("Response Type: {}", resEntity.getBody().getClass());
+        } else {
+            log.info("Response Type: {}", "response body is null");
+        }
+
+        return resEntity.getBody();
+    }
 }

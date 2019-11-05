@@ -398,12 +398,12 @@
 
 
         <!-- 배포 테스트 대기 팝업 Modal -->
-        <div class="modal fade" id="hihihi" tabindex="-1" role="dialog" aria-labelledby="hihihi" aria-hidden="true">
+        <div class="modal fade" id="awaitDeployModal" tabindex="-1" role="dialog" aria-labelledby="awaitDeployModal" aria-hidden="true">
             <div class="modal-dialog">
                 <div class="modal-content modal-sm">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h4 class="modal-title" id="ddd">생성 중...</h4>
+                        <h4 class="modal-title" id="await">생성 중...</h4>
                     </div>
                     <div class="modal-body">
                         <p class="popTxt">생성 중</p>
@@ -463,7 +463,10 @@
                         + '<td>' + data[i].name + '</td>'
                         + '<td>' + data[i].status + '</td>'
                         + '<td>' + createdDateValue + '</td>'
-                        + '<td>' + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='showLog(\"" + data[i].appGuid + "\")'>로그 확인</button><button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn'>삭제</button>" + '</td>'
+                        + '<td>'
+                        + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='showLog(\"" + data[i].appGuid + "\")'>로그 확인</button>"
+                        + "<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteTestApp(\"" + data[i].id + "\",\"" + data[i].appGuid + "\")'>삭제</button>"
+                        + '</td>'
                         + '</tr>'
                     );
                 }
@@ -479,9 +482,10 @@
 
         };
 
+        // 배포 테스트된 앱 최신 로그 조회
         var showLog = function (appGuid) {
             var reqUrl = "/admin/softwares/app/" + appGuid;
-            procCallAjax(reqUrl, "GET", null, null, callbackGetRecentAppLog)
+            procCallAjax(reqUrl, "GET", null, null, callbackGetRecentAppLog);
 
         };
 
@@ -494,6 +498,26 @@
           $("#logArea").html(html);
           $("#deployLogModal").modal('show');
         };
+
+        // 배포 테스트된 앱 삭제
+        var deleteTestApp = function (id, appGuid) {
+            var swId = $("#id").val();
+            var reqUrl = "/admin/softwares/" + swId + "/testSwInfo/" + id + "/app/" + appGuid;
+
+            procCallAjax(reqUrl, "DELETE", null, null, callbackDeleteTestApp);
+        };
+
+        var callbackDeleteTestApp = function (data) {
+            console.log(data);
+            if(data.RESULT === "Successful") {
+                alert("삭제 완료!");
+            } else {
+                alert("삭제 실패!");
+            }
+            var swId = $("#id").val();
+            getTestSoftwareInfoList(swId);
+        };
+
 
         var moveSoftwaresPage = function() {
             procMovePage("/admin/softwares/page");
@@ -591,8 +615,6 @@
 
             // 선택한 plan id
             var selectedPlanValue = $("#instancePriceModal_table :input:radio[name=instancePriceModal_selectedPlan]:checked").val();
-            //alert("software id ::: " + softwareId + "selected plan id ::: " + selectedPlanValue);
-
             var testName = $("#testSwName").val();
 
             var reqParam = {
@@ -606,7 +628,7 @@
 
 
         var callbackDeployTestResult = function (data) {
-            $("#hihihi").modal('hide');
+            $("#awaitDeployModal").modal('hide');
 
             console.log(JSON.stringify(data));
             console.log(data.name);
@@ -614,19 +636,12 @@
             getTestSoftwareInfoList(data.softwareId);
         };
 
-        // if($("#deleteDeployBtn").length > 0) {
-        //     $("#deployTestAppBtn")
-        //         .click(function () {alert("지금 안댜!!!")})
-        //         .attr("disabled", "disabled");
-        // }
 
         var first = function () {
-            $("#hihihi").modal('show');
+            $("#awaitDeployModal").modal('show');
+            $("#awaitDeployModal").modal({backdrop: 'static', keyboard: false});
         };
 
-        // $("#deployLogBtn").on("click", function () {
-        //
-        // });
 
         /*]]>*/
     </script>

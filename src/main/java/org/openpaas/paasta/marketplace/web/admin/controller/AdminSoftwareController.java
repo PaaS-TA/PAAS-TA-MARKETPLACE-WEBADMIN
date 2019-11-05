@@ -157,12 +157,28 @@ public class AdminSoftwareController {
         return adminSoftwareService.getHistoryList(id, commonService.setParameters(httpServletRequest));
     }
 
+
+    /**
+     * 앱 배포 테스트
+     *
+     * @param id
+     * @param planId
+     * @param testSoftwareInfo
+     * @return
+     */
     @PostMapping(value = "/{id}/plan/{planId}")
     @ResponseBody
     public TestSoftwareInfo deployTestSoftware(@PathVariable Long id, @PathVariable Long planId, @RequestBody TestSoftwareInfo testSoftwareInfo) {
         return adminSoftwareService.deployTestSoftware(id, planId, testSoftwareInfo);
     }
 
+
+    /**
+     * 배포 테스트한 앱 목록 조회
+     *
+     * @param id
+     * @return
+     */
     @GetMapping(value = "/{id}/testSwInfo")
     @ResponseBody
     public List<TestSoftwareInfo> getTestSwInfoList(@PathVariable Long id) {
@@ -170,9 +186,27 @@ public class AdminSoftwareController {
     }
 
 
+    /**
+     * 배포 테스트한 앱 최근 로그
+     *
+     * @param appGuid
+     * @return
+     */
     @GetMapping(value = "/app/{appGuid}")
     @ResponseBody
     public Map getRecentAppLog(@PathVariable String appGuid) {
         return adminSoftwareService.getRecentAppLog(appGuid);
+    }
+
+
+    /**
+     * 배포 테스트한 앱 삭제
+     *
+     * @param appGuid
+     */
+    @DeleteMapping(value = "/{swId}/testSwInfo/{id}/app/{appGuid}")
+    @ResponseBody
+    public Map deleteDeployTestApp(@PathVariable Long swId, @PathVariable Long id, @PathVariable String appGuid) {
+        return adminSoftwareService.deleteDeployTestApp(swId, id, appGuid);
     }
 }

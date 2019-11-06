@@ -238,7 +238,7 @@
         <!-- //cBox1 -->
         <div class="cont_btnBox">
             <div class="pull-right">
-                <button name="button" class="btn btn-color1 btn-md" type="button" data-toggle="modal" data-target="#myModal_ok">저장</button>
+                <button name="button" class="btn btn-color1 btn-md" type="button" id="saveBtn">저장</button>
                 <!-- Modal -->
                 <div class="modal fade" id="myModal_ok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
@@ -253,7 +253,7 @@
                                 </div>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" name="button" class="btn btn-color1"  th:onclick="'javascript:saveBtn(\''+${software.id} +'\');'">확인</button>
+                                <button type="button" name="button" class="btn btn-color1"  th:onclick="'javascript:modifySoftware(\''+${software.id} +'\');'">확인</button>
                                 <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
                             </div>
                         </div>
@@ -291,13 +291,42 @@
             $("#softwarePlaneOriginalList").val(softwarePlaneOriginalList);
         });
 
+        //[저장]버튼
+        function isEmpty(val) {
+            return (val == null || val == "");
+        };
 
-        //saveBtn
-        var saveBtn = function(id) {
+        $('#saveBtn').click(function() {
+            var manCheck = false;
+            var msg = "";
+
+            if(manCheck) {
+                alert(msg);
+                return;
+            }
+
+            if($('input:radio[name="softwareStatus"]:checked').val() == 'Rejected') {
+                if(!manCheck && isEmpty($("#softwareConfirmComment").val())){
+                    msg = "반려사유를 입력하십시오.";
+                    alert(msg);
+                    return;
+                }
+            }else{
+                $("#softwareConfirmComment").val("");
+            }
+            $('div #myModal_ok').modal();
+
+        });
+
+        // 상품 수정(텍스트)
+        var modifySoftware = function(id) {
             modifyAdminSoftware(id);
         };
 
         var modifyAdminSoftware = function (id) {
+
+            if(doubleSubmitCheck()) return;
+
             //상품명
             var softwareName = $("#softwareName").val();
             //카테고리
@@ -331,7 +360,11 @@
             //처리일자
             var softwareStatusModifiedDate = $("#softwareStatusModifiedDate").val();
 
-            //TODO Rejected=>hidden
+
+            if($('input:radio[name="softwareStatus"]:checked').val() == 'Rejected') {
+                softwareConfirmComment;
+            }
+
             if(softwareConfirmComment === null || softwareConfirmComment === '') {
                 softwareConfirmComment = '';
             }

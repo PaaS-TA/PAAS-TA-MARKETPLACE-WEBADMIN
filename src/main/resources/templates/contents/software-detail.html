@@ -199,7 +199,7 @@
                                 <table class="table">
                                     <colgroup>
                                         <col style="width:15%;">
-                                        <col style="width:auto;">
+                                        <col style="width:15%;">
                                         <col style="width:auto;">
                                         <col style="width:auto;">
                                     </colgroup>
@@ -210,18 +210,6 @@
                                         <th scope="row">제어</th>
                                     </tr>
                                     <tbody id="deployedInfoArea">
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
-                                    <tr>
-                                        <td></td>
-                                    </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -427,16 +415,42 @@
             </div>
         </div>
         <!-- //배포 테스트 대기 팝업 Modal -->
+
+        <!-- 배포 앱 삭제 팝업 Modal -->
+        <div class="modal fade deleteTestedApp" id="deleteAppModal" tabindex="-1" role="dialog" aria-labelledby="deleteAppModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-sm"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">배포 테스트 앱 삭제</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="deployedTestId">
+                        <input type="hidden" id="deployedTestAppGuid">
+                        <div class="only-text">
+                            배포 테스트한 앱을 삭제하시겠습니까?
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" name="button" class="btn btn-color1" th:onclick="'javascript:deleteTestApp();'">확인</button>
+                        <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //배포 앱 삭제 팝업 Modal -->
+
     </div>
 <!-- //content -->
     <input type="hidden" id="id" name="softwareId" th:value="${software.id}">
-
+    <input type="hidden" id="name" name="softwareName" th:value="${software.name}">
     <script th:inline="javascript" type="text/javascript" layout:fragment="custom-script">
         /*<![CDATA[*/
+        
+        var DEPLOYED_APP_LOG;
 
         // ON LOAD
         $(document.body).ready(function () {
-            console.log('::softwares/{id} init::' + $("#id").val());
             currentMenu('1');
 
             var id = $("#id").val();
@@ -448,8 +462,6 @@
         };
 
         var callbackTestSoftwareInfoList = function (data) {
-            console.log(data);
-
             var deployedInfoArea = $("#deployedInfoArea");
             var htmlString = [];
 
@@ -464,8 +476,9 @@
                         + '<td>' + data[i].status + '</td>'
                         + '<td>' + createdDateValue + '</td>'
                         + '<td>'
-                        + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='showLog(\"" + data[i].appGuid + "\")'>로그 확인</button>"
-                        + "<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteTestApp(\"" + data[i].id + "\",\"" + data[i].appGuid + "\")'>삭제</button>"
+                        + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='logEvent(\"" + data[i].appGuid+ "\",\"" + "view" + "\")'>로그 확인</button>"
+                        + "<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='logEvent(\"" + data[i].appGuid+ "\",\"" + "download" + "\")'>로그 다운</button>"
+                        + "<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + data[i].appGuid + "\")'>삭제</button>"
                         + '</td>'
                         + '</tr>'
                     );
@@ -478,15 +491,15 @@
 
             deployedInfoArea.html(htmlString);
 
-            //$("#deployedInfo").show();
-
         };
 
-        // 배포 테스트된 앱 최신 로그 조회
-        var showLog = function (appGuid) {
+        // 배포 테스트된 앱 최신 로그 조회 및 로그 파일 다운로드
+        var logViewFlag;
+        var logEvent = function (appGuid, logFlag) {
             var reqUrl = "/admin/softwares/app/" + appGuid;
-            procCallAjax(reqUrl, "GET", null, null, callbackGetRecentAppLog);
+            logViewFlag = logFlag;
 
+            procCallAjax(reqUrl, "GET", null, null, callbackGetRecentAppLog);
         };
 
         var callbackGetRecentAppLog = function (data) {
@@ -495,20 +508,72 @@
               html.push("<p>" + data.log[i].logMessage.message + "</p>");
           }
 
-          $("#logArea").html(html);
-          $("#deployLogModal").modal('show');
+          DEPLOYED_APP_LOG = JSON.stringify(data);
+
+          if(logViewFlag === "view") {
+              $("#logArea").html(html);
+              $("#deployLogModal").modal('show');
+
+          }else {
+              var name = $("#name").val();
+              var date = getFormatDate(new Date());
+
+              var fileNameToSaveAs = name + "-" + date + ".log";
+              var textToWrite = DEPLOYED_APP_LOG;
+
+              var ie = navigator.userAgent.match(/MSIE\s([\d.]+)/),
+                  ie11 = navigator.userAgent.match(/Trident\/7.0/) && navigator.userAgent.match(/rv:11/),
+                  ieEDGE = navigator.userAgent.match(/Edge/g),
+                  ieVer=(ie ? ie[1] : (ie11 ? 11 : (ieEDGE ? 12 : -1)));
+
+              if (ie && ieVer<10) {
+                  console.log("No blobs on IE ver<10");
+                  return;
+              }
+
+              var textFileAsBlob = new Blob([textToWrite], {
+                  type: 'text/plain'
+              });
+
+              if (ieVer>-1) {
+                  window.navigator.msSaveBlob(textFileAsBlob, fileNameToSaveAs);
+
+              } else {
+                  var downloadLink = document.createElement("a");
+                  downloadLink.download = fileNameToSaveAs;
+                  downloadLink.href = window.URL.createObjectURL(textFileAsBlob);
+                  downloadLink.onclick = function(e) { document.body.removeChild(e.target); };
+                  downloadLink.style.display = "none";
+                  document.body.appendChild(downloadLink);
+                  downloadLink.click();
+              }
+          }
         };
 
-        // 배포 테스트된 앱 삭제
-        var deleteTestApp = function (id, appGuid) {
+
+        // 배포 테스트한 앱 삭제 modal
+        var deleteDeployBtn = function (id, appGuid) {
+            $(".deleteTestedApp .modal-body #deployedTestId").val(id);
+            $(".deleteTestedApp .modal-body #deployedTestAppGuid").val(appGuid);
+
+            $("#deleteAppModal").modal();
+
+        };
+
+        // 배포 테스트한 앱 삭제
+        var deleteTestApp = function () {
+            var id = $(".deleteTestedApp .modal-body #deployedTestId").val();
+            var appGuid = $(".deleteTestedApp .modal-body #deployedTestAppGuid").val();
             var swId = $("#id").val();
             var reqUrl = "/admin/softwares/" + swId + "/testSwInfo/" + id + "/app/" + appGuid;
 
+            console.log(reqUrl);
+
+            $("#deleteAppModal").modal('hide');
             procCallAjax(reqUrl, "DELETE", null, null, callbackDeleteTestApp);
         };
 
         var callbackDeleteTestApp = function (data) {
-            console.log(data);
             if(data.RESULT === "Successful") {
                 alert("삭제 완료!");
             } else {
@@ -564,8 +629,6 @@
             var amtArea = $("#amtArea");
             var htmlString = [];
 
-            console.log(data);
-
             if(data.length > 0){
                 for(var i = 0; i < data.length; i++){
                     var totalAmt = data[i].cpuAmt+data[i].memoryAmt+data[i].diskAmt;
@@ -600,6 +663,7 @@
                 $("#alertModal").modal("show");
                 return;
             }
+            $("#testSwName").val('');
             $("#softwarePriceModal").modal("show");
         });
 
@@ -629,10 +693,6 @@
 
         var callbackDeployTestResult = function (data) {
             $("#awaitDeployModal").modal('hide');
-
-            console.log(JSON.stringify(data));
-            console.log(data.name);
-
             getTestSoftwareInfoList(data.softwareId);
         };
 
@@ -641,7 +701,7 @@
             $("#awaitDeployModal").modal('show');
             $("#awaitDeployModal").modal({backdrop: 'static', keyboard: false});
         };
-
+        
 
         /*]]>*/
     </script>

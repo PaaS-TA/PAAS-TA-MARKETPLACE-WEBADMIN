@@ -73,6 +73,14 @@
 								<td th:text="${profiles.status}"></td>
                             </tr>
                             <tr>
+                                <th scope="row">반려사유</th>
+                                <td>
+                                    <div class="tbw_inner_txt">
+                                        <pre th:text="${profiles.description}"></pre>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
                                 <th scope="row">관리자 처리일</th>
                                 <td th:text="${#temporals.format(profiles.statusModifiedDate, 'yyyy-MM-dd')}"></td>
                             </tr>
@@ -98,14 +106,14 @@
         /*profiles*/
         var profiles = "[[${profiles}]]";
         var profilesId = "[[${profiles.id}]]";
- 
+
         // ON LOAD
         $(document).ready(function() {
             currentMenu('4');
         });
 
         var moveProfilesUpdate = function() {
-        	procMovePage("/admin/profiles/update/{id}".replace("{id}", profilesId));    
+        	procMovePage("/admin/profiles/update/{id}".replace("{id}", profilesId));
         }
 
         /*]]>*/

@@ -159,7 +159,7 @@
                     <th scope="col">등록일</th>
                     <th scope="col">전시</th>
                     <th scope="col">승인여부</th>
-                    <th scope="col">승인일</th>
+                    <th scope="col">승인일 / 반려일</th>
                 </tr>
                 </thead>
                 <tbody id = "softwareArea">
@@ -254,7 +254,7 @@
 
             if (pageNum != null)
             	pageNumSave = pageNum;
-            
+
             procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
         };
 
@@ -277,13 +277,13 @@
                     	statusModifiedDateValue = new Date(content[i].statusModifiedDate);
                         statusModifiedDate = getFormatDate(statusModifiedDateValue);
                     }
-                    
+
                     // Format Date
                     var createdDateValue = new Date(content[i].createdDate);
                     createdDate = getFormatDate(createdDateValue);
-                    
+
                     var index = (i+1) + pageNumSave * data.size;
-                    
+
                     htmlString.push(
                         "<tr>"
                         + "<td>" + index  + "</td>"
@@ -306,47 +306,47 @@
 
             //::page::
             var pageTotalNumber = data.totalElements;   // 총 데이터 수
-        	var pageSize = data.size;                   // 한 페이지에 나타낼 데이터 수        	
+        	var pageSize = data.size;                   // 한 페이지에 나타낼 데이터 수
         	paging(pageTotalNumber, pageSize, PAGING_SIZE, pageNumSave);
         	function paging(pageTotalNumber, pageSize, PAGING_SIZE, currentPage){
             	console.log("currentPage : " + currentPage);
             	currentPage = parseInt(currentPage);
-                
+
             	var totalPage = Math.ceil(pageTotalNumber/pageSize);           // 총 페이지 수
             	if (currentPage)
             		var pageGroup = Math.ceil((currentPage+1)/PAGING_SIZE);    // 페이지 그룹
             	else var pageGroup = 1;
-                
+
                 console.log("pageGroup : " + pageGroup);
-                
+
                 var last = pageGroup * PAGING_SIZE;        // 화면에 보여질 마지막 페이지 번호 (실제 페이지와 -1 차이)
                 if(last > totalPage)
                     last = totalPage;
                 var first = last - (PAGING_SIZE-1)-1;      // 화면에 보여질 첫번째 페이지
                 if(first < 0)
-                    first = 0;                               
+                    first = 0;
                 var next = currentPage + 1;                // 다음 페이지
                 var prev = currentPage - 1;                // 이전 페이지
-                
+
                 console.log("last : " + last);
                 console.log("first : " + first);
                 console.log("next : " + next);
                 console.log("prev : " + prev);
-                 
+
                 var htmlStringPage = "";
-                
+
                 if(currentPage==0) {
-                	htmlStringPage += "<li class='first disabled' id='first'><a href='#'>맨 처음</a></li>";                    
+                	htmlStringPage += "<li class='first disabled' id='first'><a href='#'>맨 처음</a></li>";
                 } else {
                 	htmlStringPage += "<li class='first' id='first'><a href='javascript:void(0);' onclick=moveSoftwareListPage('0')>맨 처음</a></li>";
                 }
-                
+
                 if(prev < 0) {
-                	htmlStringPage += "<li class='prev disabled' id='prev'><a href='#'>이전</a> </li>";                    
+                	htmlStringPage += "<li class='prev disabled' id='prev'><a href='#'>이전</a> </li>";
                 } else {
                 	htmlStringPage += "<li class='prev' id='prev'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ prev +"')>이전</a> </li>";
                 }
-                                    
+
                 for(var i=first; i < last; i++){
                 	if (i==currentPage) {
                 		htmlStringPage += "<li class='active' id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
@@ -355,20 +355,20 @@
                     	htmlStringPage += "<li id='" + i + "'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ i +"')>" + (i + 1) + "</a></li> ";
                 	}
                 }
-                
+
                 if(next > totalPage-1) {
-                	htmlStringPage += "<li class='next disabled' id='next'><a href='#'>다음</a></li>";                   
+                	htmlStringPage += "<li class='next disabled' id='next'><a href='#'>다음</a></li>";
                 } else {
                 	htmlStringPage += "<li class='next' id='next'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ next +"')>다음</a></li>";
                 }
-                
+
                 if(currentPage==totalPage-1) {
-                	htmlStringPage += "<li class='end disabled'><a href='#'>맨 끝</a></li>";            
+                	htmlStringPage += "<li class='end disabled'><a href='#'>맨 끝</a></li>";
                 } else {
                 	htmlStringPage += "<li class='end'><a href='javascript:void(0);' onclick=moveSoftwareListPage('"+ (totalPage-1) +"')>맨 끝</a></li>";
                 }
-                                
-                $("#pageNumberList").html(htmlStringPage);                      // 페이지 목록 생성                                     
+
+                $("#pageNumberList").html(htmlStringPage);                      // 페이지 목록 생성
             }
 
         };

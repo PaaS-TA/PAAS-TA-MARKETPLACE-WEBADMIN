@@ -446,7 +446,7 @@
     <input type="hidden" id="name" name="softwareName" th:value="${software.name}">
     <script th:inline="javascript" type="text/javascript" layout:fragment="custom-script">
         /*<![CDATA[*/
-        
+
         var DEPLOYED_APP_LOG;
 
         // ON LOAD
@@ -621,7 +621,7 @@
         $("#amtHistoryBtn").on("click", function () {
             var softwareId = "[[${software.id}]]";
 
-            var reqUrl = "/admin/softwares/plan/" + softwareId + "/histories" + "?sort=lastModifiedDate,desc";
+            var reqUrl = "/admin/softwares/plan/" + softwareId + "/histories" + "?sort=applyMonth,asc";
             procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwarePlanHistoryList);
         });
 
@@ -701,7 +701,7 @@
             $("#awaitDeployModal").modal('show');
             $("#awaitDeployModal").modal({backdrop: 'static', keyboard: false});
         };
-        
+
 
         /*]]>*/
     </script>

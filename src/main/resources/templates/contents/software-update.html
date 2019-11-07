@@ -425,45 +425,6 @@
 
         };
 
-        //amtHistoryBtn
-        $("#amtHistoryBtn").on("click", function () {
-            var softwareId = "[[${software.id}]]";
-
-            var reqUrl = "/admin/softwares/plan/" + softwareId + "/histories" + "?sort=lastModifiedDate,desc";
-            procCallAjax(reqUrl, "GET", null, null, callbackGetSoftwarePlanHistoryList);
-        });
-
-        var callbackGetSoftwarePlanHistoryList = function (data) {
-            var amtArea = $("#amtArea");
-            var htmlString = [];
-
-            console.log(data);
-
-            if(data.length > 0){
-                for(var i = 0; i < data.length; i++){
-                    var totalAmt = data[i].cpuAmt+data[i].memoryAmt+data[i].diskAmt;
-
-                    htmlString.push(
-                        '<tr style="width:auto;" align=center>'
-                        + '<td>'+data[i].applyMonth+'</td>'
-                        + '<td>'+data[i].name+'</td>'
-                        + '<td>'+data[i].memorySize+'</td>'
-                        + '<td>'+data[i].diskSize+'</td>'
-                        + '<td>'+data[i].cpuAmt+'</td>'
-                        + '<td>'+data[i].memoryAmt+'</td>'
-                        + '<td>'+data[i].diskAmt+'</td>'
-                        + '<td>'+totalAmt+'</td>'
-                        + '</tr>'
-                    );
-                }
-            }else{
-                htmlString = "<tr>"
-                    + "<td colspan='8'><p class='user_p'>판매금액 이력이 존재하지 않습니다.</p></td>" + "</tr>"
-            }
-
-            amtArea.html(htmlString);
-        };
-
         //[공통] 2019-00
         function fncDateValueDigit(value) {
             var result = value;
@@ -472,7 +433,6 @@
             }
             return result;
         }
-
 
         //searchBtn
         $("#searchBtn").on("click", function () {

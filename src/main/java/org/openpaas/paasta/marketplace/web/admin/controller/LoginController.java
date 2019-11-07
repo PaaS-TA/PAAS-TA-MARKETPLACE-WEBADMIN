@@ -63,10 +63,6 @@ public class LoginController {
                         authentication.getAuthorizedClientRegistrationId(),
                         authentication.getName());
 
-        System.out.println("#################################################################");
-        System.out.println(">>>>>>> client: "+ client);
-        System.out.println("#################################################################");
-        
         if (client == null) {
         	return "redirect:/main";
         }

@@ -7,6 +7,8 @@ import org.springframework.core.env.Environment;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.oauth2.client.InMemoryOAuth2AuthorizedClientService;
+import org.springframework.security.oauth2.client.OAuth2AuthorizedClientService;
 import org.springframework.security.oauth2.client.registration.ClientRegistration;
 import org.springframework.security.oauth2.client.registration.ClientRegistrationRepository;
 import org.springframework.security.oauth2.client.registration.InMemoryClientRegistrationRepository;
@@ -35,16 +37,18 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         turnOffSslChecking();
-        http
+        http.antMatcher("/**")
                 .csrf().disable()
-                .antMatcher("/**")
                 .authorizeRequests()
-                .antMatchers("/", "/index", "/login/**", "/error/**", "/static/**")
+                .antMatchers("/", "/login/**", "/error/**", "/static/**")
                 .permitAll()
                 //.antMatchers("/**").hasRole("USER").anyRequest().permitAll()
                 //.antMatchers("/admin/**").hasRole("ADMIN")
                 .anyRequest().authenticated().and()
-                .oauth2Login().loginPage("/login").defaultSuccessUrl("/index", true).permitAll()
+                //.oauth2Login().loginPage("/login").defaultSuccessUrl("/index", true).permitAll()
+                .oauth2Login().clientRegistrationRepository(clientRegistrationRepository())
+                .authorizedClientService(authorizedClientService())
+                //.and().logout().logoutSuccessUrl("https://uaa.210.220.151.160.xip.io/oauth/authorize?redirect_url=http://localhost:8779/login&response_type=code&client_id=marketclient&scope=openid cloud_controller_service_permissions.read cloud_controller.read cloud_controller.write");
                 .and().logout().logoutSuccessUrl("/login");
     }
 
@@ -69,6 +73,12 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
                 .jwkSetUri(env.getProperty("marketplace.jwk-set-uri"))
                 .clientName(env.getProperty("marketplace.registration"))
                 .build();
+    }
+
+    @Bean
+    public OAuth2AuthorizedClientService authorizedClientService() {
+        return new InMemoryOAuth2AuthorizedClientService(
+                clientRegistrationRepository());
     }
 
     // SSL Skip을 위한 함수 configure() 의 34번째 라인에서 호출한다.

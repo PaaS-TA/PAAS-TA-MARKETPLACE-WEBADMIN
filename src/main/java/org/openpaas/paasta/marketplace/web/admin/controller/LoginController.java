@@ -41,7 +41,7 @@ public class LoginController {
     @Autowired
     private OAuth2AuthorizedClientService authorizedClientService;
 
-    @GetMapping(value = {"/", "/login"})
+    @GetMapping(value = {"/", "/main"})
     public String getLoginPage(Model model) {
         Map<String, String> oauth2AuthenticationUrls = new HashMap<>();
         Iterable<ClientRegistration> clientRegistrations = null;
@@ -63,6 +63,14 @@ public class LoginController {
                         authentication.getAuthorizedClientRegistrationId(),
                         authentication.getName());
 
+        System.out.println("#################################################################");
+        System.out.println(">>>>>>> client: "+ client);
+        System.out.println("#################################################################");
+        
+        if (client == null) {
+        	return "redirect:/main";
+        }
+        
         OAuth2AccessToken accessToken = client.getAccessToken();
 
         User user1 = new User();

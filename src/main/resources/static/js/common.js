@@ -83,3 +83,20 @@ function doubleSubmitCheck(){
         return false;
     }
 }
+
+/*
+ * Loding View
+ * http://carlosbonetti.github.io/jquery-loading/
+ * */
+var loading = {
+	start: function() {
+		$('body').loading({
+			stoppable: false
+			,theme: 'dark'
+			//,message: 'Working...'
+     	});
+	},
+	stop: function() {
+		$('body').loading("stop");
+	}
+}

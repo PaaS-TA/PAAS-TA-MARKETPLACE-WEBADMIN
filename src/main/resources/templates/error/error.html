@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/layout-error}">
+<!-- index.html 고유 CSS 추가 -->
+<th:block layout:fragment="css"></th:block>
+
+<!-- index.html 고유 스크립트 추가 -->
+<th:block layout:fragment="script"></th:block>
+
+
+<div layout:fragment="content">
+	<h1>Error Page</h1>
+    error code : <span th:text="${code}"></span>
+    <br>error msg : <span th:text="${msg}"></span>
+    <br>timestamp : <span th:text="${timestamp}"></span>
+</div>
+
+</html>

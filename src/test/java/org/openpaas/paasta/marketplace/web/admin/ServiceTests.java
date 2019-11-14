@@ -6,6 +6,7 @@ import org.junit.runners.Suite.SuiteClasses;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryServiceTest;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminSellerProfileServiceTest;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareServiceTest;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminStatsServiceTest;
 
 @RunWith(Suite.class)
 @SuiteClasses({
@@ -13,6 +14,7 @@ import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareServiceTes
         AdminCategoryServiceTest.class,
         AdminSellerProfileServiceTest.class,
         AdminSoftwareServiceTest.class,
+        AdminStatsServiceTest.class,
         // @formatter:on
 })
 public class ServiceTests {

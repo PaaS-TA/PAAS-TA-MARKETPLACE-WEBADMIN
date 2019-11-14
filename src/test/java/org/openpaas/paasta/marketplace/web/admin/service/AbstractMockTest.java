@@ -18,6 +18,7 @@ import org.openpaas.paasta.marketplace.api.domain.Software;
 import org.openpaas.paasta.marketplace.api.domain.SoftwareHistory;
 import org.openpaas.paasta.marketplace.api.domain.SoftwarePlan;
 import org.openpaas.paasta.marketplace.api.domain.TestSoftwareInfo;
+import org.openpaas.paasta.marketplace.api.domain.User;
 import org.openpaas.paasta.marketplace.api.domain.Yn;
 import org.springframework.web.client.RestTemplate;
 
@@ -148,6 +149,20 @@ public abstract class AbstractMockTest {
         instanceCart.setInUse(Yn.Y);
 
         return instanceCart;
+    }
+
+    protected User user(String id) {
+        User user = new User();
+        user.setId(id);
+        user.setName("name-" + id);
+        user.setRole(User.Role.User);
+        user.setCreatedBy(id);
+        user.setCreatedDate(current);
+        user.setLastModifiedBy(id);
+        user.setLastModifiedDate(current);
+        user.setInUse(Yn.Y);
+
+        return user;
     }
 
     protected Profile profile(String id) {

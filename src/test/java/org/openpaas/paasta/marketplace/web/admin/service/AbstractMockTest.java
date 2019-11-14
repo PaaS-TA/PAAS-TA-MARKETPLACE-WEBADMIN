@@ -15,7 +15,9 @@ import org.openpaas.paasta.marketplace.api.domain.Instance;
 import org.openpaas.paasta.marketplace.api.domain.InstanceCart;
 import org.openpaas.paasta.marketplace.api.domain.Profile;
 import org.openpaas.paasta.marketplace.api.domain.Software;
+import org.openpaas.paasta.marketplace.api.domain.SoftwareHistory;
 import org.openpaas.paasta.marketplace.api.domain.SoftwarePlan;
+import org.openpaas.paasta.marketplace.api.domain.TestSoftwareInfo;
 import org.openpaas.paasta.marketplace.api.domain.Yn;
 import org.springframework.web.client.RestTemplate;
 
@@ -96,6 +98,24 @@ public abstract class AbstractMockTest {
         softwarePlan.setDiskAmt(id.intValue());
 
         return softwarePlan;
+    }
+
+    protected SoftwareHistory softwareHistory(Long id, Software software) {
+        SoftwareHistory softwareHistory = new SoftwareHistory();
+        softwareHistory.setId(id);
+        softwareHistory.setSoftware(software);
+        softwareHistory.setDescription("discription-" + id);
+
+        return softwareHistory;
+    }
+
+    protected TestSoftwareInfo testSoftwareInfo(Long id, Long softwareId, Long planGuid) {
+        TestSoftwareInfo testSoftwareInfo = new TestSoftwareInfo();
+        testSoftwareInfo.setId(id);
+        testSoftwareInfo.setSoftwareId(softwareId);
+        testSoftwareInfo.setPlanGuid(planGuid);
+        
+        return testSoftwareInfo;
     }
 
     protected Instance instance(Long id, Software software) {

@@ -8,7 +8,6 @@ import java.util.UUID;
 import org.junit.Before;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
 import org.mockito.junit.MockitoJUnitRunner;
 import org.openpaas.paasta.marketplace.api.domain.Category;
 import org.openpaas.paasta.marketplace.api.domain.Instance;
@@ -36,9 +35,6 @@ public abstract class AbstractMockTest {
 
     @Before
     public void setUp() throws Exception {
-        // FIXME: Check for unnecessary code
-        MockitoAnnotations.initMocks(this);
-
         userId = "foo";
         adminId = "admin";
         current = LocalDateTime.now();

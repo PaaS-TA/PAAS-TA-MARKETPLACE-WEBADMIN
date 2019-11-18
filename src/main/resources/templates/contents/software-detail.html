@@ -370,7 +370,7 @@
                             </tr>
                             <tr>
                                 <th colspan="2">테스트할 이름 : </th>
-                                <td colspan="2"><input type="text" id="testSwName" class="form-control validate" value="" placeholder="영문 5자 이내로 입력바랍니다."></td>
+                                <td colspan="2"><input type="text" id="testSwName" class="form-control validate" value="" placeholder="영문 5자 이내로 입력바랍니다." maxlength="5"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -476,9 +476,9 @@
                         + '<td>' + data[i].status + '</td>'
                         + '<td>' + createdDateValue + '</td>'
                         + '<td>'
-                        + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='logEvent(\"" + data[i].appGuid+ "\",\"" + "view" + "\")'>로그 확인</button>"
-                        + "<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='logEvent(\"" + data[i].appGuid+ "\",\"" + "download" + "\")'>로그 다운</button>"
-                        + "<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + data[i].appGuid + "\")'>삭제</button>"
+                        + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "view" + "\")'>로그 확인</button>"
+                        + "<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "download" + "\")'>로그 다운</button>"
+                        + "<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
                         + '</td>'
                         + '</tr>'
                     );
@@ -581,6 +581,7 @@
             }
             var swId = $("#id").val();
             getTestSoftwareInfoList(swId);
+            location.href = location.href;
         };
 
 

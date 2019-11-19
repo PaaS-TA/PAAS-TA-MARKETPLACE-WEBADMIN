@@ -224,7 +224,7 @@
         <!-- amtModal -->
         <div class="modal fade" id="myAmtModal" tabindex="-1" role="dialog" aria-labelledby="myAmtModalLabel" aria-hidden="true">
             <div class="modal-dialog">
-                <div class="modal-content"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+                <div class="modal-content" style="width: 1000px;">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
                         <h4 class="modal-title" id="myAmtModalLabel">판매금액 목록</h4>
@@ -273,7 +273,7 @@
                     <!-- Modal -->
                     <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                         <div class="modal-dialog">
-                            <div class="modal-content"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+                            <div class="modal-content" style="width: 1000px;">
                                 <div class="modal-header">
                                     <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                                     <h4 class="modal-title" id="myModalLabel">상품 수정 이력</h4>
@@ -370,7 +370,7 @@
                             </tr>
                             <tr>
                                 <th colspan="2">테스트할 이름 : </th>
-                                <td colspan="2"><input type="text" id="testSwName" class="form-control validate" value="" placeholder="영문 5자 이내로 입력바랍니다." maxlength="5"></td>
+                                <td colspan="2"><input type="text" id="testSwName" class="form-control validate" value="" placeholder="영문 20자 이내로 입력바랍니다." maxlength="20"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -448,6 +448,7 @@
         /*<![CDATA[*/
 
         var DEPLOYED_APP_LOG;
+        var CLOUDFOUNDRY_API_HOST = [[ ${cloudfoundryApiHost} ]]
 
         // ON LOAD
         $(document.body).ready(function () {
@@ -469,24 +470,33 @@
                 for(var i = 0; i < data.length; i++){
                     // Format Date
                     var createdDateValue = getFormatDate(new Date(data[i].createdDate));
-
+					var btnHtml = "";
+					
+					if (commonUtils.contains(data[i].status, "Successful")) {
+						btnHtml = "<button name='button' class='btn btn-color2 btn-sm' type='button' id='goAppBtn' onclick='fncGoApp(\""+data[i].name+"\", \""+data[i].status+"\");'>배포 확인</button>"
+	                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "view" + "\")'>로그 확인</button>"
+	                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "download" + "\")'>로그 다운</button>"
+	                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
+					} else {
+						btnHtml = "<button name='button' class='btn btn-color2 btn-sm' type='button' id='goAppBtn'>배포 확인</button>"
+                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn'>로그 확인</button>"
+                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog'>로그 다운</button>"
+                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn'>삭제</button>"
+					}
+					
                     htmlString.push(
-                        '<tr>'
+                        '<tr align="center">'
                         + '<td>' + data[i].name + '</td>'
                         + '<td>' + data[i].status + '</td>'
                         + '<td>' + createdDateValue + '</td>'
                         + '<td>'
-                        + "<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "view" + "\")'>로그 확인</button>"
-                        + "<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "download" + "\")'>로그 다운</button>"
-                        + "<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
+                        + btnHtml
                         + '</td>'
                         + '</tr>'
                     );
                 }
-
             }else{
-                htmlString = "<tr>"
-                    + "<td colspan='4'><p class='user_p'>배포한 상품이 존재하지 않습니다.</p></td>" + "</tr>"
+                htmlString = "<tr><td colspan='4'><p class='user_p'>배포한 상품이 존재하지 않습니다.</p></td></tr>"
             }
 
             deployedInfoArea.html(htmlString);
@@ -555,9 +565,7 @@
         var deleteDeployBtn = function (id, appGuid) {
             $(".deleteTestedApp .modal-body #deployedTestId").val(id);
             $(".deleteTestedApp .modal-body #deployedTestAppGuid").val(appGuid);
-
             $("#deleteAppModal").modal();
-
         };
 
         // 배포 테스트한 앱 삭제
@@ -686,24 +694,36 @@
                 "name": testName
             };
 
+            //Loading Start
+            loading.interval(60, "배포 중입니다. 잠시만 기다려주세요.");
+            
             var reqUrl = "/admin/softwares/"+ softwareId + "/plan/" + selectedPlanValue;
             procCallAjax(reqUrl, "POST", JSON.stringify(reqParam), null, callbackDeployTestResult, true);
-            first();
+            //first();
         });
-
 
         var callbackDeployTestResult = function (data) {
             $("#awaitDeployModal").modal('hide');
             getTestSoftwareInfoList(data.softwareId);
         };
 
-
         var first = function () {
             $("#awaitDeployModal").modal('show');
             $("#awaitDeployModal").modal({backdrop: 'static', keyboard: false});
         };
 
-
+		$("#testSwName").keyup(function() {
+			var currInputValue = $(this).val();
+			$(this).val(currInputValue.replace(/[0-9]|[^\a-z]/gi,""));
+	    });
+		
+		var fncGoApp = function(name, status) {
+			if (status !== "Successful") {
+				return;
+			}
+			var appUrl = "http://"+ name + CLOUDFOUNDRY_API_HOST;
+			window.open(appUrl, "goApp");
+		}
         /*]]>*/
     </script>
 </div>

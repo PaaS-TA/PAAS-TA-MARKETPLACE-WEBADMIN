@@ -1,23 +1,40 @@
 package org.openpaas.paasta.marketplace.web.admin.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.openpaas.paasta.marketplace.api.domain.*;
-import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
-import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareService;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import javax.validation.constraints.NotNull;
-import java.util.List;
-import java.util.Map;
+
+import org.openpaas.paasta.marketplace.api.domain.CustomPage;
+import org.openpaas.paasta.marketplace.api.domain.Software;
+import org.openpaas.paasta.marketplace.api.domain.SoftwareHistory;
+import org.openpaas.paasta.marketplace.api.domain.SoftwarePlan;
+import org.openpaas.paasta.marketplace.api.domain.SoftwareSpecification;
+import org.openpaas.paasta.marketplace.api.domain.TestSoftwareInfo;
+import org.openpaas.paasta.marketplace.api.domain.Yn;
+import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
+import org.openpaas.paasta.marketplace.web.admin.service.AdminSoftwareService;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = "/admin/softwares")
@@ -28,6 +45,9 @@ public class AdminSoftwareController {
     private final AdminSoftwareService adminSoftwareService;
     private final CommonService commonService;
 
+    @Value("${cloudfoundry.cc.api.host}")
+    private String cloudfoundryApiHost;
+    
     /**
      * Admin 상품 목록 조회
      *
@@ -72,6 +92,7 @@ public class AdminSoftwareController {
      */
     @GetMapping(value = "/{id}")
     public String getAdminSoftware(Model model, @PathVariable Long id) {
+    	model.addAttribute("cloudfoundryApiHost", cloudfoundryApiHost);
         model.addAttribute("software", adminSoftwareService.getAdminSoftwares(id));
         model.addAttribute("softwarePlanList", adminSoftwareService.getSoftwarePlanList(id));
         adminSoftwareService.getAdminCategories();

@@ -1,8 +1,19 @@
 package org.openpaas.paasta.marketplace.web.admin.controller;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.openpaas.paasta.marketplace.api.domain.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+
+import org.openpaas.paasta.marketplace.api.domain.CustomPage;
+import org.openpaas.paasta.marketplace.api.domain.Instance;
+import org.openpaas.paasta.marketplace.api.domain.Profile;
+import org.openpaas.paasta.marketplace.api.domain.Software;
+import org.openpaas.paasta.marketplace.api.domain.SoftwareSpecification;
 import org.openpaas.paasta.marketplace.web.admin.common.CommonService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminCategoryService;
 import org.openpaas.paasta.marketplace.web.admin.service.AdminSellerProfileService;
@@ -15,8 +26,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.servlet.http.HttpServletRequest;
-import java.util.*;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author hrjin
@@ -360,8 +371,19 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/users")
     @ResponseBody
-    public CustomPage<Object> getUserStatList(HttpServletRequest httpServletRequest) {
-        return adminStatsService.getUserList(commonService.setParameters(httpServletRequest));
+    public Map<String,Object> getUserStatList(HttpServletRequest httpServletRequest) {
+    	Map<String,Object> resultMap = new HashMap<String,Object>();
+    	
+    	// 그리드 정보 조회
+    	resultMap.put("data", adminStatsService.getUserList(commonService.setParameters(httpServletRequest)));
+    	
+    	// 사용자별 구매 퍼센트 통계
+    	resultMap.put("purchaserPercent", adminStatsService.getPurchaserPercent(commonService.setParameters(httpServletRequest)));
+    	
+    	// 월별 상품구매 통계
+    	resultMap.put("purchaseTransitionMonth", adminStatsService.getPurchaseTransitionMonth(commonService.setParameters(httpServletRequest)));
+    	
+        return resultMap;
     }
 
 }

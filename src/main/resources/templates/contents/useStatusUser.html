@@ -133,49 +133,26 @@
         var countsOfUserProvider = JSON.parse(totalCountUserProviderInfo.replace(/&quot;/g,'"'));
 
         //차트(pie.line)
-        var getSoftwareStatsChart = function(data) {
-            pieChart(data);
-            lineChart(data);
+        var getSoftwareStatsChart = function(resultMap) {
+            pieChart(resultMap.purchaserPercent);
+            lineChart(resultMap.purchaseTransitionMonth);
         };
 
         var pieChart = function(contentData) {
-            console.log(">> Chart init");
-            var pieChartData = contentData.content;
-            var userCountTotal = contentData.totalElements;
-
-            if(pieChartData.length == 0){
+            var pieChartData = contentData;
+            var seriesData = [];
+            var item = [];
+            
+            if (pieChartData.length == 0) {
                 return;
-            }else{
-                var seriesData = [];
-                var item = [];
-                var userCount;
-                var userCountPercent;
-                var userCountPercentFixed;
-
+            } else {
                 for (var i = 0; i < pieChartData.length; i++) {
-
-                    var map = pieChartData[i];
-
-                    for (key in resultCountList) {
-                        if (pieChartData[i].id == key) {
-                            userCount = resultCountList[key];
-                            userCountPercent = userCount/userCountTotal*100;
-                            userCountPercentFixed = userCountPercent.toFixed(2);
-                        }
-                        if(userCount == undefined){
-                            userCount = 0;
-                        }else
-                            {userCount;
-                        }
-                    }
-
-                    item = {name: map.name + ' (' + userCountPercentFixed + '%)'   , data: userCount};
+                    item = {name: pieChartData[i].userId + ' (' + pieChartData[i].purchaserPercent + '%)'   , data: pieChartData[i].instanceCount};
                     seriesData.push(item);
                 }
             }
 
             var container = document.getElementById('pieChartArea');
-
             var data = {
                 series: seriesData
             };
@@ -197,38 +174,21 @@
         };
 
         var lineChart = function (contentData) {
-            console.log(">> lineChart init");
-            var categoriesData = countsOfUserProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countsOfUserProviderCounts;
-            var lineChartData = contentData.content;
-
-            var container = document.getElementById('lineChartArea');
-
+        	var container = document.getElementById('lineChartArea');
+            var lineChartData = contentData;
+            var categoriesData = [];
+            var lineSeriesData = [];
+            var lineData = [];
+            
             if (lineChartData.length == 0) {
                 return;
-            }else{
-                var lineSeriesData = [];
-                var lineItem = [];
-                var dataPerMonth = [];
-
-                console.log(lineChartData);
-
+            } else {
                 for (var i = 0; i < lineChartData.length; i++) {
-                    var map = lineChartData[i];
-
-                    console.log("[map.id]"+map.id);
-
-                    if(countsOfUserProvider.counts[map.id]) {
-                        dataPerMonth = countsOfUserProvider.counts[map.id];
-                    } else {
-                        dataPerMonth = 0;
-                    }
-
-                    //dataJson(softwareName,series)
-                    lineItem = {name: map.name , data: dataPerMonth};
-                    lineSeriesData.push(lineItem);
+                	categoriesData[categoriesData.length] = lineChartData[i].yearMonth;
+                    lineData[lineData.length] = lineChartData[i].purchaseCount;
                 }
-                console.log(lineSeriesData);
+                lineItem = {name: "사용자" , data: lineData};
+                lineSeriesData.push(lineItem);
             }
 
             var data = {
@@ -252,7 +212,7 @@
                     dateFormat: 'yyyy-MM'
                 },
                 series: {
-                    showDot: false,
+                    showDot: true,
                     zoomable: true,
                     pointWidth: 2
                 },
@@ -306,14 +266,15 @@
             procCallAjax(reqUrl, "GET", null, null, callbackUserList);
         };
 
-        var callbackUserList = function(data) {
+        var callbackUserList = function(resultMap) {
+        	var data = resultMap.data;
             var userList = $("#userListArea");
             var htmlString = [];
             var content = data.content;
             var listLength = content.length;
 
             if(listLength > 0){
-                getSoftwareStatsChart(data);
+                getSoftwareStatsChart(resultMap);
 
                 for(var i = 0; i < listLength; i++){
 					var index = (i+1) + pageNumSave * data.size;

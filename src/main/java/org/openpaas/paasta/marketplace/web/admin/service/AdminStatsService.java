@@ -1,7 +1,8 @@
 package org.openpaas.paasta.marketplace.web.admin.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+import java.util.Map;
+
 import org.openpaas.paasta.marketplace.api.domain.CustomPage;
 import org.openpaas.paasta.marketplace.api.domain.Instance;
 import org.openpaas.paasta.marketplace.api.domain.Software;
@@ -12,8 +13,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author hrjin
@@ -239,4 +240,25 @@ public class AdminStatsService {
         }
         return count;
     }
+    
+    /**
+     * 사용자별 구매 퍼센트 통계
+     * @param queryParamString
+     * @return
+     */
+    public List<Map<String,Object>> getPurchaserPercent(String queryParamString) {
+        ResponseEntity<List<Map<String,Object>>> responseEntity = paasApiRest.exchange("/stats/purchaserPercent" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
+        return responseEntity.getBody();
+    }
+    
+    /**
+     * 월별 상품구매 통계
+     * @param queryParamString
+     * @return
+     */
+    public List<Map<String,Object>> getPurchaseTransitionMonth(String queryParamString) {
+    	ResponseEntity<List<Map<String,Object>>> responseEntity = paasApiRest.exchange("/stats/purchaseTransitionMonth" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
+    	return responseEntity.getBody();
+    }
+
 }

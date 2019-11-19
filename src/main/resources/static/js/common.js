@@ -97,23 +97,29 @@ var commonUtils = {
         }
 		return result;
     }, 
-    isEmpty(object) {
+    isEmpty: function(object) {
     	if (object == undefined || object == null) {
     		return true;
     	}
     	return false;
     }, 
-    isBlank(value) {
+    isBlank: function(value) {
     	if (value == undefined || value == null || value == "") {
     		return true;
     	}
     	return false;
     },
-    replaceEnter(value) {
+    replaceEnter: function(value) {
     	if (this.isEmpty(value)) {
     		return value;
     	}
     	return value.replace(/(\r?\n|\r)/gm,'');
+    },
+    contains: function(contents, findString) {
+    	if (this.isBlank(contents) || this.isBlank(findString)) {
+    		return false;
+    	}
+    	return contents.includes(findString);
     }
 }
 
@@ -122,14 +128,28 @@ var commonUtils = {
  * http://carlosbonetti.github.io/jquery-loading/
  * */
 var loading = {
-	start: function() {
+	start: function(msg) {
+		var msgValue = "LOADING...";
+		
+		if (!commonUtils.isBlank(msg)) {
+			msgValue = msg;
+		}
+		
 		$('body').loading({
 			stoppable: false
 			,theme: 'dark'
-			//,message: 'Working...'
+			,message: msgValue
      	});
 	},
 	stop: function() {
 		$('body').loading("stop");
+	},
+	interval: function(value, msg) {
+		var intervalTime = 1000 * value;
+		this.start(msg);
+		
+		setTimeout(function() {
+			$('body').loading('toggle');
+		}, intervalTime);
 	}
 }

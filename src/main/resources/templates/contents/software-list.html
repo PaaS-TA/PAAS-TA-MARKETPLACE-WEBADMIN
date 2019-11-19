@@ -185,7 +185,6 @@
 
         // ON LOAD
         $(document).ready(function() {
-            console.log('::MarketPlace index Init::');
             getSoftwareList();
             currentMenu('1');
         });
@@ -197,14 +196,6 @@
             var inUse = $("#inUse option:selected").val();                  //승인여부
             var createdBy = $("#createdBy").val();                          //판매자명
             var nameLike = $("#nameLike").val();                            //상품명
-
-            console.log(":: categoryId :: " + categoryId +
-                ":: status :: " + status +
-                ":: inUse :: " + inUse +
-                ":: createdBy :: " + createdBy +
-                ":: nameLike :: " + nameLike +
-                ":: page :: " + pageNum
-            );
 
             if (categoryId === 'ALL' || categoryId === '') {
                 categoryId = '';
@@ -228,11 +219,7 @@
 
             // datepicker
             var startDate = $("#startDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
-            console.log("startDate : "  + startDate);
-
             var endDate = $("#endDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
-            console.log("endDate : "  + endDate);
-
 
             if(DATE_DIVISION === $("#createdDateOpt").val()){
                 if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {
@@ -265,7 +252,6 @@
             var softwareList = $("#softwareArea");
             var htmlString = [];
             var content = data.content;
-
             var listLength = content.length;
 
             if(listLength > 0){

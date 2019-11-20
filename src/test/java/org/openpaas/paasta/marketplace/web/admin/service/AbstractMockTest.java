@@ -110,8 +110,8 @@ public abstract class AbstractMockTest {
         TestSoftwareInfo testSoftwareInfo = new TestSoftwareInfo();
         testSoftwareInfo.setId(id);
         testSoftwareInfo.setSoftwareId(softwareId);
-        testSoftwareInfo.setPlanGuid(planGuid);
-        
+        testSoftwareInfo.setSoftwarePlanId(planGuid);
+
         return testSoftwareInfo;
     }
 

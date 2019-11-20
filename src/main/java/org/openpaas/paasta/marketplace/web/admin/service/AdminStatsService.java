@@ -260,5 +260,15 @@ public class AdminStatsService {
     	ResponseEntity<List<Map<String,Object>>> responseEntity = paasApiRest.exchange("/stats/purchaseTransitionMonth" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
     	return responseEntity.getBody();
     }
+    
+    /**
+     * 앱사용 사용자 추이
+     * @param queryParamString
+     * @return
+     */
+    public List<Map<String,Object>> getUsageTransition(String queryParamString) {
+    	ResponseEntity<List<Map<String,Object>>> responseEntity = paasApiRest.exchange("/stats/usageTransition" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
+    	return responseEntity.getBody();
+    }
 
 }

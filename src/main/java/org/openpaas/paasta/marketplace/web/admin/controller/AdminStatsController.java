@@ -381,7 +381,10 @@ public class AdminStatsController {
     	resultMap.put("purchaserPercent", adminStatsService.getPurchaserPercent(commonService.setParameters(httpServletRequest)));
     	
     	// 월별 상품구매 통계
-    	resultMap.put("purchaseTransitionMonth", adminStatsService.getPurchaseTransitionMonth(commonService.setParameters(httpServletRequest)));
+//    	resultMap.put("purchaseTransitionMonth", adminStatsService.getPurchaseTransitionMonth(commonService.setParameters(httpServletRequest)));
+    	
+    	// 앱사용 사용자 추이
+    	resultMap.put("usageTransition", adminStatsService.getUsageTransition(commonService.setParameters(httpServletRequest)));
     	
         return resultMap;
     }

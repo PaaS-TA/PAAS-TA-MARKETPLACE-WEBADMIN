@@ -135,7 +135,7 @@
         //차트(pie.line)
         var getSoftwareStatsChart = function(resultMap) {
             pieChart(resultMap.purchaserPercent);
-            lineChart(resultMap.purchaseTransitionMonth);
+            lineChart(resultMap.usageTransition);
         };
 
         var pieChart = function(contentData) {
@@ -147,7 +147,7 @@
                 return;
             } else {
                 for (var i = 0; i < pieChartData.length; i++) {
-                    item = {name: pieChartData[i].userId + ' (' + pieChartData[i].purchaserPercent + '%)'   , data: pieChartData[i].instanceCount};
+                    item = {name: pieChartData[i].userId + ' (' + pieChartData[i].purchaserPercent + '%)', data: pieChartData[i].instanceCount};
                     seriesData.push(item);
                 }
             }
@@ -185,7 +185,7 @@
             } else {
                 for (var i = 0; i < lineChartData.length; i++) {
                 	categoriesData[categoriesData.length] = lineChartData[i].yearMonth;
-                    lineData[lineData.length] = lineChartData[i].purchaseCount;
+                    lineData[lineData.length] = lineChartData[i].usageUserCount;
                 }
                 lineItem = {name: "사용자" , data: lineData};
                 lineSeriesData.push(lineItem);
@@ -206,7 +206,7 @@
                     tickInterval: 'auto'
                 },
                 xAxis: {
-                    pointOnColumn: true,
+                    pointOnColumn: false,
                     tickInterval: 'auto',
                     type: 'datetime',
                     dateFormat: 'yyyy-MM'

@@ -370,7 +370,7 @@
                             </tr>
                             <tr>
                                 <th colspan="2">테스트할 이름 : </th>
-                                <td colspan="2"><input type="text" id="testSwName" class="form-control validate" value="" placeholder="영문 20자 이내로 입력바랍니다." maxlength="20"></td>
+                                <td colspan="2"><input type="text" id="testSwName" class="form-control validate" value="" placeholder="20자(영문숫자)이내로 입력바랍니다." maxlength="20"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -714,7 +714,7 @@
 
 		$("#testSwName").keyup(function() {
 			var currInputValue = $(this).val();
-			$(this).val(currInputValue.replace(/[0-9]|[^\a-z]/gi,""));
+			$(this).val(currInputValue.replace(/[^0-9a-z]/gi,""));
 	    });
 		
 		var fncGoApp = function(name, status) {

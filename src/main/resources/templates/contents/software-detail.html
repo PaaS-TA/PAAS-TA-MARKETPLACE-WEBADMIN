@@ -481,7 +481,7 @@
 						btnHtml = "<button name='button' class='btn btn-color2 btn-sm' type='button' id='goAppBtn'>배포 확인</button>"
                         + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn'>로그 확인</button>"
                         + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog'>로그 다운</button>"
-                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn'>삭제</button>"
+                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
 					}
 					
                     htmlString.push(
@@ -500,7 +500,7 @@
             }
 
             deployedInfoArea.html(htmlString);
-
+			loading.stop();
         };
 
         // 배포 테스트된 앱 최신 로그 조회 및 로그 파일 다운로드
@@ -575,18 +575,21 @@
             var swId = $("#id").val();
             var reqUrl = "/admin/softwares/" + swId + "/testSwInfo/" + id + "/app/" + appGuid;
 
-            console.log(reqUrl);
-
             $("#deleteAppModal").modal('hide');
+            loading.interval(30, "배포 테스트 삭제중...");
+            
             procCallAjax(reqUrl, "DELETE", null, null, callbackDeleteTestApp);
         };
 
         var callbackDeleteTestApp = function (data) {
+        	loading.stop();
+        	
             if(data.RESULT === "Successful") {
-                alert("삭제 완료!");
+                commonAlert.show("삭제 완료!");
             } else {
-                alert("삭제 실패!");
+            	commonAlert.show("삭제 실패!");
             }
+            
             var swId = $("#id").val();
             getTestSoftwareInfoList(swId);
             location.href = location.href;
@@ -668,8 +671,7 @@
         $("#deployTestAppBtn").on("click", function () {
             var rows = $('#instancePriceModal_table').children('tbody').children('tr');
             if (rows.length <= 0) {
-                $("#alertModal-text").text("테스트할 상품의 가격 정보가 없습니다.");
-                $("#alertModal").modal("show");
+            	commonAlert.show("테스트할 상품의 가격 정보가 없습니다.");
                 return;
             }
             $("#testSwName").val('');
@@ -695,7 +697,7 @@
             };
 
             //Loading Start
-            loading.interval(60, "배포 중입니다. 잠시만 기다려주세요.");
+            loading.interval(60, "배포 중입니다. 잠시만(60초) 기다려주세요.");
             
             var reqUrl = "/admin/softwares/"+ softwareId + "/plan/" + selectedPlanValue;
             procCallAjax(reqUrl, "POST", JSON.stringify(reqParam), null, callbackDeployTestResult, true);

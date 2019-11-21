@@ -12,6 +12,24 @@
             <div layout:fragment="content"></div>
         </div>
     </div>
+    <!--/* 공통 알림 팝업 Modal */-->
+    <div class="modal fade" id="commonAlertModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content modal-sm">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                    <h4 class="modal-title"><span style="color: #FF3366">알림!</span></h4>
+                </div>
+                <div class="modal-body">
+                    <p class="popTxt" id="commonAlertModal-Message">알림 문구</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--/* //공통알림 팝업 Modal */-->
 </body>
 
 </html>

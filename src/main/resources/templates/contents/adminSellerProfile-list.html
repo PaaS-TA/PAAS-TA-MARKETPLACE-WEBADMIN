@@ -125,6 +125,23 @@
             var dateParameter;
             var createdDateAfter = $("#createdDateAfter").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
             var createdDateBefore = $("#createdDateBefore").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+            
+            //조회일자 범위 검사
+            if (!commonUtils.isBlank(createdDateAfter) || !commonUtils.isBlank(createdDateBefore)) {
+            	if (commonUtils.isBlank(createdDateAfter)) {
+            		commonAlert.show("검색 시작일자를 선택해주세요");
+            		return;
+            	} else if (commonUtils.isBlank(createdDateBefore)) {
+            		commonAlert.show("검색 종료일자를 선택해주세요");
+            		return;
+            	}
+            	var startDateTemp = createdDateAfter.replace(/\-/g, "");
+            	var endDateTemp = createdDateBefore.replace(/\-/g, "");
+            	if (startDateTemp > endDateTemp) {
+            		commonAlert.show("검색 시작일이 종료일보다 클수없습니다.");
+            		return;
+            	}
+            }
 
             if((createdDateAfter === "" || createdDateAfter === undefined) && (createdDateBefore === "" || createdDateBefore === undefined)) {
                 dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';

@@ -204,9 +204,6 @@ public class AdminStatsService {
     public CustomPage<Instance> getInstanceListBySwId(String queryString) {
         ResponseEntity<CustomPage<Instance>> responseEntity = paasApiRest.exchange("/instances/page" + queryString, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Instance>>() {});
         CustomPage<Instance> customPage = responseEntity.getBody();
-
-        System.out.println("getContent ::: " + customPage.getContent());
-        System.out.println("getTotalElements ::: " + customPage.getTotalElements());
         return customPage;
     }
 
@@ -214,9 +211,6 @@ public class AdminStatsService {
     public CustomPage<Instance> getInstanceListBySwInId(String queryParamString) {
         ResponseEntity<CustomPage<Instance>> responseEntity = paasApiRest.exchange("/instances/my/totalPage" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<CustomPage<Instance>>() {});
         CustomPage<Instance> customPage = responseEntity.getBody();
-
-        System.out.println("getContent ::: " + customPage.getContent());
-        System.out.println("getTotalElements ::: " + customPage.getTotalElements());
         return customPage;
     }
 
@@ -268,6 +262,16 @@ public class AdminStatsService {
      */
     public List<Map<String,Object>> getUsageTransition(String queryParamString) {
     	ResponseEntity<List<Map<String,Object>>> responseEntity = paasApiRest.exchange("/stats/usageTransition" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
+    	return responseEntity.getBody();
+    }
+    
+    /**
+     * 사용자의 전체 사용금액 계산
+     * @param queryParamString
+     * @return
+     */
+    public Long getUsagePriceTotal(String queryParamString) {
+    	ResponseEntity<Long> responseEntity = paasApiRest.exchange("/instances/usagePriceTotal" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {});
     	return responseEntity.getBody();
     }
 

@@ -137,12 +137,20 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/instances")
     @ResponseBody
-    public CustomPage<Instance> getInstanceListBySwId(Model model, HttpServletRequest httpServletRequest) {
+    public Map<String,Object> getInstanceListBySwId(Model model, HttpServletRequest httpServletRequest) {
+    	Map<String,Object> resultMap = new HashMap<String,Object>();
+    	
         //사용량 추이
         Map  countsOfInstsProvider =  adminStatsService.countsOfInstsProviderMonthly();
-        model.addAttribute("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
-        model.addAttribute("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
-        return adminStatsService.getInstanceListBySwId(commonService.setParameters(httpServletRequest));
+        resultMap.put("countOfInstsProviderMonthly", countsOfInstsProvider.get("terms"));
+        resultMap.put("countOfInstsProviderCounts", countsOfInstsProvider.get("counts"));
+        
+        // 상품별 현황 상세 리스트
+        resultMap.put("instanceListBySwId", adminStatsService.getInstanceListBySwId(commonService.setParameters(httpServletRequest)));
+        
+        // 총금액조회
+        resultMap.put("totalPricePerMonth", adminStatsService.getUsagePriceTotal(commonService.setParameters(httpServletRequest)));        
+        return resultMap;
     }
 
 

@@ -278,7 +278,7 @@
             var yy = yearValueF;        			// 이전 해
             var yy2 = yearValueS;       			// 다음 해
             var mm = monthValueF;       			// 이전 달
-            var mm2 = parseInt(monthValueS);	// 다음 달
+            var mm2 = parseInt(monthValueS);		// 다음 달
             
             if (monthValueF < 10) {
                 mm = '0' + monthValueF;
@@ -292,21 +292,19 @@
                 mm2 = mm2;
             }
 
-            var currentYearMonth = yy + "-" + mm + "-01";
-            var nextYearMonth = yy2 + "-" + mm2 + "-01";
+            var usageStartDate = yy + "-" + mm + "-01T00:00:00";
+            var srchLastDay = (new Date(yy2, commonUtils.dateValueDigit(mm2), 0)).getDate();
+            var usageEndDate = yy2 + "-" + mm2 +"-"+ srchLastDay +"T23:59:59";;
 
-            if(currentYearMonth == 'undefined-undefined-01' || currentYearMonth == 'undefined-undefined-01' ){
-                currentYearMonth = '';
-                nextYearMonth = '';
-            }
-                                     
             var pageUrl = "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT;
-            var dateUrl = "&usageStartDate=" + currentYearMonth +"&usageEndDate=" + nextYearMonth;
-            var reqUrl = "/admin/stats/instances" + "?createdBy=" + $("#userId").val() + "&categoryId=" + categoryId + pageUrl + dateUrl;
+            var dateUrl = "&usageStartDate=" + usageStartDate +"&usageEndDate=" + usageEndDate;
+            var reqUrl = "/admin/stats/instances" + "?userId="+ $("#userId").val() +"&createdBy=" + $("#userId").val() + "&categoryId=" + categoryId + pageUrl + dateUrl;
+            
             procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
 
-        var callbackGetInstanceList = function(data) {
+        var callbackGetInstanceList = function(result) {
+        	var data = result.instanceListBySwId;
             var userList = $("#userListArea");
             var htmlString = [];
             var instanceCount;
@@ -357,11 +355,6 @@
                     var currentDateValue = new Date();
                     var currentDate = getFormatDate(currentDateValue);
 
-
-                    console.log('[currentDate]: '+ currentDate);
-                    console.log("[usageStartDate]: " +usageStartDate+" "+"[usageEndDate]: "+usageEndDate);
-
-
                     //이용 월(일)수
                     var arr1 = usageStartDate.split('-');
                     var arr2 = currentDate.split('-');
@@ -400,7 +393,7 @@
                     );
                 }
                 //총 건수 / 총 금액
-                $("#totalCount").text(" (" + data.totalElements + " / " + totalPricePerMonth +" 원)");
+                $("#totalCount").text(" (" + data.totalElements + " / " + result.totalPricePerMonth +" 원)");
             }else{
                 $("#totalCount").text(" (" + 0 + " / " + 0 +" 원)");
                 htmlString = "<tr>"

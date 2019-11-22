@@ -220,6 +220,23 @@
             // datepicker
             var startDate = $("#startDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
             var endDate = $("#endDatePicker").datepicker('option', 'dateFormat', 'yy-mm-dd').val();
+            
+          	//조회일자 범위 검사
+            if (!commonUtils.isBlank(startDate) || !commonUtils.isBlank(endDate)) {
+            	if (commonUtils.isBlank(startDate)) {
+            		commonAlert.show("검색 시작일자를 선택해주세요");
+            		return;
+            	} else if (commonUtils.isBlank(endDate)) {
+            		commonAlert.show("검색 종료일자를 선택해주세요");
+            		return;
+            	}
+            	var startDateTemp = startDate.replace(/\-/g, "");
+            	var endDateTemp = endDate.replace(/\-/g, "");
+            	if (startDateTemp > endDateTemp) {
+            		commonAlert.show("검색 시작일이 종료일보다 클 수 없습니다.");
+            		return;
+            	}
+            }
 
             if(DATE_DIVISION === $("#createdDateOpt").val()){
                 if((startDate === "" || startDate === undefined) && (endDate === "" || endDate === undefined)) {

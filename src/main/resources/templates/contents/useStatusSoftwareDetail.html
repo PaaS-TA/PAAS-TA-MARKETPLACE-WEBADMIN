@@ -105,16 +105,16 @@
             <h3 class="h-tit3">판매 현황 <span class="point4" id="totalCount"></span></h3>
         </div>
 
-
         <!-- 테이블 -->
         <div class="tbl type1 pt20">
             <table class="table">
                 <colgroup>
-                    <col style="width:10%;">
-                    <col style="width:20%;">
+                    <col style="width:5%;">
                     <col style="width:auto;">
-                    <col style="width:18%;">
-                    <col style="width:18%;">
+                    <col style="width:15%;">
+                    <col style="width:15%;">
+                    <col style="width:15%;">
+                    <col style="width:15%;">
                 </colgroup>
                 <thead>
                 <tr>
@@ -124,6 +124,7 @@
                     <th scope="col">사용자 ID</th>
                     <th scope="col">구매일</th>
                     <th scope="col">종료일</th>
+                    <th scope="col">판매금액</th>
                 </tr>
                 </thead>
                 <tbody id="instanceListArea">
@@ -155,7 +156,6 @@
         var countofInstsProvider = JSON.parse(totalCountsOfInstsMonthlyInfo.replace(/&quot;/g,'"'));
 
         var lineChart = function (contentData) {
-            console.log(">>lineChart");
             var softwareId = $("#softwareId").val();
             var softwareName = $("#softwareName").val();
             var lineChartData = contentData.content;
@@ -169,7 +169,6 @@
 
                 if(countofInstsProvider.counts[softwareId]) {
                     dataPerMonth = countofInstsProvider.counts[softwareId];
-                    console.log(dataPerMonth);
                 } else {
                     dataPerMonth = 0;
                 }
@@ -226,9 +225,10 @@
           procCallAjax(reqUrl, "GET", null, null, callbackGetInstanceList);
         };
 
-        var callbackGetInstanceList = function(data) {
-            lineChart(data);
+        var callbackGetInstanceList = function(result) {
+        	var data = result.instanceListBySwId;
 
+        	lineChart(data);
             $("#totalCount").text("(" + data.totalElements + ")");
 
             var instanceListArea = $("#instanceListArea");
@@ -246,13 +246,7 @@
                     	var usageEndDateValue = new Date(content[i].usageEndDate);
                     	usageEndDate = getFormatDate(usageEndDateValue);
                     } 
-//                     var usageStartDateValue =  content[i].usageStartDate;
-//                     var idx = usageStartDateValue.indexOf("T");
-//                     var usageStartDate = usageStartDateValue.substring(0, idx);
-
-//                     var usageEndDateValue =  content[i].usageEndDate;
-//                     var idx = usageEndDateValue.indexOf("T");
-//                     var usageEndDate = usageEndDateValue.substring(0, idx);
+                    
 					// Format Date
                     var usageStartDateValue = new Date(content[i].usageStartDate);
                     usageStartDate = getFormatDate(usageStartDateValue);
@@ -265,12 +259,12 @@
                         + "<td>" + content[i].createdBy + "</td>"
                         + "<td>" + usageStartDate + "</td>"
                         + "<td>" + usageEndDate + "</td>"
+                        + "<td>" + content[i].softwarePlanAmtMonth + "</td>"
                         + "</tr>"
                     );
                 }
             }else{
-                htmlString = "<tr>"
-                    + "<td colspan='6'><p class='user_p'>결과가 존재하지 않습니다.</p></td>" + "</tr>"
+                htmlString = "<tr><td colspan='6'><p class='user_p'>결과가 존재하지 않습니다.</p></td></tr>"
             }
 
             instanceListArea.html(htmlString);
@@ -281,15 +275,12 @@
         	paging(pageTotalNumber, pageSize, PAGING_SIZE, pageNumSave);
         	
         	function paging(pageTotalNumber, pageSize, PAGING_SIZE, currentPage){
-            	console.log("currentPage : " + currentPage);
             	currentPage = parseInt(currentPage);
                 
             	var totalPage = Math.ceil(pageTotalNumber/pageSize);           // 총 페이지 수
             	if (currentPage)
             		var pageGroup = Math.ceil((currentPage+1)/PAGING_SIZE);    // 페이지 그룹
             	else var pageGroup = 1;
-                
-                console.log("pageGroup : " + pageGroup);
                 
                 var last = pageGroup * PAGING_SIZE;        // 화면에 보여질 마지막 페이지 번호 (실제 페이지와 -1 차이)
                 if(last > totalPage)
@@ -299,12 +290,6 @@
                     first = 0;                               
                 var next = currentPage + 1;                // 다음 페이지
                 var prev = currentPage - 1;                // 이전 페이지
-                
-                console.log("last : " + last);
-                console.log("first : " + first);
-                console.log("next : " + next);
-                console.log("prev : " + prev);
-                 
                 var htmlStringPage = "";
                 
                 if(currentPage==0) {
@@ -352,12 +337,9 @@
 
      	// ON LOAD
         $(document).ready(function () {
-            console.log('software id ::: ' + $("#softwareId").val());
             getInstanceList();
             currentMenu('3_1');
         });
-
-
     </script>
 </div>
 

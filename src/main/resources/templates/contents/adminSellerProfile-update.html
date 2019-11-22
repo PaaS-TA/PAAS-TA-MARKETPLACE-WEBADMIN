@@ -154,7 +154,6 @@
 
         $("#profilesTypes").change(function() {
             // Add action of select option
-            console.log($("#profilesTypes option:selected").val());
         });
 
         function isEmpty(val) {
@@ -217,9 +216,6 @@
             }
 
             var reqUrl = "/admin/profiles/" + profileId;
-
-            console.log(JSON.stringify(reqParam));
-            console.log("REST_URL " + reqUrl);
 
             procCallAjax(reqUrl, "PUT", JSON.stringify(reqParam), null, callbackModifyProfiles);
         };

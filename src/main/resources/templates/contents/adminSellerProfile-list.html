@@ -109,7 +109,6 @@
 
         // ON LOAD
         $(document).ready(function() {
-            console.log('::Init::');
             getProfileList();
             currentMenu('4');
         });
@@ -149,13 +148,7 @@
                 dateParameter = "&createdDateAfter=" + createdDateAfter + "T00:00:00" + "&createdDateBefore=" + createdDateBefore + "T23:59:59";
             }
 
-            console.log("시작 날짜 ::: "  + createdDateAfter);
-            console.log("종료 날짜 ::: "  + createdDateBefore);
-
             var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
-
-            console.log("전체 경로 ::: "  + reqUrl);
-            console.log("dateParameter ::: "  + dateParameter);
 
             if (pageNum != null)
             	pageNumSave = pageNum;
@@ -206,15 +199,12 @@
         	paging(pageTotalNumber, pageSize, PAGING_SIZE, pageNumSave);
         	
         	function paging(pageTotalNumber, pageSize, PAGING_SIZE, currentPage){
-            	console.log("currentPage : " + currentPage);
             	currentPage = parseInt(currentPage);
                 
             	var totalPage = Math.ceil(pageTotalNumber/pageSize);           // 총 페이지 수
             	if (currentPage)
             		var pageGroup = Math.ceil((currentPage+1)/PAGING_SIZE);    // 페이지 그룹
             	else var pageGroup = 1;
-                
-                console.log("pageGroup : " + pageGroup);
                 
                 var last = pageGroup * PAGING_SIZE;        // 화면에 보여질 마지막 페이지 번호 (실제 페이지와 -1 차이)
                 if(last > totalPage)
@@ -225,11 +215,6 @@
                 var next = currentPage + 1;                // 다음 페이지
                 var prev = currentPage - 1;                // 이전 페이지
                 
-                console.log("last : " + last);
-                console.log("first : " + first);
-                console.log("next : " + next);
-                console.log("prev : " + prev);
-                 
                 var htmlStringPage = "";
                 
                 if(currentPage==0) {

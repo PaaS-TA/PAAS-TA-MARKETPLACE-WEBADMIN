@@ -25,7 +25,6 @@ public class AdminSellerProfileService {
     @SneakyThrows
     public Map getProfiles() {
         Map map  = paasApiRest.getForObject("/admin/profiles/page", Map.class);
-        System.out.println(map.toString());
         return map;
     }
 
@@ -55,8 +54,4 @@ public class AdminSellerProfileService {
         paasApiRest.put(url, profile);
         return getProfiles(id);
     }
-
-
-
-
 }

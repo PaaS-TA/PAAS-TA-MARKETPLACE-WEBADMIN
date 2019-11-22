@@ -72,7 +72,7 @@ public class LoginController {
         User user1 = new User();
         user1.setRole(User.Role.Admin);
         user1.getAuthorities();
-//
+
         Set<GrantedAuthority> authorities = new HashSet<>(AuthorityUtils.createAuthorityList("ROLE_ADMIN"));
         OAuth2User oAuth2User = new DefaultOAuth2User(authorities, authentication.getPrincipal().getAttributes(), "sub");
         authentication = new OAuth2AuthenticationToken(oAuth2User, authorities, "cf");
@@ -87,10 +87,6 @@ public class LoginController {
         }
 
         SecurityContextHolder.getContext().setAuthentication(newAuth);
-
-        System.out.println("우헤헤헤 ::: " + authentication.getPrincipal().getAuthorities());
-        System.out.println("authentication access Token value ::: " + accessToken.getTokenValue());
-        System.out.println("authentication getName ::: " + authentication.getPrincipal().getAttributes().get("user_name"));
 
         httpSession.setAttribute("yourName", authentication.getPrincipal().getAttributes().get("user_name"));
         httpSession.setAttribute("token", accessToken.getTokenValue());

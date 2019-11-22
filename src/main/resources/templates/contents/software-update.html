@@ -274,7 +274,6 @@
 
         // ON LOAD
         $(document).ready(function() {
-            console.log("admin-software-update init");
             currentMenu('1');
 
             selectCal('selectDateMonth', 'selectDateYear');
@@ -371,7 +370,6 @@
 
           	//수정이력
 			var softwareHistoryDescription = "전시여부: " + softwareInUse + ", 승인상태: " + softwareStatus + ", 반려사유: " + softwareConfirmComment;
-			console.log("변경이력>> " + softwareHistoryDescription);
 
             var reqParam = {
                 "inUse" : softwareInUse,
@@ -384,18 +382,11 @@
             };
 
             var reqUrl = "/admin/softwares/" + id;
-
-            console.log(JSON.stringify(reqParam));
-            console.log("REST_URL " + reqUrl);
-
             procCallAjax(reqUrl, "PUT",JSON.stringify(reqParam), null, callbackModifyAdminSoftware);
         };
 
         var callbackModifyAdminSoftware = function (data) {
-            console.log("modify data ::: " + JSON.stringify(data));
-
             procMovePage("/admin/softwares/{id}".replace("{id}", data.id));
-
         };
 
 
@@ -436,7 +427,6 @@
 
         //searchBtn
         $("#searchBtn").on("click", function () {
-            console.log("searchBtn Event");
             var softwareId = "[[${software.id}]]";
             var selectDateYear = $("#selectDateYear").val();
             var selectDateMonth = $("#selectDateMonth").val();
@@ -512,13 +502,11 @@
         var selectYear = function() {
             var selectedYearValue = $("#selectDateYear option:selected").val();
             yearValue = selectedYearValue;
-            console.log("Year ::: " + selectedYearValue);
         };
 
         var selectMonth = function() {
             var selectedMonthValue = $("#selectDateMonth option:selected").val();
             monthValue = selectedMonthValue;
-            console.log("Month ::: " + selectedMonthValue);
         };
 
         //년/월

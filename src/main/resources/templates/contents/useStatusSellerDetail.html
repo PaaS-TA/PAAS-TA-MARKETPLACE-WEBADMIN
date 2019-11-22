@@ -281,7 +281,6 @@
 
                     if(countofInstsProvider.counts[map.id]) {
                         dataPerMonth = countofInstsProvider.counts[map.id];
-                        console.log("[dataPerMonth]: "+dataPerMonth);
                     } else {
                         dataPerMonth = 0;
                     }
@@ -360,7 +359,6 @@
 
                 var instanceUserCount;
                 var instanceUserCountList = soldPerSwCount.replace("{", "").replace("}", "").split(",");
-				console.log("instanceUserCountList >> " + instanceUserCountList);
                 for(var i = 0; i < listLength; i++){
 					var index = (i+1) + pageNumSave * data.size;
 
@@ -375,7 +373,6 @@
 	                         instanceUserCount = 0;
 	                     }
 					}
-					console.log("value[0] = " + value[0] + ", content.id = " + content[i].id+ ", value[1] = " + value[1] );
                     var createdDateValue = new Date(content[i].createdDate);
                     var createdDate = getFormatDate(createdDateValue);
 
@@ -410,15 +407,12 @@
         	paging(pageTotalNumber, pageSize, PAGING_SIZE, pageNumSave);
         	
         	function paging(pageTotalNumber, pageSize, PAGING_SIZE, currentPage){
-            	console.log("currentPage : " + currentPage);
             	currentPage = parseInt(currentPage);
                 
             	var totalPage = Math.ceil(pageTotalNumber/pageSize);           // 총 페이지 수
             	if (currentPage)
             		var pageGroup = Math.ceil((currentPage+1)/PAGING_SIZE);    // 페이지 그룹
             	else var pageGroup = 1;
-                
-                console.log("pageGroup : " + pageGroup);
                 
                 var last = pageGroup * PAGING_SIZE;        // 화면에 보여질 마지막 페이지 번호 (실제 페이지와 -1 차이)
                 if(last > totalPage)
@@ -428,12 +422,6 @@
                     first = 0;                               
                 var next = currentPage + 1;                // 다음 페이지
                 var prev = currentPage - 1;                // 이전 페이지
-                
-                console.log("last : " + last);
-                console.log("first : " + first);
-                console.log("next : " + next);
-                console.log("prev : " + prev);
-                 
                 var htmlStringPage = "";
                 
                 if(currentPage==0) {

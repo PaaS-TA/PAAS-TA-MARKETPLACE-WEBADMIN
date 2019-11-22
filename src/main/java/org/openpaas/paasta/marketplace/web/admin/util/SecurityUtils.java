@@ -29,14 +29,12 @@ public class SecurityUtils {
         SecurityContextHolder.getContext().setAuthentication(newAuth);
 
         Authentication finalAuth = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println("principal ::: " + finalAuth.getPrincipal());
 
         if (finalAuth == null) {
             return null;
         }
 
         OAuth2User principal = (OAuth2User) finalAuth.getPrincipal();
-        System.out.println("user Id ::: " + principal.getAttributes().get("user_name"));
 
         if (principal == null) {
             return null;

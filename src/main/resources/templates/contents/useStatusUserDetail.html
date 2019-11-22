@@ -196,7 +196,6 @@
         };
 
         var lineChart = function (contentData) {
-            console.log(">> lineChart init");
             var lineChartData = contentData.content;
             var categoriesData = countUserProvider.terms;
             var userId = $("#userId").val();
@@ -323,10 +322,8 @@
                     var pricePerMonth;
                     if(software.pricePerMonth == null){
                         pricePerMonth = 0;
-                        console.log("[pricePerMonth]: 0");
                     }else{
                         pricePerMonth = software.pricePerMonth;
-                        console.log("[pricePerMonth]: "+pricePerMonth);
                     }
 
                     //총 건수 / 총 금액
@@ -479,7 +476,6 @@
 
         //[공통] 년,월(select box)
         function selectCal(monthfieldF, yearfieldF, monthfieldS, yearfieldS) {
-            console.log(">>selectCal init");
             var today = new Date();
 
             yearValueF = today.getFullYear();
@@ -518,7 +514,6 @@
 
             yearValueF = selectedYearValue;
             yearValueS = selectedYearValueS;
-            console.log("Year ::: " + selectedYearValue +"/"+ selectedYearValueS);
         };
 
         var selectMonth = function() {
@@ -527,8 +522,6 @@
 
             monthValueF = selectedMonthValue;
             monthValueS = selectedMonthValueS;
-
-            console.log("Month ::: " + selectedMonthValue +"/"+ selectedMonthValueS);
         };
 
     </script>

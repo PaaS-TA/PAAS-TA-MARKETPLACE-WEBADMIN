@@ -94,14 +94,10 @@
                 "description": categoryDesc
             };
 
-            //console.log("값 뭐 받아오니? 이름 :: " + categoryName + "& 설명 :: " + categoryDesc);
-
             procCallAjax(reqUrl, "PUT", JSON.stringify(reqParam), null, callbackModifyCategory);
         };
 
         var callbackModifyCategory = function(data) {
-            //console.log("데이타는??? " + JSON.stringify(data));
-            //procMovePage("/admin/categories/" + $("#categoryId").val());
             procMovePage("/admin/categories");
         };
 

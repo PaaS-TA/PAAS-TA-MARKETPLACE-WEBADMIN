@@ -143,6 +143,8 @@
         var PAGING_SIZE = 10;
         var pageNumSave = 0;
         var SORT = "id,asc";
+        var CURR_TOTAL_ELEMENTS = 0;
+        var NEXT_STEP_PROC_URL;
 
         // 등록한 상품별 판매된 총 개수
         var soldPerSwCount = "[[${soldPerSwCount}]]";
@@ -153,7 +155,6 @@
 
         // 판매 상품 총 개수
         var soldSoftwareTotal = "[[${instanceCountSum}]]";
-
         var usingSWUserTotal = "[[${instanceUsingUserSum}]]";
 
         //사용량 추이(terms,counts)
@@ -313,6 +314,7 @@
 
         var getSoftwareList = function (pageNum) {
             var dateParameter;                                              //날짜
+            var srchDateParameter = "";
             var categoryId = $("#categoryId option:selected").val();        //카테고리
 
 
@@ -345,24 +347,32 @@
                 dateParameter = "&createdDateAfter=" + '' + "&createdDateBefore=" + '';
             }else{
                 dateParameter = "&createdDateAfter=" + startDate + "T00:00:00" + "&createdDateBefore=" + endDate + "T23:59:59";
+                srchDateParameter = "&srchStartDate=" + startDate + "T00:00:00" + "&srchEndDate=" + endDate + "T23:59:59";
             }
 
-
+			// 리스트 조회
             var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
-
             if (pageNum != null)
             	pageNumSave = pageNum;
-            
             procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
+			
+            // 상태 요약정보 조회 URL 생성
+            NEXT_STEP_PROC_URL = "/admin/stats/softwares/statsInfo" + "?categoryId=" + categoryId + srchDateParameter;
+            procCallAjax(NEXT_STEP_PROC_URL, "GET", null, null, callbackSoftwareStatsInfo);
         };
+        
+        // 상태 요약 정보 화면설정
+        var callbackSoftwareStatsInfo = function(data) {
+        	$("#totalCount").text(" ("+ CURR_TOTAL_ELEMENTS +" / "+ data.countOfInstsUsing +" / "+ data.countOfUsersUsing +")");
+        }
 
         var callbackSoftwareList = function(data) {
-            $("#totalCount").text(" (" + data.totalElements + " / " + soldSoftwareTotal + " / " + usingSWUserTotal +")");
-
+        	// 조회된 상품 전체 카운터
+        	CURR_TOTAL_ELEMENTS = data.totalElements;
+        	
             var softwareList = $("#softwareArea");
             var htmlString = [];
             var content = data.content;
-
             var listLength = content.length;
 
             if(listLength > 0){

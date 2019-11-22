@@ -274,5 +274,24 @@ public class AdminStatsService {
     	ResponseEntity<Long> responseEntity = paasApiRest.exchange("/instances/usagePriceTotal" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {});
     	return responseEntity.getBody();
     }
+    
+    /**
+     * 현재 사용중인 상품 카운트
+     * @param queryParamString
+     * @return
+     */
+    public Long getCountOfInstsUsing(String queryParamString) {
+    	ResponseEntity<Long> responseEntity = paasApiRest.exchange("/admin/stats/instances/counts/sum" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {});
+    	return responseEntity.getBody();
+    }
 
+    /**
+     * 현재 상품을 사용중인 User 카운트
+     * @param queryParamString
+     * @return
+     */
+    public Long getCountOfUsersUsing(String queryParamString) {
+    	ResponseEntity<Long> responseEntity = paasApiRest.exchange("/admin/stats/users/counts/sum" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {});
+    	return responseEntity.getBody();
+    }
 }

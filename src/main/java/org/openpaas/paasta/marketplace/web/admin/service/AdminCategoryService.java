@@ -1,13 +1,14 @@
 package org.openpaas.paasta.marketplace.web.admin.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import java.util.List;
+
 import org.openpaas.paasta.marketplace.api.domain.Category;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 @Service
@@ -56,4 +57,14 @@ public class AdminCategoryService {
 
         return getCategory(id);
     }
+    
+    /**
+     * 카테고리 사용중인 소프트웨어 카운트 조회
+     * @param categoryId
+     * @return
+     */
+    public Long getSoftwareUsedCategoryCount(Long categoryId) {
+    	return paasApiRest.getForObject("/admin/softwares/softwareUsedCategoryCount/"+ categoryId, Long.class);
+    }
+
 }

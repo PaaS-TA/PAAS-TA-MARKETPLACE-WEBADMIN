@@ -144,8 +144,18 @@
         
         // deleteCategoryConfirmBtn
         var deleteCategoryConfirmBtn = function(categoryId) {
-        	TARGET_CATEGORY_ID = categoryId;
-        	var btnObj = $("#deleteBtn-"+categoryId);
+        	procCallAjax("/admin/categories/softwareUsedCategory/" + categoryId, "GET", null, null, callbackSoftwareUsedCategory);
+        }
+        
+        // 카테고리 사용유무 검사
+        var callbackSoftwareUsedCategory = function(data) {
+        	if (data.resultCode == "Used") {
+        		commonAlert.show("현재 사용중인 카테고리는 삭제할수 없습니다");
+        		return;
+        	}
+        	
+        	TARGET_CATEGORY_ID = data.categoryId;
+        	var btnObj = $("#deleteBtn-"+data.categoryId);
         	$("#categoryDeleteConfirmModal-text").text("["+ btnObj.data("categoryName") +"]");
         	$("#categoryDeleteConfirmModal").modal("show");
         }

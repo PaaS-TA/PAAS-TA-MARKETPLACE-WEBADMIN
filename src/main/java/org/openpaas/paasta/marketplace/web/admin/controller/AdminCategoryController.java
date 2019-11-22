@@ -9,7 +9,9 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Slf4j
 @Controller
@@ -130,6 +132,25 @@ public class AdminCategoryController {
     @ResponseBody
     public Category updateSeq(@PathVariable Long id, @PathVariable Category.Direction direction){
         return adminCategoryService.updateSeq(id, direction);
+    }
+
+    /**
+     * 카테고리를 사용중인지 조회
+     * @param categoryId
+     * @return
+     */
+    @GetMapping(value = "/softwareUsedCategory/{categoryId}")
+    @ResponseBody
+    public Map<String,Object> softwareUsedCategory(@PathVariable Long categoryId){
+    	Map<String,Object> resultMap = new HashMap<String,Object>();
+    	resultMap.put("categoryId", categoryId);
+    	resultMap.put("resultCode", "NotUsed");
+    	
+    	Long usedCount = adminCategoryService.getSoftwareUsedCategoryCount(categoryId);
+    	if (usedCount != null && usedCount > 0) {
+        	resultMap.put("resultCode", "Used");
+    	}
+        return resultMap;
     }
 
 }

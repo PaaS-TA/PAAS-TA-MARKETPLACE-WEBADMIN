@@ -1,9 +1,15 @@
 package org.openpaas.paasta.marketplace.web.admin.service;
 
-import lombok.RequiredArgsConstructor;
-import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
-import org.openpaas.paasta.marketplace.api.domain.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.openpaas.paasta.marketplace.api.domain.Category;
+import org.openpaas.paasta.marketplace.api.domain.CustomPage;
+import org.openpaas.paasta.marketplace.api.domain.Software;
+import org.openpaas.paasta.marketplace.api.domain.SoftwareHistory;
+import org.openpaas.paasta.marketplace.api.domain.SoftwarePlan;
+import org.openpaas.paasta.marketplace.api.domain.TestSoftwareInfo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpMethod;
@@ -12,8 +18,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.List;
-import java.util.Map;
+import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
+import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
@@ -112,5 +119,23 @@ public class AdminSoftwareService {
         }
 
         return resEntity.getBody();
+    }
+    
+    /**
+     * 배포 테스트 실패한 앱 삭제
+     * @param testFailedAppId
+     * @return
+     */
+    public Map<String,Object> deleteDeployTestFailedApp(Long testFailedAppId) {
+    	Map<String,Object> resultMap = new HashMap<String,Object>();
+    	resultMap.put("RESULT", "Successful");
+    	
+    	ResponseEntity<Long> resEntity = paasApiRest.exchange("/admin/softwares/testFailed/app/"+ testFailedAppId, HttpMethod.DELETE, null, Long.class);
+    	Long deleteCount = resEntity.getBody();
+    	
+    	if (deleteCount == null || deleteCount == 0) {
+    		resultMap.put("RESULT", "Fail");
+    	}
+    	return resultMap;
     }
 }

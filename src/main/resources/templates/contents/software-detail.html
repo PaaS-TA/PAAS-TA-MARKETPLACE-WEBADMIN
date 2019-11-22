@@ -384,7 +384,6 @@
         </div>
         <!-- //배포 테스트 팝업 Modal -->
 
-
         <!-- 배포 테스트 대기 팝업 Modal -->
         <div class="modal fade" id="awaitDeployModal" tabindex="-1" role="dialog" aria-labelledby="awaitDeployModal" aria-hidden="true">
             <div class="modal-dialog">
@@ -439,6 +438,29 @@
             </div>
         </div>
         <!-- //배포 앱 삭제 팝업 Modal -->
+        
+        <!-- 배포 앱 삭제 팝업 Modal -->
+        <div class="modal fade deleteTestedFailedApp" id="deleteAppFailedModal" tabindex="-1" role="dialog" aria-labelledby="deleteAppModal" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content modal-sm"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">배포 실패 테스트 앱 삭제</h4>
+                    </div>
+                    <div class="modal-body">
+                        <input type="hidden" id="deployedTestFailedId">
+                        <div class="only-text">
+                            배포 실패한 테스트 앱을 삭제하시겠습니까?
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" name="button" class="btn btn-color1" th:onclick="'javascript:deleteTestFailedApp();'">확인</button>
+                        <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- //배포 앱 삭제 팝업 Modal -->
 
     </div>
 <!-- //content -->
@@ -459,7 +481,7 @@
         });
 
         var getTestSoftwareInfoList = function (id) {
-          procCallAjax("/admin/softwares/" + id + "/testSwInfo", "GET", null, null, callbackTestSoftwareInfoList);
+          	procCallAjax("/admin/softwares/" + id + "/testSwInfo", "GET", null, null, callbackTestSoftwareInfoList);
         };
 
         var callbackTestSoftwareInfoList = function (data) {
@@ -474,14 +496,14 @@
 					
 					if (commonUtils.contains(data[i].status, "Successful")) {
 						btnHtml = "<button name='button' class='btn btn-color2 btn-sm' type='button' id='goAppBtn' onclick='fncGoApp(\""+data[i].name+"\", \""+data[i].status+"\");'>배포 확인</button>"
-	                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "view" + "\")'>로그 확인</button>"
-	                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "download" + "\")'>로그 다운</button>"
-	                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
+		                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "view" + "\")'>로그 확인</button>"
+		                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "download" + "\")'>로그 다운</button>"
+		                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
 					} else {
 						btnHtml = "<button name='button' class='btn btn-color2 btn-sm' type='button' id='goAppBtn' onclick='goDeployTestFailed(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>배포 확인</button>"
-                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='goDeployTestFailed(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>로그 확인</button>"
-                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='goDeployTestFailed(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>로그 다운</button>"
-                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
+		                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='goDeployTestFailed(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>로그 확인</button>"
+		                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='goDeployTestFailed(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>로그 다운</button>"
+		                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployFailedBtn' onclick='deleteDeployFailedBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
 					}
 					
                     htmlString.push(
@@ -559,12 +581,17 @@
           }
         };
 
-
         // 배포 테스트한 앱 삭제 modal
         var deleteDeployBtn = function (id, appGuid) {
             $(".deleteTestedApp .modal-body #deployedTestId").val(id);
             $(".deleteTestedApp .modal-body #deployedTestAppGuid").val(appGuid);
             $("#deleteAppModal").modal();
+        };
+        
+        // 배포 테스트 실패한 앱 삭제 modal
+        var deleteDeployFailedBtn = function (id, appGuid) {
+            $("#deployedTestFailedId").val(id);
+            $("#deleteAppFailedModal").modal();
         };
 
         // 배포 테스트한 앱 삭제
@@ -575,25 +602,35 @@
             var reqUrl = "/admin/softwares/" + swId + "/testSwInfo/" + id + "/app/" + appGuid;
 
             $("#deleteAppModal").modal('hide');
-            loading.interval(30, "배포 테스트 삭제중...");
+            loading.interval(30, "배포 테스트 앱 삭제중...");
             
             procCallAjax(reqUrl, "DELETE", null, null, callbackDeleteTestApp);
         };
 
+        // 배포 테스트 실패한 앱 삭제
+        var deleteTestFailedApp = function() {
+            var testFailedAppId = $("#deployedTestFailedId").val();
+            var reqUrl = "/admin/softwares/testFailed/app/"+ testFailedAppId;
+
+            $("#deleteAppFailedModal").modal('hide');
+            loading.interval(30, "배포 테스트 실패한 앱 삭제중...");
+            
+            procCallAjax(reqUrl, "DELETE", null, null, callbackDeleteTestApp);
+        }
+        
         var callbackDeleteTestApp = function (data) {
-        	loading.stop();
-        	
             if(data.RESULT === "Successful") {
                 commonAlert.show("삭제 완료!");
             } else {
             	commonAlert.show("삭제 실패!");
             }
             
-            var swId = $("#id").val();
+            // var swId = $("#id").val();
             // getTestSoftwareInfoList(swId);
+            // loading.stop();
+            
             location.href = location.href;
         };
-
 
         var moveSoftwaresPage = function() {
             procMovePage("/admin/softwares/page");

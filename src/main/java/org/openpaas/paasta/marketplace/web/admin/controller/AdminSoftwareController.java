@@ -230,4 +230,15 @@ public class AdminSoftwareController {
     public Map deleteDeployTestApp(@PathVariable Long swId, @PathVariable Long id, @PathVariable String appGuid) {
         return adminSoftwareService.deleteDeployTestApp(swId, id, appGuid);
     }
+    
+    /**
+     * 배포 테스트 실패한 앱 삭제
+     * @param testFailedAppId
+     * @return
+     */
+    @DeleteMapping(value = "/testFailed/app/{testFailedAppId}")
+    @ResponseBody
+    public Map<String,Object> deleteDeployTestFailedApp(@PathVariable Long testFailedAppId) {
+    	return adminSoftwareService.deleteDeployTestFailedApp(testFailedAppId);
+    }
 }

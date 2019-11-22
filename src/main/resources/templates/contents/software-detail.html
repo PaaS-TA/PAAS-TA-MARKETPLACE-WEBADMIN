@@ -719,14 +719,17 @@
             $("#testSwName").val('');
         });
 
-
         // 배포 테스트 Btn
         $("#deployConfirmBtn").on("click", function () {
             var softwareId = "[[${software.id}]]";
-
             // 선택한 plan id
             var selectedPlanValue = $("#instancePriceModal_table :input:radio[name=instancePriceModal_selectedPlan]:checked").val();
             var testName = $("#testSwName").val();
+            
+            if (commonUtils.isBlank(testName)) {
+            	commonAlert.show("테스트 앱 이름을 입력해주세요.");
+            	return;
+            }
 
             var reqParam = {
                 "name": testName
@@ -737,7 +740,6 @@
             
             var reqUrl = "/admin/softwares/"+ softwareId + "/plan/" + selectedPlanValue;
             procCallAjax(reqUrl, "POST", JSON.stringify(reqParam), null, callbackDeployTestResult, true);
-            //first();
         });
 
         var callbackDeployTestResult = function (data) {

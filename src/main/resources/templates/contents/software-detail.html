@@ -478,9 +478,9 @@
 	                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='logEvent(\"" + commonUtils.replaceEnter(data[i].appGuid)+ "\",\"" + "download" + "\")'>로그 다운</button>"
 	                        + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
 					} else {
-						btnHtml = "<button name='button' class='btn btn-color2 btn-sm' type='button' id='goAppBtn'>배포 확인</button>"
-                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn'>로그 확인</button>"
-                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog'>로그 다운</button>"
+						btnHtml = "<button name='button' class='btn btn-color2 btn-sm' type='button' id='goAppBtn' onclick='goDeployTestFailed(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>배포 확인</button>"
+                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color4 btn-sm' type='button' data-toggle='modal' id='deployTestAppBtn' onclick='goDeployTestFailed(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>로그 확인</button>"
+                        + "&nbsp;&nbsp;<button name='button' class='btn btn-color1 btn-sm' type='button' id='downloadDeployLog' onclick='goDeployTestFailed(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>로그 다운</button>"
                         + "&nbsp;&nbsp;<button type='button' name='btton' class='btn btn-color9 btn-sm' id='deleteDeployBtn' onclick='deleteDeployBtn(\"" + data[i].id + "\",\"" + commonUtils.replaceEnter(data[i].appGuid) +"\")'>삭제</button>"
 					}
 					
@@ -590,7 +590,7 @@
             }
             
             var swId = $("#id").val();
-            getTestSoftwareInfoList(swId);
+            // getTestSoftwareInfoList(swId);
             location.href = location.href;
         };
 
@@ -724,6 +724,10 @@
 			}
 			var appUrl = "http://"+ name + CLOUDFOUNDRY_API_HOST;
 			window.open(appUrl, "goApp");
+		}
+		
+		var goDeployTestFailed = function(id, appGuid) {
+			commonAlert.show("<strong>[배포 테스트 Failed]</strong><br/><br/>"+ appGuid);
 		}
         /*]]>*/
     </script>

@@ -168,11 +168,11 @@ var loading = {
 //공통 알림 Modal
 var commonAlert = {
 	show: function(message) {
-		$("#commonAlertModal-Message").text(message);
+		$("#commonAlertModal-Message").html(message);
 		$("#commonAlertModal").modal("show");
 	},
 	hide: function() {
-		$("#commonAlertModal-Message").text("");
+		$("#commonAlertModal-Message").html("");
 		$("#commonAlertModal").modal("hide");
 	}
 }

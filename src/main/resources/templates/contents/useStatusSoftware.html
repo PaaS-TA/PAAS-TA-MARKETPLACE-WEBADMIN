@@ -351,7 +351,7 @@
             }
 
 			// 리스트 조회
-            var reqUrl = "/admin/softwares" + "?categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
+            var reqUrl = "/admin/softwares/with/instanceCount" + "?categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
             if (pageNum != null)
             	pageNumSave = pageNum;
             procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
@@ -366,7 +366,10 @@
         	$("#totalCount").text(" ("+ CURR_TOTAL_ELEMENTS +" / "+ data.countOfInstsUsing +" / "+ data.countOfUsersUsing +")");
         }
 
-        var callbackSoftwareList = function(data) {
+        var callbackSoftwareList = function(resultMap) {
+        	var data = resultMap.softwarePage;
+        	var instanceCountMap = resultMap.instanceCountMap;
+        	
         	// 조회된 상품 전체 카운터
         	CURR_TOTAL_ELEMENTS = data.totalElements;
         	
@@ -374,26 +377,17 @@
             var htmlString = [];
             var content = data.content;
             var listLength = content.length;
+            var instanceUserCount = 0;
 
             if(listLength > 0){
                 getSoftwareStatsChart(data);
-                
-                var instanceUserCountList = soldPerSwCount.replace("{", "").replace("}", "").split(",");
     			
                 for(var i = 0; i < listLength; i++){
                 	var index = (i+1) + pageNumSave * data.size;
-                    var instanceUserCount;
                     
-					for (var j = 0; j < instanceUserCountList.length; j++) {
-						var instanceRate = instanceUserCountList[j];
-	                    var value = instanceRate.split("=");
-
-	                    if (content[i].id == value[0]) {
-	                        instanceUserCount = value[1];
-	                        break;
-	                    }else{
-	                        instanceUserCount = 0;
-	                    }
+                	instanceUserCount = instanceCountMap[content[i].id];
+					if (commonUtils.isEmpty(instanceUserCount)) {
+						instanceUserCount = 0;
 					}
                     
                     var statusModifiedDate = '';

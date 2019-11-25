@@ -43,7 +43,7 @@ var procCallAjax = function(reqUrl, reqMethod, param, preFunc, callback, useAsyn
         },
         complete : function(data) {
             // SKIP
-            console.log("COMPLETE :: data :: ", data);
+            //console.log("COMPLETE :: data :: ", data);
         }
     });
 };

@@ -138,4 +138,19 @@ public class AdminSoftwareService {
     	}
     	return resultMap;
     }
+    
+    /**
+     * 판매된 소프트웨어의 카운트정보 조회
+     * @param queryParamString
+     * @return
+     */
+    public Map<String,Object> getSoftwareInstanceCountMap(List<Long> softwareIdList) {
+        UriComponentsBuilder builder = UriComponentsBuilder.newInstance().path("/softwares/instanceCount");
+        for (Long id : softwareIdList) {
+            builder.queryParam("softwareIdList", id);
+        }
+        String url = builder.buildAndExpand().toUriString();
+
+        return paasApiRest.getForObject(url, Map.class);
+    }
 }

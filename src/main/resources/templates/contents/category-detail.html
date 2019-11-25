@@ -67,9 +67,10 @@
                         <!-- //table -->
                         <div class="cont_btnBox">
                             <button name="button" class="btn btn-color1 btn-md" id="modifyCategory" type="button">수정</button>
-                            <button name="button" class="btn btn-color1 btn-md" id="deleteCategory" type="button" data-toggle="modal" data-target="#myModal_ok">삭제</button>
+                            <!--/* <button name="button" class="btn btn-color1 btn-md" id="deleteCategory" type="button" data-toggle="modal" data-target="#categoryDeleteConfirmModal">삭제</button> */-->
+                            <button name="button" class="btn btn-color1 btn-md" id="deleteCategory" type="button" onclick="deleteCategoryConfirmBtn();">삭제</button>
                             <!-- Modal -->
-                            <div class="modal fade" id="myModal_ok" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                            <div class="modal fade" id="categoryDeleteConfirmModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
                                 <div class="modal-dialog">
                                     <div class="modal-content modal-sm"><!-- 개발에서 사용하는 다른 팝업모듈 사용시 이부분만 사용하세요.  -->
                                         <div class="modal-header">
@@ -82,7 +83,7 @@
                                             </div>
                                         </div>
                                         <div class="modal-footer">
-                                            <button type="submit" name="button" class="btn btn-color1" id="confirmBtn">확인</button>
+                                            <button type="submit" name="button" class="btn btn-color1" id="goDeleteCategoryBtn">확인</button>
                                             <button type="button" name="button" class="btn btn-color2" data-dismiss="modal">닫기</button>
                                         </div>
                                     </div>
@@ -102,22 +103,41 @@
     <script type="text/javascript">
         var categoryId = $("#categoryId").val();
 
-        $("#modifyCategory").on("click", function () {
-           procMovePage("/admin/categories/" + categoryId + "/modify");
-        });
-
-        $("#confirmBtn").on("click", function () {
-            procCallAjax("/admin/categories/" + categoryId, "DELETE", null, null, callbackDeleteCategory);
-        });
-
-        var callbackDeleteCategory = function(data) {
-            procMovePage("/admin/categories");
-        };
-
         // ON LOAD
         $(document).ready(function () {
         	currentMenu('2');
         })
+
+        $("#modifyCategory").on("click", function () {
+           procMovePage("/admin/categories/" + categoryId + "/modify");
+        });
+
+/*         $("#confirmBtn").on("click", function () {
+            procCallAjax("/admin/categories/" + categoryId, "DELETE", null, null, callbackDeleteCategory);
+        });
+ */
+        var callbackDeleteCategory = function(data) {
+            procMovePage("/admin/categories");
+        };
+
+        // deleteCategoryConfirmBtn
+        var deleteCategoryConfirmBtn = function() {
+        	procCallAjax("/admin/categories/softwareUsedCategory/"+ categoryId, "GET", null, null, callbackSoftwareUsedCategory);
+        }
+
+        // 카테고리 사용유무 검사
+        var callbackSoftwareUsedCategory = function(data) {
+        	if (data.resultCode == "Used") {
+        		commonAlert.show("현재 사용중인 카테고리는 삭제할수 없습니다");
+        		return;
+        	}
+        	$("#categoryDeleteConfirmModal").modal("show");
+        }
+        
+        $("#goDeleteCategoryBtn").on("click", function(){
+        	procCallAjax("/admin/categories/" + categoryId, "DELETE", null, null, callbackDeleteCategory);
+        });
+
     </script>
 </div>
 <!-- rignt Cnt -->

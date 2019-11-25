@@ -705,20 +705,30 @@
 
         // 배포 테스트 Modal
         $("#deployTestAppBtn").on("click", function () {
-            var rows = $('#instancePriceModal_table').children('tbody').children('tr');
+            /* var rows = $('#instancePriceModal_table').children('tbody').children('tr');
+            if (rows.length <= 0) {
+            	commonAlert.show("테스트할 상품의 가격 정보가 없습니다.");
+                return;
+            }
+            $("#testSwName").val('');
+            $("#softwarePriceModal").modal("show"); */
+        	instancePriceModalView();
+        });
+
+        var instancePriceModalView = function() {
+        	var rows = $('#instancePriceModal_table').children('tbody').children('tr');
             if (rows.length <= 0) {
             	commonAlert.show("테스트할 상품의 가격 정보가 없습니다.");
                 return;
             }
             $("#testSwName").val('');
             $("#softwarePriceModal").modal("show");
-        });
-
+        }
 
         $("#deployCancel").on("click", function () {
             $("#testSwName").val('');
         });
-
+        
         // 배포 테스트 Btn
         $("#deployConfirmBtn").on("click", function () {
             var softwareId = "[[${software.id}]]";
@@ -727,6 +737,7 @@
             var testName = $("#testSwName").val();
             
             if (commonUtils.isBlank(testName)) {
+            	commonAlert.setCallBackFunc(instancePriceModalView);
             	commonAlert.show("테스트 앱 이름을 입력해주세요.");
             	return;
             }

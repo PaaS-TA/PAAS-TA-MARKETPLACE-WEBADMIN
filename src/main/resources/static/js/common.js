@@ -174,5 +174,36 @@ var commonAlert = {
 	hide: function() {
 		$("#commonAlertModal-Message").html("");
 		$("#commonAlertModal").modal("hide");
+	},
+	callBackArguments: {},
+	calbackFunc: {},
+	setCallBackFunc: function(callbackFunction) {
+		this.calbackFunc = arguments[0];
+		this.callBackArguments = arguments;
+	},
+	excCallBackFunc: function() {
+		var execFunction = ""; 
+		if (commonUtils.isEmpty(this.calbackFunc)) {
+			return;
+		}
+		
+		if (commonUtils.isEmpty(this.callBackArguments) || this.callBackArguments.length > 1) {
+			execFunction = "this.calbackFunc(";
+			var argCount = this.callBackArguments.length;
+			
+			for (var idx=1; idx<argCount ;idx++) {
+				if (idx == 1) {
+					execFunction += "this.callBackArguments["+ idx +"]";
+				} else {
+					execFunction += ",this.callBackArguments["+ idx +"]";
+				}
+			}
+			
+			execFunction += ")";
+		} else {
+			execFunction = "this.calbackFunc()";
+		}
+		
+		eval(execFunction);
 	}
 }

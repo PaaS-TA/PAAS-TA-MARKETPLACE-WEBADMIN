@@ -619,6 +619,10 @@
         }
         
         var callbackDeleteTestApp = function (data) {
+        	commonAlert.setCallBackFunc(function(){
+        		location.href = location.href;
+        	});
+
             if(data.RESULT === "Successful") {
                 commonAlert.show("삭제 완료!");
             } else {
@@ -629,7 +633,7 @@
             // getTestSoftwareInfoList(swId);
             // loading.stop();
             
-            location.href = location.href;
+            // location.href = location.href;
         };
 
         var moveSoftwaresPage = function() {

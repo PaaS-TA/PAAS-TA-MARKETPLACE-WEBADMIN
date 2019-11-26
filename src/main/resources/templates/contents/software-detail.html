@@ -747,7 +747,8 @@
             };
 
             //Loading Start
-            loading.interval(60, "배포 중입니다. 잠시만 기다려주세요. (최대 60초)");
+            // loading.interval(60, "배포 중입니다. 잠시만 기다려주세요. (최대 60초)");
+            loading.start("배포 중입니다. 잠시만 기다려주세요. (최대 60초 이상)");
             
             var reqUrl = "/admin/softwares/"+ softwareId + "/plan/" + selectedPlanValue;
             procCallAjax(reqUrl, "POST", JSON.stringify(reqParam), null, callbackDeployTestResult, true);

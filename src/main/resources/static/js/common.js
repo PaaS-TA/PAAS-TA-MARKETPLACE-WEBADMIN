@@ -167,6 +167,7 @@ var loading = {
 
 //공통 알림 Modal
 var commonAlert = {
+	callBackArguments: null,
 	show: function(message) {
 		$("#commonAlertModal-Message").html(message);
 		$("#commonAlertModal").modal("show");
@@ -175,20 +176,22 @@ var commonAlert = {
 		$("#commonAlertModal-Message").html("");
 		$("#commonAlertModal").modal("hide");
 	},
-	callBackArguments: {},
-	calbackFunc: {},
-	setCallBackFunc: function(callbackFunction) {
-		this.calbackFunc = arguments[0];
+	setCallBackFunc: function() {
 		this.callBackArguments = arguments;
 	},
 	excCallBackFunc: function() {
-		var execFunction = ""; 
-		if (commonUtils.isEmpty(this.calbackFunc)) {
+		var execFunction = "";
+		if (commonUtils.isEmpty(this.callBackArguments)) {
 			return;
 		}
 		
+		if (typeof this.callBackArguments[0] !== "function") {
+			this.callBackArguments = null;
+			return;
+		}
+
 		if (commonUtils.isEmpty(this.callBackArguments) || this.callBackArguments.length > 1) {
-			execFunction = "this.calbackFunc(";
+			execFunction = "this.callBackArguments[0](";
 			var argCount = this.callBackArguments.length;
 			
 			for (var idx=1; idx<argCount ;idx++) {
@@ -201,9 +204,15 @@ var commonAlert = {
 			
 			execFunction += ")";
 		} else {
-			execFunction = "this.calbackFunc()";
+			execFunction = "this.callBackArguments[0]()";
 		}
 		
-		eval(execFunction);
+		try {
+			eval(execFunction);
+		} catch(error) {
+			console.log(error.message);
+		}
+
+		this.callBackArguments = null;
 	}
 }

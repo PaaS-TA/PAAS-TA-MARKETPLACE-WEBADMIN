@@ -2,7 +2,8 @@
 <html lagn="ko" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
 
 <script th:replace="~{fragments/common-script}"></script>
-<script layout:fragment="script"></script>
+<script layout:fragment="script">
+</script>
 <!--</head>-->
 <body>
     <div id="wrap">
@@ -24,11 +25,16 @@
                     <p class="popTxt" id="commonAlertModal-Message">알림 문구</p>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" id="commonAlertCloseBtn" name="commonAlertCloseBtn" onclick="commonAlert.excCallBackFunc()" class="btn btn-color2" data-dismiss="modal">닫기</button>
+                    <button type="button" id="commonAlertCloseBtn" name="commonAlertCloseBtn" class="btn btn-color2" data-dismiss="modal">닫기</button>
                 </div>
             </div>
         </div>
     </div>
+    <script th:inline="javascript" type="text/javascript" layout:fragment="custom-script">
+    	$('#commonAlertModal').on('hide.bs.modal', function (e) {
+			commonAlert.excCallBackFunc();
+		})
+    </script>
     <!--/* //공통알림 팝업 Modal */-->
 </body>
 

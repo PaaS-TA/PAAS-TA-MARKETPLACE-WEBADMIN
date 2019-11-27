@@ -273,17 +273,14 @@
 			getSoftwareStatsChart(resultMap);
 			
 			// 리스트 그리기
-            if(listLength > 0){
+            if (listLength > 0) {
                 for(var i = 0; i < listLength; i++){
 					var index = (i+1) + pageNumSave * data.size;
-                    //총 건수
-                    $("#totalCount").text(" (" + data.totalElements +")");
-
                     var instanceCount;
 
                     for(key in resultCountList) {
                         if(content[i].id == key){
-                            instanceCount = resultCountList[key];
+                            instanceCount = (commonUtils.isEmpty(resultCountList[key]) ? 0 : resultCountList[key]);
                             break;
                         } else {
                             instanceCount = 0;
@@ -303,7 +300,13 @@
                         + "</tr>"
                     );
                 }
+                
+                //총 건수
+                $("#totalCount").text(" (" + data.totalElements +")");
             }else{
+                //총 건수
+                $("#totalCount").text(" (0)");
+
                 htmlString = "<tr><td colspan='5'><p class='user_p'>사용자가 존재하지 않습니다.</p></td></tr>";
             }
 

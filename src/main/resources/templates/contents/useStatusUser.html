@@ -270,7 +270,7 @@
             if (listLength > 0) {
                 for(var i = 0; i < listLength; i++){
 					var index = (i+1) + pageNumSave * data.size;
-                    var instanceCount;
+                    var instanceCount = 0;
 
                     for(key in resultCountList) {
                         if(content[i].id == key){

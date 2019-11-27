@@ -268,10 +268,12 @@
             var htmlString = [];
             var content = data.content;
             var listLength = content.length;
-
+            
+            // 차트 그리기
+			getSoftwareStatsChart(resultMap);
+			
+			// 리스트 그리기
             if(listLength > 0){
-                getSoftwareStatsChart(resultMap);
-
                 for(var i = 0; i < listLength; i++){
 					var index = (i+1) + pageNumSave * data.size;
                     //총 건수
@@ -291,7 +293,6 @@
                     var createdDateValue = new Date(content[i].createdDate);
                     createdDate = getFormatDate(createdDateValue);
 
-
                     htmlString.push(
                         "<tr>"
                         + "<td>" + index  + "</td>"
@@ -303,8 +304,7 @@
                     );
                 }
             }else{
-                htmlString = "<tr>"
-                    + "<td colspan='5'><p class='user_p'>사용자가 존재하지 않습니다.</p></td>" + "</tr>"
+                htmlString = "<tr><td colspan='5'><p class='user_p'>사용자가 존재하지 않습니다.</p></td></tr>";
             }
 
             userList.html(htmlString);

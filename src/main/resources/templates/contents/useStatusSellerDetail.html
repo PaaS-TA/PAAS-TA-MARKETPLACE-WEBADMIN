@@ -182,7 +182,7 @@
         var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
         var countofInstsProvider = null;
         if(totalCountInstsProviderInfo !== "") {
-            countofInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
+            countofInstsProvider = commonUtils.isBlank(totalCountInstsProviderInfo) ? [] : JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
         }
 
 

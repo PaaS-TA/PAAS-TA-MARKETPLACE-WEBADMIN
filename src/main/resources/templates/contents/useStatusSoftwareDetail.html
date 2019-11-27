@@ -153,7 +153,7 @@
         //사용량 추이(Daily::terms,counts)
         var totalCountsOfInstsMonthlyInfo = "[[${totalCountsOfInstsMonthlyInfo}]]";
         var countsOfInstsMonthly = "[[${countsOfInstsMonthly}]]";
-        var countofInstsProvider = JSON.parse(totalCountsOfInstsMonthlyInfo.replace(/&quot;/g,'"'));
+        var countofInstsProvider = commonUtils.isBlank(totalCountsOfInstsMonthlyInfo) ? [] : JSON.parse(totalCountsOfInstsMonthlyInfo.replace(/&quot;/g,'"'));
 
         var lineChart = function (contentData) {
             var softwareId = $("#softwareId").val();

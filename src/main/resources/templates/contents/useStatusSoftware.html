@@ -151,7 +151,7 @@
 
         // 상품별 사용자 수
         var userCountPerSoftware = "[[${instanceUserCount}]]";
-        var resultCountList = JSON.parse(userCountPerSoftware.replace(/&quot;/g,'"'));
+        var resultCountList = commonUtils.isBlank(userCountPerSoftware) ? [] : JSON.parse(userCountPerSoftware.replace(/&quot;/g,'"'));
 
         // 판매 상품 총 개수
         var soldSoftwareTotal = "[[${instanceCountSum}]]";
@@ -161,7 +161,7 @@
         var countOfInstsProviderMonthly = "[[${countOfInstsProviderMonthly}]]";
         var countOfInstsProviderCounts = "[[${countOfInstsProviderCounts}]]";
         var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
-        var countofInstsProvider = JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
+        var countofInstsProvider = commonUtils.isBlank(totalCountInstsProviderInfo) ? [] : JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
 
         //차트(pie.line)
         var getSoftwareStatsChart = function(data) {

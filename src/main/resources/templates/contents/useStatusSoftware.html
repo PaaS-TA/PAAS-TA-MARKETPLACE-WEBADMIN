@@ -97,7 +97,7 @@
         <!-- //검색 Form -->
 
         <div class="cont-titWrap mt30">
-            <h3 class="h-tit3">전체 상품 / 판매 상품 / 사용자<span class="point4" id="totalCount"></span></h3>
+            <h3 class="h-tit3">전체 상품<span class="point4" id="view-totalElements"></span> / 판매 상품<span class="point4" id="view-countOfInstsUsing"></span> / 사용자<span class="point4" id="view-countOfUsersUsing"></span></h3>
         </div>
 
         <!-- 테이블 -->
@@ -169,6 +169,7 @@
             lineChart(data);
         };
 
+        // PIE 차트
         var pieChart = function(contentData) {
             // Chart [pieChart]
             var pieChartData = contentData.content;
@@ -245,6 +246,7 @@
             $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
         };
 
+        // LINE 차트
         var lineChart = function(contentData) {
             var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
             var countsData = countOfInstsProviderCounts;
@@ -273,7 +275,7 @@
                     lineSeriesData.push(lineItem);
                 }
             }
-
+            
             var data = {
                 categories: categoriesData,
                 series: lineSeriesData
@@ -363,7 +365,9 @@
         
         // 상태 요약 정보 화면설정
         var callbackSoftwareStatsInfo = function(data) {
-        	$("#totalCount").text(" ("+ CURR_TOTAL_ELEMENTS +" / "+ data.countOfInstsUsing +" / "+ data.countOfUsersUsing +")");
+        	$("#view-totalElements").text(" ("+ CURR_TOTAL_ELEMENTS +")");
+        	$("#view-countOfInstsUsing").text(" ("+ data.countOfInstsUsing +")");
+        	$("#view-countOfUsersUsing").text(" ("+ data.countOfUsersUsing +")");
         }
 
         var callbackSoftwareList = function(resultMap) {
@@ -379,7 +383,8 @@
             var listLength = content.length;
             var instanceUserCount = 0;
 
-            if(listLength > 0){
+            if (listLength > 0) {
+            	// 차트 그리기
                 getSoftwareStatsChart(data);
     			
                 for(var i = 0; i < listLength; i++){

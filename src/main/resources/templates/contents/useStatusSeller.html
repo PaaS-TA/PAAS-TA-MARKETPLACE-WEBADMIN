@@ -40,7 +40,7 @@
             <ul>
                 <li>
                     <!-- pieChart -->
-                    <div class="inWrap bg01">
+                    <div class="inWrap bg01" style="background-image: url('../../static/images/icon_backgroud_white.png');">
                         <span class="tit">등록 앱</span>
                         <div class="in_txtBox" id="pieChartArea">
                         </div>
@@ -48,7 +48,7 @@
                     <!-- pieChart -->
                 <li>
                     <!-- lineChart -->
-                    <div class="inWrap bg01">
+                    <div class="inWrap bg01" style="background-image: url('../../static/images/icon_backgroud_white.png');">
                         <span class="tit">사용 앱</span>
                         <div class="in_txtBox" id="lineChartArea"></div>
                     </div>
@@ -303,7 +303,7 @@
 
 
         var callbackProfileStatsList = function(data){
-            $("#totalCount").text("(" + data.totalElements + ")");
+            //$("#totalCount").text("(" + data.totalElements + ")");
 
             //::adminProfileList::
             var adminProfileList = $("#profileArea");
@@ -349,7 +349,11 @@
                         + "</tr>"
                     );
                 }
+
+                $("#totalCount").text("(" + data.totalElements + ")");
+
             }else{
+                $("#totalCount").text("(0)");
                 htmlString = "<tr>"
                     + "<td colspan='8'><p class='user_p'>판매자가 존재하지 않습니다.</p></td>" + "</tr>"
             }

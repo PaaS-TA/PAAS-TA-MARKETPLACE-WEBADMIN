@@ -27,6 +27,9 @@ var procCallAjax = function(reqUrl, reqMethod, param, preFunc, callback, useAsyn
         dataType: 'json',
         async: useAsync,
         contentType: "application/json",
+        headers: {
+        	"X-ERROR-RESPONSE-FORMAT": "JSON"
+        },
         beforeSend: function(xhr){
         },
         success: function(data) {

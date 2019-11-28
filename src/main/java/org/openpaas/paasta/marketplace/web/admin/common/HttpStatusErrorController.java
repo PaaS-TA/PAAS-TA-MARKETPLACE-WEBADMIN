@@ -6,6 +6,7 @@ import java.util.Date;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
 import org.springframework.http.HttpStatus;
@@ -17,7 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 public class HttpStatusErrorController implements ErrorController {
 
-    private static final String ERROR_PATH = "/error";
+private static final String ERROR_PATH = "/error";
     
     @Override
     public String getErrorPath() {
@@ -25,7 +26,7 @@ public class HttpStatusErrorController implements ErrorController {
     }
     
     @RequestMapping("/error")
-    public String handleError(HttpServletRequest request, Exception exception, Model model) {
+    public String handleError(HttpServletRequest request, HttpServletResponse response, Exception exception, Model model) {
     	String errorUrl = "error/error";
     	String code = "";
     	String msg = "";
@@ -34,9 +35,10 @@ public class HttpStatusErrorController implements ErrorController {
 
     	Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
     	if (status != null) {
-    		HttpStatus httpStatus = HttpStatus.valueOf(Integer.valueOf(status.toString()));
     		code = status.toString();
+    		HttpStatus httpStatus = HttpStatus.valueOf(Integer.parseInt(code));
     		msg = httpStatus.getReasonPhrase();
+    		response.setStatus(Integer.parseInt(code));
     	}
     	
     	if (exception != null) {
@@ -53,6 +55,7 @@ public class HttpStatusErrorController implements ErrorController {
     	
     	StringBuffer errorInfo = new StringBuffer();
     	errorInfo.append("\n [HttpStatusErrorController] Error Infomation");
+    	errorInfo.append("\n Result Code: FAIL");
     	errorInfo.append(String.format("\n Timestamp: %s", new Date()));
     	errorInfo.append(String.format("\n RequestURI: %s", request.getRequestURI()));
     	errorInfo.append(String.format("\n Error Code: %s", code));

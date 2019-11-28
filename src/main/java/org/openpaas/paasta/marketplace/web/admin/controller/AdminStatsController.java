@@ -397,6 +397,11 @@ public class AdminStatsController {
         return resultMap;
     }
     
+    /**
+     * 상품현황의 Total 카운트 조회 (판매상품/사용자)
+     * @param httpServletRequest
+     * @return
+     */
     @GetMapping(value = "/softwares/statsInfo")
     @ResponseBody
     public Map<String,Object> softwareStatsInfo(HttpServletRequest httpServletRequest) {
@@ -409,6 +414,22 @@ public class AdminStatsController {
     	resultMap.put("countOfUsersUsing", adminStatsService.getCountOfUsersUsing(commonService.setParameters(httpServletRequest)));
 
         return resultMap;
+    }
+    
+    /**
+     * 상품별현황 > 사용앱, 사용추이 차트 데이터 조회
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/softwares/chart/useAppTransitionInfo")
+    @ResponseBody
+    public Map<String,Object> useAppTransitionInfo(HttpServletRequest httpServletRequest) {
+    	Map<String,Object> resultMap = new HashMap<String,Object>();
+    	// 사용앱 차트 데이터 조회
+    	resultMap.put("statsUseAppList", adminStatsService.getStatsUseApp(commonService.setParameters(httpServletRequest)));
+    	// 사용추이 차트 데이터 조회
+    	resultMap.put("statsUseTransitionList", adminStatsService.getStatsUseTransition(commonService.setParameters(httpServletRequest)));
+    	return resultMap;
     }
 
 }

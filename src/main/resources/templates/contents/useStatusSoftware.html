@@ -163,48 +163,15 @@
         var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
         var countofInstsProvider = commonUtils.isBlank(totalCountInstsProviderInfo) ? [] : JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
 
-        //차트(pie.line)
-        var getSoftwareStatsChart = function(data) {
-            pieChart(data);
-            lineChart(data);
-        };
-
         // PIE 차트
-        var pieChart = function(contentData) {
-            // Chart [pieChart]
-            var pieChartData = contentData.content;
-
-            if(pieChartData.length == 0){
+        var pieChart = function(pieChartData) {
+            if (commonUtils.isEmptyArray(pieChartData)) {
                 return;
-            }else{
-                var seriesData = [];
-                var item = [];
-                var userCount;
-
-                for (var i = 0; i < pieChartData.length; i++) {
-
-                    var map = pieChartData[i];
-
-                    for (key in resultCountList) {
-                        if (pieChartData[i].id == key) {
-                            userCount = resultCountList[key];
-                        }
-                    }
-
-                    if(userCount == "" || userCount == undefined){
-                        userCount = 0;
-                    }
-
-                    //dataJson(softwareName,userCount)
-                    item = {name: map.name , data: userCount};
-                    seriesData.push(item);
-                }
             }
 
             var container = document.getElementById('pieChartArea');
-
             var data = {
-                series: seriesData
+                series: pieChartData
             };
 
             var options = {
@@ -248,34 +215,19 @@
 
         // LINE 차트
         var lineChart = function(contentData) {
-            var categoriesData = countOfInstsProviderMonthly.replace("[", "").replace("]", "").split(",");
-            var countsData = countOfInstsProviderCounts;
-            var lineChartData = contentData.content;
+        	if (commonUtils.isEmptyArray(contentData)) {
+        		return;
+        	}
 
-            var container = document.getElementById('lineChartArea');
-
-            if (lineChartData.length == 0) {
-                return;
-            }else{
-                var lineSeriesData = [];
-                var lineItem = [];
-                var dataPerMonth = [];
-
-                for (var i = 0; i < lineChartData.length; i++) {
-                    var map = lineChartData[i];
-
-                    if(countofInstsProvider.counts[map.id]) {
-                        dataPerMonth = countofInstsProvider.counts[map.id];
-                    } else {
-                        dataPerMonth = 0;
-                    }
-
-                    //dataJson(softwareName,series)
-                    lineItem = {name: map.name , data: dataPerMonth};
-                    lineSeriesData.push(lineItem);
-                }
-            }
+        	// 차트 데이터 생성
+        	var categoriesData = getCategoriesData(contentData);
+        	var lineSeriesData = getlineSeriesData(contentData);
+        	
+        	if (commonUtils.isEmptyArray(categoriesData) || commonUtils.isEmptyArray(lineSeriesData)) {
+        		return;
+        	}
             
+        	var container = document.getElementById('lineChartArea');
             var data = {
                 categories: categoriesData,
                 series: lineSeriesData
@@ -297,7 +249,7 @@
                     dateFormat: 'yyyy-MM'
                 },
                 series: {
-                    showDot: false,
+                    showDot: true,
                     zoomable: true,
                     pointWidth: 2
                 },
@@ -313,7 +265,54 @@
             tui.chart.lineChart(container, data, options);
             $(".tui-chart-series-custom-event-area").hide();
         }
+        
+     	// [Chart] 일자별 카테고리 정보 생성
+        var getCategoriesData = function(contentData) {
+        	var categoriesDatas = contentData.reduce(function(previousItem, currentItem, index, array){
+        		if (!commonUtils.arrayContains(previousItem, currentItem.yearMonth)) {
+        			previousItem.push(currentItem.yearMonth);
+        		}
+        		return previousItem;
+        	}, []);
+			return categoriesDatas;
+        }
+        
+        // [Chart] Line Data 생성
+        var getlineSeriesData = function(contentData) {
+        	var lineSeriesDatas = [];
+        	
+        	// LINE 그레프를 위한 앱이름별 리스트 생성
+        	var appNameDatas = contentData.reduce(function(previousItem, currentItem, index, array){
+        		if (!commonUtils.arrayContains(previousItem, currentItem.name)) {
+        			previousItem.push(currentItem.name);
+        		}
+        		return previousItem;
+        	}, []);
+        	
+        	if (commonUtils.isEmptyArray(appNameDatas)) {
+        		return;
+        	}
+			
+        	// Line Data 생성
+        	appNameDatas.forEach(function(element, index, array) {
+        		var lineData = {
+        			name: element
+        		};
+        		
+        		lineData.data = contentData.reduce(function(previousItem, currentItem, index, array){
+            		if (element == currentItem.name) {
+            			previousItem.push(currentItem.usageCount);
+            		}
+            		return previousItem;
+            	}, []);
+        		
+        		lineSeriesDatas.push(lineData);
+        	});
+        	
+        	return lineSeriesDatas;
+        }
 
+        // 리스트 정보 조회
         var getSoftwareList = function (pageNum) {
             var dateParameter;                                              //날짜
             var srchDateParameter = "";
@@ -351,17 +350,31 @@
                 dateParameter = "&createdDateAfter=" + startDate + "T00:00:00" + "&createdDateBefore=" + endDate + "T23:59:59";
                 srchDateParameter = "&srchStartDate=" + startDate + "T00:00:00" + "&srchEndDate=" + endDate + "T23:59:59";
             }
+            
+            loading.start();
 
 			// 리스트 조회
             var reqUrl = "/admin/softwares/with/instanceCount" + "?categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
             if (pageNum != null)
             	pageNumSave = pageNum;
             procCallAjax(reqUrl, "GET", null, null, callbackSoftwareList);
-			
+
             // 상태 요약정보 조회 URL 생성
             NEXT_STEP_PROC_URL = "/admin/stats/softwares/statsInfo" + "?categoryId=" + categoryId + srchDateParameter;
             procCallAjax(NEXT_STEP_PROC_URL, "GET", null, null, callbackSoftwareStatsInfo);
+            
+            // 차트 정보 조회
+            NEXT_STEP_PROC_URL = "/admin/stats/softwares/chart/useAppTransitionInfo" + "?categoryId=" + categoryId + srchDateParameter;
+            procCallAjax(NEXT_STEP_PROC_URL, "GET", null, null, callbackChartRefresh);
+            
+            loading.stop();
         };
+        
+        // 차트 그리기
+        var callbackChartRefresh = function(data) {
+        	pieChart(data.statsUseAppList);
+            lineChart(data.statsUseTransitionList);
+        }
         
         // 상태 요약 정보 화면설정
         var callbackSoftwareStatsInfo = function(data) {
@@ -384,9 +397,6 @@
             var instanceUserCount = 0;
 
             if (listLength > 0) {
-            	// 차트 그리기
-                getSoftwareStatsChart(data);
-    			
                 for(var i = 0; i < listLength; i++){
                 	var index = (i+1) + pageNumSave * data.size;
                     

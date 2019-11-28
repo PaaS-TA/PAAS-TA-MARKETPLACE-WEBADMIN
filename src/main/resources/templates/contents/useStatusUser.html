@@ -247,11 +247,12 @@
                 nameLike = '';
             }
 
-            //var reqUrl = "/admin/stats/users" + "?categoryId=" + categoryId + "&page=" + pageNum + "&size=" + PAGING_SIZE + "&sort=" + SORT + dateParameter;
             var reqUrl = "/admin/stats/users"+ "?page=" + pageNum + "&nameLike=" + nameLike + "&size=" + PAGING_SIZE + "&sort=" + SORT;
 
             if (pageNum != null)
             	pageNumSave = pageNum;
+            
+            loading.start();
 
             procCallAjax(reqUrl, "GET", null, null, callbackUserList);
         };
@@ -364,7 +365,8 @@
 
                 $("#pageNumberList").html(htmlStringPage);                      // 페이지 목록 생성
             }
-
+            
+			loading.stop();
         };
 
         var moveUserStatsDetail = function(id) {

@@ -294,4 +294,24 @@ public class AdminStatsService {
     	ResponseEntity<Long> responseEntity = paasApiRest.exchange("/admin/stats/users/counts/sum" + queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<Long>() {});
     	return responseEntity.getBody();
     }
+    
+    /**
+     * 상품별 사용앱 데이터 조회 (Chart)
+     * @param queryParamString
+     * @return
+     */
+    public List<Map<String,Object>> getStatsUseApp(String queryParamString) {
+    	ResponseEntity<List<Map<String,Object>>> resEntity = paasApiRest.exchange("/admin/stats/softwares/chart/statsUseApp"+ queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
+    	return resEntity.getBody();
+    }
+    
+    /**
+     * 상품별 사용추이 데이터 조회 (Chart)
+     * @param queryParamString
+     * @return
+     */
+    public List<Map<String,Object>> getStatsUseTransition(String queryParamString) {
+    	ResponseEntity<List<Map<String,Object>>> resEntity = paasApiRest.exchange("/admin/stats/softwares/chart/statsUseTransition"+ queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
+    	return resEntity.getBody();
+    }
 }

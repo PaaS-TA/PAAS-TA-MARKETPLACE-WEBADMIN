@@ -122,6 +122,27 @@ var commonUtils = {
     		return false;
     	}
     	return contents.includes(findString);
+    },
+    isEmptyArray: function(object) {
+    	if (object == undefined || object == null || object.length <= 0) {
+    		return true;
+    	}
+    	return false;
+    }, 
+    arrayContains: function(arrayObj, findValue) {
+    	var result = false;
+    	
+    	if (this.isEmptyArray(arrayObj) || this.isBlank(findValue)) {
+    		return result;
+    	}
+    	
+    	arrayObj.forEach(function(element, index, array) {
+    		if (findValue == element) {
+    			result = true;
+    			return;
+    		}
+    	});
+    	return result;
     }
 }
 

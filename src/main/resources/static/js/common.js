@@ -28,10 +28,6 @@ var procCallAjax = function(reqUrl, reqMethod, param, preFunc, callback, useAsyn
         async: useAsync,
         contentType: "application/json",
         beforeSend: function(xhr){
-            // preFunc
-            // if(_csrf_header && _csrf_token) {
-            //     xhr.setRequestHeader(_csrf_header, _csrf_token);
-            // }
         },
         success: function(data) {
         	if (!commonUtils.isEmpty(callback)) {
@@ -39,11 +35,24 @@ var procCallAjax = function(reqUrl, reqMethod, param, preFunc, callback, useAsyn
         	}
         },
         error: function(jqXHR, exception) {
+        	try {
+        		// 열려있는 Modal Close
+        		$('.modal').each(function () {
+                    $(this).modal('hide');
+                });
+        		
+        		// 실행되고 있는 Loading처리 Stop
+        		if (loading.isLoading()) {
+        			loading.stop();
+        		}
+        		
+        		commonAlert.show("서버와의 통신 중 연결이 끊기거나 오류가 발생하였습니다.<br>새로고침을 하시거나 다시 한번 시도해주세요.");
+        	} catch (e) {
+        		console.log(e);
+        	}
             console.log("jqXHR.status::::"+jqXHR.status+" exception:::"+exception);
         },
         complete : function(data) {
-            // SKIP
-            //console.log("COMPLETE :: data :: ", data);
         }
     });
 };
@@ -151,6 +160,7 @@ var commonUtils = {
  * http://carlosbonetti.github.io/jquery-loading/
  * */
 var loading = {
+	//currentStatus: "INIT",
 	timeoutList: [],
 	start: function(msg) {
 		var msgValue = "LOADING...";
@@ -160,9 +170,19 @@ var loading = {
 		}
 		
 		$('body').loading({
-			stoppable: false
-			,theme: 'dark'
-			,message: msgValue
+			stoppable: false,
+			theme: 'dark',
+			message: msgValue
+			/* 사용시 Loading 로직이 동작하지 않음
+			onStart: function(loadingObj) {
+				loading.currentStatus = "START";
+			},
+			onStop: function(loadingObj) {
+				loading.currentStatus = "STOP";
+			},
+			onClick: function(loadingObj) {
+				loading.currentStatus = "CLICK";
+			}*/
      	});
 	},
 	stop: function() {
@@ -183,6 +203,12 @@ var loading = {
 		this.timeoutList[this.timeoutList.length] = setTimeout(function() {
 			$('body').loading('toggle');
 		}, intervalTime);
+	},
+	/*status: function() {
+		return this.currentStatus;
+	},*/
+	isLoading: function() {
+		return $('body').is(':loading');
 	}
 }
 

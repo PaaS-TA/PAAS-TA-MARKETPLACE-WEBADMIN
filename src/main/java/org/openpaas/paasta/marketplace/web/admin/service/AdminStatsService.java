@@ -314,4 +314,24 @@ public class AdminStatsService {
     	ResponseEntity<List<Map<String,Object>>> resEntity = paasApiRest.exchange("/admin/stats/softwares/chart/statsUseTransition"+ queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
     	return resEntity.getBody();
     }
+    
+    /**
+     * 판매자별 등록앱 데이터 조회 (Chart)
+     * @param queryParamString
+     * @return
+     */
+    public List<Map<String,Object>> getSellerCreatedAppPercent(String queryParamString) {
+    	ResponseEntity<List<Map<String,Object>>> resEntity = paasApiRest.exchange("/admin/stats/softwares/chart/sellerCreatedAppPercent"+ queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
+    	return resEntity.getBody();
+    }
+    
+    /**
+     * 판매자별  사용앱 데이터 조회 (Chart)
+     * @param queryParamString
+     * @return
+     */
+    public List<Map<String,Object>> getSellerCreatedAppTransition(String queryParamString) {
+    	ResponseEntity<List<Map<String,Object>>> resEntity = paasApiRest.exchange("/admin/stats/softwares/chart/sellerCreatedAppTransition"+ queryParamString, HttpMethod.GET, null, new ParameterizedTypeReference<List<Map<String,Object>>>() {});
+    	return resEntity.getBody();
+    }
 }

@@ -122,16 +122,9 @@
     <!-- //content -->
 
     <script type="text/javascript">
-
     	var PAGING_SIZE = 5;
     	var pageNumSave = 0;
         var SORT = "id,asc";
-
-        // 판매자별 등록한 총 상품 수
-        var totalSwCountByProvider = commonUtils.isBlank("[[${totalSwCountByProvider}]]") ? [] : JSON.parse("[[${totalSwCountByProvider}]]".replace(/&quot;/g,'"'));
-
-        // 등록된 총 상품 수
-        var totalSwCount = "[[${totalSwCount}]]";
 
         //승인상품 수
         var approvalSoftwareCount = commonUtils.isBlank("[[${approvalSoftwareCount}]]") ? [] : JSON.parse("[[${approvalSoftwareCount}]]".replace(/&quot;/g,'"'));
@@ -142,52 +135,20 @@
         //판매량 수
         var soldSoftwareCount = commonUtils.isBlank("[[${soldSoftwareCount}]]") ? [] : JSON.parse("[[${soldSoftwareCount}]]".replace(/&quot;/g,'"'));
 
-        // 판매 상품 총 개수
-        var soldSoftwareTotal = "[[${instanceCountSum}]]";
-
-        //사용량 추이(terms,counts)
-        var totalCountInstsProviderInfo = "[[${totalCountInstsProviderInfo}]]";
-        var countsCountInstsProvider = commonUtils.isBlank(totalCountInstsProviderInfo) ? [] : JSON.parse(totalCountInstsProviderInfo.replace(/&quot;/g,'"'));
-
-
-        //차트(pie,line)
-        var getSoftwareStatsChart = function(data) {
-            pieChart(data);
-            lineChart(data);
-        };
-
-        var pieChart = function(contentData) {
-            var pieChartData = contentData.content;
-
-            if(pieChartData.length == 0){
-                return;
-            }else{
-                var seriesData = [];
-                var item = [];
-                var soldSWCount;
-                var soldSWCountPercent;  //전체값(totalSwCount) X 퍼센트 ÷ 100
-                var soldSWCountPercentFixed;
-
-                for (var i = 0; i < pieChartData.length; i++) {
-                    var map = pieChartData[i];
-
-                    for(key in totalSwCountByProvider) {
-                        if(map.id == key){
-                            soldSWCount = totalSwCountByProvider[key];
-                            soldSWCountPercent = soldSWCount/totalSwCount*100;
-                            soldSWCountPercentFixed = soldSWCountPercent.toFixed(2);
-                        }
-                    }
-
-                    item = {name: map.name + '(' + soldSWCountPercentFixed + '%)'   , data: soldSWCountPercentFixed};
-                    seriesData.push(item);
-                }
-            }
+        // 등록앱 차트
+        var pieChart = function(pieChartData) {
+        	if (commonUtils.isEmptyArray(pieChartData)) {
+        		return;
+        	}
+        	
+        	// 차트 데이터 가공
+        	for (var idx=0; idx<pieChartData.length ;idx++) {
+        		pieChartData[idx].name = pieChartData[idx].name +" ("+ pieChartData[idx].data +"%)";
+        	}
 
             var container = document.getElementById('pieChartArea');
-
             var data = {
-                series: seriesData
+                series: pieChartData
             };
 
             var options = {
@@ -195,7 +156,7 @@
                     width : 450,
                     height : 250,
                     format: function(value, chartType, areaType) {
-                        if (areaType === 'makingSeriesLabel') { // formatting at series area
+                        if (areaType === 'makingSeriesLabel') {
                             value = value + '%';
                         }
                         return value;
@@ -220,33 +181,21 @@
             $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
         };
 
-        var lineChart = function (contentData) {
-            var lineChartData = contentData.content;
-            var categoriesData = countsCountInstsProvider.terms;
+        // 사용앱 차트
+        var lineChart = function (lineChartData) {
+        	if (commonUtils.isEmptyArray(lineChartData)) {
+        		return;
+        	}
+
+        	// 차트 데이터 생성
+        	var categoriesData = getCategoriesData(lineChartData);
+        	var lineSeriesData = getlineSeriesData(lineChartData);
+        	
+        	if (commonUtils.isEmptyArray(categoriesData) || commonUtils.isEmptyArray(lineSeriesData)) {
+        		return;
+        	}
 
             var container = document.getElementById('lineChartArea');
-
-            if (lineChartData.length == 0) {
-                return;
-            }else{
-                var lineSeriesData = [];
-                var lineItem = [];
-                var dataPerMonth = [];
-
-                for (var i = 0; i < lineChartData.length; i++) {
-                    var map = lineChartData[i];
-
-                    if(countsCountInstsProvider.counts[map.id]) {
-                        dataPerMonth = countsCountInstsProvider.counts[map.id];
-                    } else {
-                        dataPerMonth = 0;
-                    }
-
-                    lineItem = {name: map.name , data: dataPerMonth};
-                    lineSeriesData.push(lineItem);
-                }
-            }
-
             var data = {
                 categories: categoriesData,
                 series: lineSeriesData
@@ -268,7 +217,7 @@
                     dateFormat: 'yyyy-MM'
                 },
                 series: {
-                    showDot: false,
+                    showDot: true,
                     zoomable: true,
                     pointWidth: 2
                 },
@@ -285,7 +234,54 @@
             $(".tui-chart-series-custom-event-area").hide();
             $(".statusBox .inWrap.bg01").css('background-image', 'url("../../static/images/icon_backgroud_white.png")');
         };
+        
+     	// [Chart] 일자별 카테고리 정보 생성
+        var getCategoriesData = function(contentData) {
+        	var categoriesDatas = contentData.reduce(function(previousItem, currentItem, index, array){
+        		if (!commonUtils.arrayContains(previousItem, currentItem.yearMonth)) {
+        			previousItem.push(currentItem.yearMonth);
+        		}
+        		return previousItem;
+        	}, []);
+			return categoriesDatas;
+        }
+        
+        // [Chart] Line Data 생성
+        var getlineSeriesData = function(contentData) {
+        	var lineSeriesDatas = [];
+        	
+        	// LINE 그레프를 위한 앱이름별 리스트 생성
+        	var appNameDatas = contentData.reduce(function(previousItem, currentItem, index, array){
+        		if (!commonUtils.arrayContains(previousItem, currentItem.name)) {
+        			previousItem.push(currentItem.name);
+        		}
+        		return previousItem;
+        	}, []);
+        	
+        	if (commonUtils.isEmptyArray(appNameDatas)) {
+        		return;
+        	}
+			
+        	// Line Data 생성
+        	appNameDatas.forEach(function(element, index, array) {
+        		var lineData = {
+        			name: element
+        		};
+        		
+        		lineData.data = contentData.reduce(function(previousItem, currentItem, index, array){
+            		if (element == currentItem.name) {
+            			previousItem.push(currentItem.useCount);
+            		}
+            		return previousItem;
+            	}, []);
+        		
+        		lineSeriesDatas.push(lineData);
+        	});
+        	
+        	return lineSeriesDatas;
+        }
 
+        // 조회
         var getProfileStatsList = function (pageNum) {
             var nameLike = $("#nameLike").val();
 
@@ -293,17 +289,30 @@
                 nameLike = '';
             }
 
-            var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike + "&size=" + PAGING_SIZE + "&sort=" + SORT + "&page=" + pageNum;
+            loading.start();
             
             if (pageNum != null)
             	pageNumSave = pageNum;
-			
-            loading.start();
             
+            // 리스트 조회
+            var reqUrl = "/admin/profiles" + "?nameLike="+ nameLike + "&size=" + PAGING_SIZE + "&sort=" + SORT + "&page=" + pageNum;
             procCallAjax(reqUrl, "GET", null, null, callbackProfileStatsList);
+
+            // 차트 데이터 조회
+            reqUrl = "/admin/stats/softwares/chart/sellerAppTransitionInfo" + "?sellerName="+ nameLike
+            procCallAjax(reqUrl, "GET", null, null, callbackChartRefresh);
+            
+            loading.stop();
         };
 
+        // 차트 그리기
+        var callbackChartRefresh = function(data) {
+        	allChartClean();
+        	pieChart(data.sellerCreatedAppPercentList);
+        	lineChart(data.sellerCreatedAppTransitionList);
+        }
 
+        // 리스트 그리기
         var callbackProfileStatsList = function(data){
             var adminProfileList = $("#profileArea");
             var htmlString = [];
@@ -311,8 +320,6 @@
             var listLength = content.length;
 
             if(listLength > 0){
-                getSoftwareStatsChart(data);
-
                 var approvalSWCount;
                 var soldSWCount;
                 var productsCount;
@@ -417,14 +424,10 @@
                                 
                 $("#pageNumberList").html(htmlStringPage);                      // 페이지 목록 생성                                     
             }
-        	
-			loading.stop();
         };
 
         //eventNameLike
         var search = function() {
-            $("#pieChartArea").empty();
-            $("#lineChartArea").empty();
             getProfileStatsList();
         };
 
@@ -435,9 +438,13 @@
         
      	// 페이지 이동
         var moveProfileStatsListPage = function(page) {
+            getProfileStatsList(page);
+        };
+        
+     	// 차트 초기화
+        var allChartClean = function() {
         	$("#pieChartArea").empty();
             $("#lineChartArea").empty();
-            getProfileStatsList(page);
         };
 
         // ON LOAD
@@ -448,5 +455,4 @@
     </script>
 </div>
 
-<!--</div>-->
 </html>

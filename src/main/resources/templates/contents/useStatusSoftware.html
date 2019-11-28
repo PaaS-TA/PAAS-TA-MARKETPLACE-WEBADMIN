@@ -372,6 +372,7 @@
         
         // 차트 그리기
         var callbackChartRefresh = function(data) {
+        	allChartClean();
         	pieChart(data.statsUseAppList);
             lineChart(data.statsUseTransitionList);
         }
@@ -503,17 +504,19 @@
 
         // 페이지 이동
         var moveSoftwareListPage = function(page) {
-        	$("#pieChartArea").empty();
-            $("#lineChartArea").empty();
             getSoftwareList(page);
         };
 
         //eventBtn
         $("#searchBtn").on("click", function () {
-            $("#pieChartArea").empty();
-            $("#lineChartArea").empty();
             getSoftwareList();
         });
+        
+        // 차트 초기화
+        var allChartClean = function() {
+        	$("#pieChartArea").empty();
+            $("#lineChartArea").empty();
+        };
 
         // ON LOAD
         $(document).ready(function() {

@@ -128,6 +128,7 @@
 
         //차트(pie.line)
         var getSoftwareStatsChart = function(resultMap) {
+        	allChartClean();
             pieChart(resultMap.purchaserPercent);
             lineChart(resultMap.usageTransition);
         };
@@ -255,6 +256,8 @@
             loading.start();
 
             procCallAjax(reqUrl, "GET", null, null, callbackUserList);
+            
+            loading.stop();
         };
 
         var callbackUserList = function(resultMap) {
@@ -265,7 +268,9 @@
             var listLength = content.length;
             
             // 차트 그리기
-			getSoftwareStatsChart(resultMap);
+            allChartClean();
+            pieChart(resultMap.purchaserPercent);
+            lineChart(resultMap.usageTransition);
 			
 			// 리스트 그리기
             if (listLength > 0) {
@@ -365,8 +370,6 @@
 
                 $("#pageNumberList").html(htmlStringPage);                      // 페이지 목록 생성
             }
-            
-			loading.stop();
         };
 
         var moveUserStatsDetail = function(id) {
@@ -375,23 +378,23 @@
 
         // search enter
         var search = function() {
-            $("#pieChartArea").empty();
-            $("#lineChartArea").empty();
             getUserList();
         };
 
         //eventBtn
         $("#searchBtn").on("click", function () {
-            $("#pieChartArea").empty();
-            $("#lineChartArea").empty();
             getUserList();
         });
 
         // 페이지 이동
         var moveUserListPage = function(page) {
+            getUserList(page);
+        };
+        
+     	// 차트 초기화
+        var allChartClean = function() {
         	$("#pieChartArea").empty();
             $("#lineChartArea").empty();
-            getUserList(page);
         };
 
         // ON LOAD

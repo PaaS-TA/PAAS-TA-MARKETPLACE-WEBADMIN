@@ -173,11 +173,6 @@ public class AdminStatsController {
         Map<String, Long> totalSoldResult = adminStatsService.getCountsOfInstanceProvider();
         model.addAttribute("soldSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSoldResult)));
 
-        // 판매자가 등록한 총 상품 수
-        Map<String, Long> totalSwCountByProvider = adminStatsService.getCountsOfTotalSwsProvider();
-        model.addAttribute("totalSwCountByProvider", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalSwCountByProvider)));
-        model.addAttribute("totalSwCount", adminStatsService.getCountOfTotalSw());
-
         // 승인상품 수
         Map<String, Long> totalApprovalSwCount = adminStatsService.getCountsOfSwsProvider();
         model.addAttribute("approvalSoftwareCount", commonService.getJsonStringFromMap(commonService.getResultMap(idIn, totalApprovalSwCount)));
@@ -188,13 +183,6 @@ public class AdminStatsController {
             map.put(id, adminStatsService.countOfSoldSw(id));
         }
         model.addAttribute("getSoldSoftwareCount", commonService.getJsonStringFromMap(map));
-
-        // 판매량
-        model.addAttribute("instanceCountSum", adminStatsService.getCountOfInstsUsing());
-
-        // 판매자별 상품 월 별 사용량 추이(month)
-        Map countsOfInstsProvider =  adminStatsService.countsOfInstsStatsMonthly(idIn);
-        model.addAttribute("totalCountInstsProviderInfo", commonService.getJsonStringFromMap(countsOfInstsProvider));
 
         return "contents/useStatusSeller";
     }
@@ -429,6 +417,22 @@ public class AdminStatsController {
     	resultMap.put("statsUseAppList", adminStatsService.getStatsUseApp(commonService.setParameters(httpServletRequest)));
     	// 사용추이 차트 데이터 조회
     	resultMap.put("statsUseTransitionList", adminStatsService.getStatsUseTransition(commonService.setParameters(httpServletRequest)));
+    	return resultMap;
+    }
+    
+    /**
+     * 판매자별 현황 > 등록앱, 사용앱 차트 데이터 조회
+     * @param httpServletRequest
+     * @return
+     */
+    @GetMapping(value = "/softwares/chart/sellerAppTransitionInfo")
+    @ResponseBody
+    public Map<String,Object> sellerAppTransitionInfo(HttpServletRequest httpServletRequest) {
+    	Map<String,Object> resultMap = new HashMap<String,Object>();
+    	// 등록앱 차트 데이터 조회
+    	resultMap.put("sellerCreatedAppPercentList", adminStatsService.getSellerCreatedAppPercent(commonService.setParameters(httpServletRequest)));
+    	// 사용앱 차트 데이터 조회
+    	resultMap.put("sellerCreatedAppTransitionList", adminStatsService.getSellerCreatedAppTransition(commonService.setParameters(httpServletRequest)));
     	return resultMap;
     }
 

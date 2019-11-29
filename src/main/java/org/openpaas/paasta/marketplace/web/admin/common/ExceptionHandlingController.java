@@ -22,7 +22,23 @@ public class ExceptionHandlingController {
 	private final String ERROR_RESPONSE_FORMAT_HTML = "HTML";
 	private final String ERROR_RESPONSE_FORMAT_JSON = "JSON";
 
-	
+	/**
+	 * Exception 공통처리
+	 * - Controller 진입 이후에 발생한 Exception을처리 한다
+	 * - Header의 X-ERROR-RESPONSE-FORMAT 값에 의하여 Response를 정한다
+	 *   값이 JSON이면 Json형식의 Text를 만드는 Thymeleaf html로 보낸다
+	 *   그외에는 Error화면으로 보낸다
+	 * - error/error: 에러페이지
+	 * - error/error-json: Json String을 만드는 Html
+     * - 예제
+     *   1. API와의 통신오류 및 에러발생시
+     *   2. 로직처리상 발생한 Exception
+	 * @param request
+	 * @param response
+	 * @param exception
+	 * @param model
+	 * @return
+	 */
 	@ExceptionHandler(Exception.class)
 	public String handleError(HttpServletRequest request, HttpServletResponse response, Exception exception, Model model) {
 		String errorResponseFormat = "HTML";
@@ -91,6 +107,13 @@ public class ExceptionHandlingController {
 		return errorUrl;
 	}
 	
+	/**
+	 * Error Code 생성
+	 * - HttpStatus의 Code와 Exception Message에서 Error Code를 추출함
+	 * @param code
+	 * @param exception
+	 * @return
+	 */
 	private int getErrorStatusCode(String code, Exception exception) {
 		int errorStatusCode = HttpStatus.INTERNAL_SERVER_ERROR.value();
 		

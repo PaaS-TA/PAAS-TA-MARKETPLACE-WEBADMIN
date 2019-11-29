@@ -25,6 +25,18 @@ private static final String ERROR_PATH = "/error";
         return ERROR_PATH;
     }
     
+    /**
+     * Request Error 공통 처리
+     * - Controller 진입 이전에 발생한 Exception을 처리 한다
+     * - 예제
+     *   1. 잘못된 URL
+     *   2. PathParam 또는 Parameter Validation 오류
+     * @param request
+     * @param response
+     * @param exception
+     * @param model
+     * @return
+     */
     @RequestMapping("/error")
     public String handleError(HttpServletRequest request, HttpServletResponse response, Exception exception, Model model) {
     	String errorUrl = "error/error";

@@ -197,32 +197,34 @@
             if(pieChartData.length == 0){
                 return;
             }else{
+                var instanceUserCountList = instanceUserCountProvider.replace("{", "").replace("}", "").split(",");
                 var seriesData = [];
                 var item = [];
-                var instanceUserCount;
-
-                var instanceUserCountList = instanceUserCountProvider.replace("{", "").replace("}", "").split(",");
-
+                var instanceUserCount = 0;
+                var map = {};
+                var instancemap = "";
+                var value = "";
+                
                 for (var i = 0; i < pieChartData.length; i++) {
-
-                    var map = pieChartData[i];
-                    var instancemap = instanceUserCountList[i];
-                    var value = instancemap.split("=");
-
-                    if (map.id == value[0]) {
-                        instanceUserCount = value[1];
-                    }else{
-                        instanceUserCount = 0;
+                    map = pieChartData[i];
+                    instanceUserCount = 0;
+                    
+                    for (var idx=0; idx < instanceUserCountList.length; idx++) {
+	                    instancemap = instanceUserCountList[idx];
+	                    value = instancemap.split("=");
+	
+	                    if (map.id == value[0]) {
+	                        instanceUserCount = value[1];
+	                        break;
+	                    }
                     }
 
-                    //dataJson(softwareName,userCount)
                     item = {name: map.name , data: instanceUserCount};
                     seriesData.push(item);
                 }
             }
-
+            
             var container = document.getElementById('pieChartArea');
-
             var data = {
                 series: seriesData
             };
@@ -266,15 +268,18 @@
         var lineChart = function(contentData) {
             var categoriesData = countofInstsProvider.terms;
             var lineChartData = contentData.content;
-
-            var container = document.getElementById('lineChartArea');
-
+            
             if (lineChartData.length == 0) {
                 return;
             }else{
                 var lineSeriesData = [];
                 var lineItem = [];
                 var dataPerMonth = [];
+                var tempDataPerMonth = [];
+                
+                for (key in categoriesData) {
+                	tempDataPerMonth.push(0);
+                }
 
                 for (var i = 0; i < lineChartData.length; i++) {
                     var map = lineChartData[i];
@@ -282,15 +287,15 @@
                     if(countofInstsProvider.counts[map.id]) {
                         dataPerMonth = countofInstsProvider.counts[map.id];
                     } else {
-                        dataPerMonth = 0;
+                        dataPerMonth = tempDataPerMonth;
                     }
 
-                    //dataJson(softwareName,series)
                     lineItem = {name: map.name , data: dataPerMonth};
                     lineSeriesData.push(lineItem);
                 }
             }
-
+            
+            var container = document.getElementById('lineChartArea');
             var data = {
                 categories: categoriesData,
                 series: lineSeriesData
@@ -312,7 +317,7 @@
                     dateFormat: 'yyyy-MM'
                 },
                 series: {
-                    showDot: false,
+                    showDot: true,
                     zoomable: true,
                     pointWidth: 2
                 },

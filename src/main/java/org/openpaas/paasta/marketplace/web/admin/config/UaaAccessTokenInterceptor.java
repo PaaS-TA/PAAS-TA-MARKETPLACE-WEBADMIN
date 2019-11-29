@@ -7,8 +7,6 @@ import org.springframework.http.client.ClientHttpRequestExecution;
 import org.springframework.http.client.ClientHttpRequestInterceptor;
 import org.springframework.http.client.ClientHttpResponse;
 
-import lombok.extern.slf4j.Slf4j;
-
 /**
  * Uaa Access Token 을 header 에 넣어주는 Interceptor
  *
@@ -16,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
  * @version 1.0
  * @since 2019-04-09
  */
-@Slf4j
 public class UaaAccessTokenInterceptor implements ClientHttpRequestInterceptor {
 
 	private String uaaAccessToken;
@@ -29,11 +26,7 @@ public class UaaAccessTokenInterceptor implements ClientHttpRequestInterceptor {
     @Override
     public ClientHttpResponse intercept(HttpRequest request, byte[] body, ClientHttpRequestExecution execution) throws IOException {
         String bearerAuthToken = makeBearerTokenAuthorization(uaaAccessToken);
-
-        log.info("베어럴 ~~~ " + bearerAuthToken);
-
         request.getHeaders().set(CF_AUTHORIZATION_HEADER_KEY, bearerAuthToken);
-
         return execution.execute(request, body);
     }
 

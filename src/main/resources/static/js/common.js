@@ -70,8 +70,6 @@ var procMovePage = function (pageUrl) {
     if ((!!pageUrl && typeof pageUrl === 'number') && -1 === pageUrl) {
         history.back();
     } else {
-        // pageUrl = ("/" === pageUrl) ? "" : pageUrl;
-        // location.href = procGetDashboardUrl() + pageUrl;
         location.href = pageUrl;
     }
 
@@ -163,7 +161,6 @@ var commonUtils = {
  * http://carlosbonetti.github.io/jquery-loading/
  * */
 var loading = {
-	//currentStatus: "INIT",
 	timeoutList: [],
 	start: function(msg) {
 		var msgValue = "LOADING...";
@@ -176,16 +173,6 @@ var loading = {
 			stoppable: false,
 			theme: 'dark',
 			message: msgValue
-			/* 사용시 Loading 로직이 동작하지 않음
-			onStart: function(loadingObj) {
-				loading.currentStatus = "START";
-			},
-			onStop: function(loadingObj) {
-				loading.currentStatus = "STOP";
-			},
-			onClick: function(loadingObj) {
-				loading.currentStatus = "CLICK";
-			}*/
      	});
 	},
 	stop: function() {
@@ -207,9 +194,6 @@ var loading = {
 			$('body').loading('toggle');
 		}, intervalTime);
 	},
-	/*status: function() {
-		return this.currentStatus;
-	},*/
 	isLoading: function() {
 		return $('body').is(':loading');
 	}

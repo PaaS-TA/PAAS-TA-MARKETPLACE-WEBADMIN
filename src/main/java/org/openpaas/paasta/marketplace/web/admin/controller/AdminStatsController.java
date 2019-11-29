@@ -161,7 +161,6 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/sellers")
     public String getSellerStatsMain(Model model, HttpServletRequest httpServletRequest) {
-
         CustomPage<Profile> profileList = adminSellerProfileService.getProfileList(commonService.setParameters(httpServletRequest));
 
         List<String> idIn = new ArrayList<>();
@@ -194,7 +193,6 @@ public class AdminStatsController {
      */
     @GetMapping(value = "/sellers/{id}")
     public String getSellerStats(Model model, @PathVariable String id, HttpServletRequest httpServletRequest) {
-
         model.addAttribute("categories", adminSoftwareService.getAdminCategories());
         model.addAttribute("sellerStat", adminSellerProfileService.getProfiles(id));
 
@@ -213,8 +211,6 @@ public class AdminStatsController {
         } else {
             model.addAttribute("approvalSwOfProvider", 0);
         }
-        log.info("{}의 승인 상품 수 ::: {}", id, totalApprovalSwCount.get(id));
-
 
         // 판매 상품 수
         model.addAttribute("mySoldSoftwareCount", adminStatsService.countOfSoldSw(id));

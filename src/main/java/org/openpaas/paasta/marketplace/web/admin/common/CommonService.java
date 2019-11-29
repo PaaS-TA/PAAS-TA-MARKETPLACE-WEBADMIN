@@ -44,33 +44,6 @@ public class CommonService {
         return resultString;
     }
 
-//    public Map setParameters(HttpServletRequest httpServletRequest) {
-//        Map<String, String[]> parametersMap = httpServletRequest.getParameterMap();
-//        String[] parametersObject;
-//        String parametersKey;
-//        String resultString = "";
-//
-//        Map resultMap = new HashMap();
-//
-//        StringBuilder stringBuilder = new StringBuilder();
-//
-//        for (int i = 0; i < ParametersList.values().length; i++) {
-//            parametersKey = ParametersList.values()[i].actualValue;
-//            parametersObject = parametersMap.get(parametersKey);
-//
-//            if (parametersObject != null && !"".equals(parametersObject[0])) {
-//                resultMap.put(parametersKey, parametersObject[0]);
-//                //stringBuilder.append("&").append(parametersKey).append("=").append(parametersObject[0]);
-//            }
-//        }
-//
-//        if (stringBuilder.length() > 0) {
-//            resultString = "?" + stringBuilder.substring(1);
-//        }
-//
-//        return resultMap;
-//    }
-
     /**
      * Sets path variables.
      *

@@ -14,14 +14,12 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author hrjin
  * @version 1.0
  * @since 2019-08-30
  */
-@Slf4j
 @RequiredArgsConstructor
 @Service
 public class AdminStatsService {

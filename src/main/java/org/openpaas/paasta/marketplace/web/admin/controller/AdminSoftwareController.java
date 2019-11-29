@@ -37,11 +37,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 
 @Controller
 @RequestMapping(value = "/admin/softwares")
-@Slf4j
 @RequiredArgsConstructor
 public class AdminSoftwareController {
 
@@ -76,7 +74,6 @@ public class AdminSoftwareController {
      */
     @GetMapping(value = "/page")
     public String getAdminSoftwares(Model model, @AuthenticationPrincipal OAuth2User oauth2User, HttpSession httpSession, SoftwareSpecification spec, Authentication authentication) {
-//        httpSession.setAttribute("yourName", oauth2User.getAttributes().get("user_name"));
         model.addAttribute("categories", adminSoftwareService.getAdminCategories());
         model.addAttribute("spec", new SoftwareSpecification());
         model.addAttribute("status", Software.Status.values());
@@ -132,7 +129,6 @@ public class AdminSoftwareController {
     @PutMapping(value = "/{id}")
     @ResponseBody
     public Software updateAdminSoftware(@PathVariable Long id, @Valid @RequestBody Software software) {
-        log.info(">> updateAdminSoftware " + software.toString());
         Software updateSoftware = adminSoftwareService.getAdminSoftwares(id);
         updateSoftware.setCategory(software.getCategory());
         updateSoftware.setInUse(software.getInUse());

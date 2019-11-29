@@ -20,11 +20,9 @@ import org.springframework.web.util.UriComponentsBuilder;
 
 import lombok.RequiredArgsConstructor;
 import lombok.SneakyThrows;
-import lombok.extern.slf4j.Slf4j;
 
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class AdminSoftwareService {
 
     @Autowired
@@ -61,13 +59,11 @@ public class AdminSoftwareService {
                 .expand(id)
                 .toString();
 
-        log.info("updateAdminSoftwared url :: " + url + " Software " + software.toString());
         paasApiRest.put(url, software);
         return getAdminSoftwares(id);
     }
 
     public SoftwarePlan getSoftwarePlan(Long id) {
-        log.info("getSoftwarePlan :: " + id );
         String url = UriComponentsBuilder.newInstance().path("/admin/softwares/plan/{id}")
                 .build()
                 .expand(id)
@@ -111,13 +107,6 @@ public class AdminSoftwareService {
 
     public Map deleteDeployTestApp(Long swId, Long id, String appGuid) {
         ResponseEntity<Map> resEntity = paasApiRest.exchange("/admin/softwares/" + swId + "/testSwInfo/" + id + "/app/" + appGuid, HttpMethod.DELETE, null, Map.class);
-
-        if (resEntity.getBody() != null) {
-            log.info("Response Type: {}", resEntity.getBody().getClass());
-        } else {
-            log.info("Response Type: {}", "response body is null");
-        }
-
         return resEntity.getBody();
     }
     

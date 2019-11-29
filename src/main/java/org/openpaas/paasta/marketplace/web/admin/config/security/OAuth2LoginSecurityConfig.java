@@ -50,12 +50,10 @@ public class OAuth2LoginSecurityConfig extends WebSecurityConfigurerAdapter {
             	.anyRequest()
             	.authenticated()
             .and()
-            //.oauth2Login().loginPage("/login").defaultSuccessUrl("/index", true).permitAll()
             .oauth2Login()
             	.clientRegistrationRepository(clientRegistrationRepository())
             	.authorizedClientService(authorizedClientService())
             	.defaultSuccessUrl("/index", true).permitAll()
-            //.and().logout().logoutSuccessUrl("https://uaa.210.220.151.160.xip.io/oauth/authorize?redirect_url=http://localhost:8779/login&response_type=code&client_id=marketclient&scope=openid cloud_controller_service_permissions.read cloud_controller.read cloud_controller.write");
             .and()
             .logout()
                 .logoutUrl("/logout")

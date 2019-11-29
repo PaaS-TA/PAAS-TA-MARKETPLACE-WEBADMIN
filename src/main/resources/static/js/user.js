@@ -26,13 +26,9 @@ function depth1Click (evt) {
 	if (target.hasClass("open")) {
 		$("#leftMenu").find('a.dept1').removeClass("open on");
 		
-		//nowHrefFunction("dept1");
-		
 	} else {
 		$("#leftMenu").find('ul.dept2').hide(200);
 		$("#leftMenu").find('a.dept1').removeClass("open on");
-		
-		//nowHrefFunction("dept1");
 		
 		target.addClass("open on");
 		$(target).closest("li.dept1").find("ul.dept2").toggle(200);
@@ -250,23 +246,6 @@ jQuery(document).ready(function(){
 			_this.addClass("on");
 		}
 	});
-
-	/*추가*/
-	/*$(".gnbMenu .mm").hover(function(){
-		var _this = $(this);
-
-		if(_this.hasClass("on")){
-			_this.removeClass("on");
-			_this.siblings(".snb").show();
-			_this.siblings(".snb").find(".sm").removeClass("on");
-		}else{
-			$(".gnbMenu .mm").removeClass("on");
-			$(".snb").show();
-			_this.addClass("on");
-			_this.siblings(".snb").hide();
-		}
-	});
-	*/
 
 	$(".gnbMenu .mm").mouseover(function(){
 		$(this).children(".snb").stop().slideUp();
@@ -585,7 +564,6 @@ jQuery(document).ready(function(){
   $(".renameApp").on("click", function(){
     var nameP = $(this).parents('.panel_head').find('.tit');
     var name01 = nameP.text();//현재 앱 이름 저장
-    //console.log(name01);
     nameP.contents().unwrap().wrap("<input type='text' name='renameApp' value='' class='form-control'></input>");
    $(this).parents(".panel_head").append("<div class='sdBtnWrap'><button type='button' name='button' class='btn btn-ico-saveName-s only-ico' title='이름저장'><span class='ico'>이름저장</span></button><button type='button' name='button' class='btn btn-ico-delName-s only-ico' title='변경취소'><span class='ico'>변경취소</span></button></div>");
     $("input[name='renameApp']").attr("placeholder", name01);
@@ -595,7 +573,6 @@ jQuery(document).ready(function(){
   $(".renameApp2").on("click", function(){
     var nameP = $(this).parents('.sevBox.on').find('.txt1');
     var name01 = nameP.text();//현재 앱 이름 저장
-    //console.log(name01);
     nameP.contents().unwrap().wrap("<input type='text' name='renameSev' value='' class='form-control'></input>");
     $(this).parents(".sevBox").append("<div class='sdBtnWrap'><button type='button' name='button' class='btn btn-ico-saveName-s only-ico' title='이름저장'><span class='ico'>이름저장</span></button><button type='button' name='button' class='btn btn-ico-delName-s only-ico' title='변경취소'><span class='ico'>변경취소</span></button></div>");
     $("input[name='renameSev']").attr("placeholder", name01);
@@ -605,7 +582,6 @@ jQuery(document).ready(function(){
   $(".renameApp3").on("click", function(){
     var nameP = $(this).parents('.panel_head').find('.tit');
     var name01 = nameP.text();//현재 앱 이름 저장
-    //console.log(name01);
     nameP.contents().unwrap().wrap("<input type='text' name='renameServ' value='' class='form-control'></input>");
     $(this).parents(".panel_head").append("<div class='sdBtnWrap'><button type='button' name='button' class='btn btn-ico-saveName-s only-ico' title='이름저장'><span class='ico'>이름저장</span></button><button type='button' name='button' class='btn btn-ico-delName-s only-ico' title='변경취소'><span class='ico'>변경취소</span></button></div>");
     $("input[name='renameServ']").attr("placeholder", name01);
@@ -615,7 +591,6 @@ jQuery(document).ready(function(){
   $(".renameInst").on("click", function(){
     var nameP = $(this).parents('.cBox-hd').find('.c-tit');
     var name01 = nameP.text();//현재 앱 이름 저장
-    //console.log(name01);
     nameP.contents().unwrap().wrap("<input type='text' name='renameInst' value='' class='form-control'></input>");
     $(this).parents(".cBox-hd").append("<div class='sdBtnWrap'><button type='button' name='button' class='btn btn-ico-saveName-s only-ico' title='이름저장'><span class='ico'>이름저장</span></button><button type='button' name='button' class='btn btn-ico-delName-s only-ico' title='변경취소'><span class='ico'>변경취소</span></button></div>");
     $("input[name='renameInst']").attr("placeholder", name01);

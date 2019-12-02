@@ -153,7 +153,11 @@ var commonUtils = {
     		}
     	});
     	return result;
-    }
+    },
+    sleep: function(delayTimeMillis) {
+ 	   var start = new Date().getTime();
+ 	   while (new Date().getTime() < (start + delayTimeMillis));
+ 	}
 }
 
 /*
@@ -224,24 +228,24 @@ var commonAlert = {
 			return;
 		}
 
-		if (commonUtils.isEmpty(this.callBackArguments) || this.callBackArguments.length > 1) {
-			execFunction = "this.callBackArguments[0](";
-			var argCount = this.callBackArguments.length;
-			
-			for (var idx=1; idx<argCount ;idx++) {
-				if (idx == 1) {
-					execFunction += "this.callBackArguments["+ idx +"]";
-				} else {
-					execFunction += ",this.callBackArguments["+ idx +"]";
-				}
-			}
-			
-			execFunction += ")";
-		} else {
-			execFunction = "this.callBackArguments[0]()";
-		}
-		
 		try {
+			if (commonUtils.isEmpty(this.callBackArguments) || this.callBackArguments.length > 1) {
+				execFunction = "this.callBackArguments[0](";
+				var argCount = this.callBackArguments.length;
+				
+				for (var idx=1; idx<argCount ;idx++) {
+					if (idx == 1) {
+						execFunction += "this.callBackArguments["+ idx +"]";
+					} else {
+						execFunction += ",this.callBackArguments["+ idx +"]";
+					}
+				}
+				
+				execFunction += ")";
+			} else {
+				execFunction = "this.callBackArguments[0]()";
+			}
+		
 			eval(execFunction);
 		} catch(error) {
 			console.log(error.message);

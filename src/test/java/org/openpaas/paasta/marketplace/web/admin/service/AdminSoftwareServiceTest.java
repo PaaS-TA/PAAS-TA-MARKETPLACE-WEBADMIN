@@ -9,6 +9,8 @@ import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -44,6 +46,9 @@ public class AdminSoftwareServiceTest extends AbstractMockTest {
 
     @Mock
     Page<Software> softwarePage;
+    
+    @Mock
+    ResponseEntity<Long> longResponse;
 
     boolean deleteTestSoftwareInfoNull;
 
@@ -288,5 +293,43 @@ public class AdminSoftwareServiceTest extends AbstractMockTest {
 
         deleteDeployTestApp();
     }
-
+    
+    // 배포 테스트 실패한 앱 삭제
+    @Test
+    public void deleteDeployTestFailedApp() {
+    	Long testFailedAppId = 1L;
+    	
+    	when(paasApiRest.exchange(startsWith("/admin/softwares/testFailed/app/"), eq(HttpMethod.DELETE), eq(null), eq(Long.class)))
+    					.thenReturn(longResponse);
+    	when(longResponse.getBody()).thenReturn(1L);
+    	
+    	Map<String,Object> result = adminSoftwareService.deleteDeployTestFailedApp(testFailedAppId);
+    	assertEquals("Successful", result.get("RESULT"));
+    }
+    
+    // 배포 테스트 실패한 앱 삭제
+    @Test
+    public void deleteDeployTestFailedAppWithEmpty() {
+    	Long testFailedAppId = 1L;
+    	
+    	when(paasApiRest.exchange(startsWith("/admin/softwares/testFailed/app/"), eq(HttpMethod.DELETE), eq(null), eq(Long.class))).thenReturn(longResponse);
+    	when(longResponse.getBody()).thenReturn(0L);
+    	
+    	Map<String,Object> result = adminSoftwareService.deleteDeployTestFailedApp(testFailedAppId);
+    	assertEquals("Fail", result.get("RESULT"));
+    }
+    
+    // 판매된 소프트웨어의 카운트정보 조회
+    @Test
+    public void getSoftwareInstanceCountMap() {
+    	List<Long> softwareIdList = Arrays.asList(1L, 2L);
+    	Map<String,Object> mockMap = new HashMap<String,Object>();
+    	mockMap.put("1", 10);
+    	mockMap.put("2", 20);
+    			
+    	when(paasApiRest.getForObject(startsWith("/softwares/instanceCount"), eq(Map.class))).thenReturn(mockMap);
+    	
+    	Map<String,Object> result = adminSoftwareService.getSoftwareInstanceCountMap(softwareIdList);
+    	assertEquals(mockMap.get("1"), result.get("1"));
+    }
 }

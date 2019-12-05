@@ -30,6 +30,8 @@ public abstract class AbstractMockTest {
     protected String userId;
 
     protected String adminId;
+    
+    protected String categoryId;
 
     protected LocalDateTime current;
 
@@ -37,6 +39,7 @@ public abstract class AbstractMockTest {
     public void setUp() throws Exception {
         userId = "foo";
         adminId = "admin";
+        categoryId = "1";
         current = LocalDateTime.now();
     }
 

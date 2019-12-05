@@ -7,6 +7,7 @@ import static org.mockito.ArgumentMatchers.startsWith;
 import static org.mockito.Mockito.when;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -47,6 +48,12 @@ public class AdminStatsServiceTest extends AbstractMockTest {
 
     @Mock
     CustomPage<Software> softwareCustomPage;
+    
+    @Mock
+    ResponseEntity<List<Map<String,Object>>> listMapResponse;
+    
+    @Mock
+    ResponseEntity<Long> longResponse; 
 
     boolean instanceListEmpty;
 
@@ -441,5 +448,182 @@ public class AdminStatsServiceTest extends AbstractMockTest {
 
         countOfSoldSw();
     }
+    
+    // 사용자별 구매 퍼센트 통계
+    @Test
+    public void getPurchaserPercent() {
+    	String queryParamString = "sort=id";
+    	
+    	List<Map<String,Object>> mockList = new ArrayList<Map<String,Object>>();
+    	Map<String,Object> mockMap1 = new HashMap<String,Object>();
+    	mockMap1.put("first", 10);
+    	mockMap1.put("secend", 20);
+    	Map<String,Object> mockMap2 = new HashMap<String,Object>();
+    	mockMap2.put("first", 30);
+    	mockMap2.put("secend", 40);
+    	
+    	when(paasApiRest.exchange(startsWith("/stats/purchaserPercent"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(listMapResponse);
+    	when(listMapResponse.getBody()).thenReturn(mockList);
+    	
+    	List<Map<String,Object>> result = adminStatsService.getPurchaserPercent(queryParamString);
+    	assertEquals(mockList.size(), result.size());
+    }
+    
+    // 월별 상품구매 통계
+    @Test
+    public void getPurchaseTransitionMonth() {
+    	String queryParamString = "sort=id";
+    	
+    	List<Map<String,Object>> mockList = new ArrayList<Map<String,Object>>();
+    	Map<String,Object> mockMap1 = new HashMap<String,Object>();
+    	mockMap1.put("2019-10-01", 10);
+    	mockMap1.put("2019-11-01", 20);
+    	mockMap1.put("2019-12-01", 30);
+    	
+    	when(paasApiRest.exchange(startsWith("/stats/purchaseTransitionMonth"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(listMapResponse);
+    	when(listMapResponse.getBody()).thenReturn(mockList);
 
+    	List<Map<String,Object>> result = adminStatsService.getPurchaseTransitionMonth(queryParamString);
+    	assertEquals(mockList.size(), result.size());
+    }
+    
+    // 앱사용 사용자 추이
+    @Test
+    public void getUsageTransition() {
+    	String queryParamString = "sort=id";
+    	
+    	List<Map<String,Object>> mockList = new ArrayList<Map<String,Object>>();
+    	Map<String,Object> mockMap1 = new HashMap<String,Object>();
+    	mockMap1.put("2019-10-01", 10);
+    	mockMap1.put("2019-11-01", 20);
+    	mockMap1.put("2019-12-01", 30);
+
+    	when(paasApiRest.exchange(startsWith("/stats/usageTransition"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(listMapResponse);
+    	when(listMapResponse.getBody()).thenReturn(mockList);
+
+    	List<Map<String,Object>> result = adminStatsService.getUsageTransition(queryParamString);
+    	assertEquals(mockList.size(), result.size());
+    }
+    
+    // 사용자의 전체 사용금액 계산
+    @Test
+    public void getUsagePriceTotal() {
+    	String queryParamString = "sort=id";
+    	
+        when(paasApiRest.exchange(startsWith("/instances/usagePriceTotal"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(longResponse);
+    	when(longResponse.getBody()).thenReturn(7L);
+
+        long result = adminStatsService.getUsagePriceTotal(queryParamString);
+        assertEquals(7L, result);
+    }
+    
+    // 현재 사용중인 상품 카운트
+    @Test
+    public void getCountOfInstsUsingWithParams() {
+    	String queryParamString = "sort=id";
+    	
+        when(paasApiRest.exchange(startsWith("/admin/stats/instances/counts/sum"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(longResponse);
+    	when(longResponse.getBody()).thenReturn(7L);
+
+        long result = adminStatsService.getCountOfInstsUsing(queryParamString);
+        assertEquals(7L, result);
+    }
+    
+    // 현재 상품을 사용중인 User 카운트
+    @Test
+    public void getCountOfUsersUsingWithParams() {
+    	String queryParamString = "sort=id";
+    	
+        when(paasApiRest.exchange(startsWith("/admin/stats/users/counts/sum"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(longResponse);
+    	when(longResponse.getBody()).thenReturn(7L);
+
+        long result = adminStatsService.getCountOfUsersUsing(queryParamString);
+        assertEquals(7L, result);
+    }
+    
+    // 상품별 사용앱 데이터 조회 (Chart)
+    @Test
+    public void getStatsUseApp() {
+    	String queryParamString = "sort=id";
+    	
+    	List<Map<String,Object>> mockList = new ArrayList<Map<String,Object>>();
+    	Map<String,Object> mockMap1 = new HashMap<String,Object>();
+    	mockMap1.put("yearMonth", "2019-12-12");
+    	mockMap1.put("name", "홍길동");
+    	mockMap1.put("usageCount", 20);
+    	Map<String,Object> mockMap2 = new HashMap<String,Object>();
+    	mockMap2.put("yearMonth", "2019-12-12");
+    	mockMap2.put("name", "고길동");
+    	mockMap2.put("usageCount", 30);
+    	
+    	when(paasApiRest.exchange(startsWith("/admin/stats/softwares/chart/statsUseApp"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(listMapResponse);
+    	when(listMapResponse.getBody()).thenReturn(mockList);
+    	
+    	List<Map<String,Object>> result = adminStatsService.getStatsUseApp(queryParamString);
+    	assertEquals(mockList.size(), result.size());
+    }
+    
+    // 상품별 사용추이 데이터 조회 (Chart)
+    @Test
+    public void getStatsUseTransition() {
+    	String queryParamString = "sort=id";
+    	
+    	List<Map<String,Object>> mockList = new ArrayList<Map<String,Object>>();
+    	Map<String,Object> mockMap1 = new HashMap<String,Object>();
+    	mockMap1.put("yearMonth", "2019-12-12");
+    	mockMap1.put("name", "MYSQL");
+    	mockMap1.put("usageCount", 20);
+    	Map<String,Object> mockMap2 = new HashMap<String,Object>();
+    	mockMap2.put("yearMonth", "2019-12-12");
+    	mockMap2.put("name", "spring-music");
+    	mockMap2.put("usageCount", 30);
+    	
+    	when(paasApiRest.exchange(startsWith("/admin/stats/softwares/chart/statsUseTransition"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(listMapResponse);
+    	when(listMapResponse.getBody()).thenReturn(mockList);
+    	
+    	List<Map<String,Object>> result = adminStatsService.getStatsUseTransition(queryParamString);
+    	assertEquals(mockList.size(), result.size());
+    }
+    
+    // 판매자별 등록앱 데이터 조회 (Chart)
+    @Test
+    public void getSellerCreatedAppPercent() {
+    	String queryParamString = "sort=id";
+    	
+    	List<Map<String,Object>> mockList = new ArrayList<Map<String,Object>>();
+    	Map<String,Object> mockMap1 = new HashMap<String,Object>();
+    	mockMap1.put("name", "홍길동");
+    	mockMap1.put("data", 20);
+    	Map<String,Object> mockMap2 = new HashMap<String,Object>();
+    	mockMap2.put("name", "고길동");
+    	mockMap2.put("data", 30);
+    	
+    	when(paasApiRest.exchange(startsWith("/admin/stats/softwares/chart/sellerCreatedAppPercent"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(listMapResponse);
+    	when(listMapResponse.getBody()).thenReturn(mockList);
+    	
+    	List<Map<String,Object>> result = adminStatsService.getSellerCreatedAppPercent(queryParamString);
+    	assertEquals(mockList.size(), result.size());
+    }
+    
+    // 판매자별  사용앱 데이터 조회 (Chart)
+    @Test
+    public void getSellerCreatedAppTransition() {
+    	String queryParamString = "sort=id";
+    	
+    	List<Map<String,Object>> mockList = new ArrayList<Map<String,Object>>();
+    	Map<String,Object> mockMap1 = new HashMap<String,Object>();
+    	mockMap1.put("yearMonth", "2019-12-12");
+    	mockMap1.put("name", "MYSQL");
+    	mockMap1.put("useCount", 20);
+    	Map<String,Object> mockMap2 = new HashMap<String,Object>();
+    	mockMap2.put("yearMonth", "2019-12-12");
+    	mockMap2.put("name", "spring-music");
+    	mockMap2.put("useCount", 30);
+    	
+    	when(paasApiRest.exchange(startsWith("/admin/stats/softwares/chart/sellerCreatedAppTransition"), eq(HttpMethod.GET), eq(null), any(ParameterizedTypeReference.class))).thenReturn(listMapResponse);
+    	when(listMapResponse.getBody()).thenReturn(mockList);
+    	
+    	List<Map<String,Object>> result = adminStatsService.getSellerCreatedAppTransition(queryParamString);
+    	assertEquals(mockList.size(), result.size());
+    }
 }

@@ -96,4 +96,13 @@ public class AdminCategoryServiceTest extends AbstractMockTest {
         assertEquals(category1, result);
     }
     
+    // 카테고리 사용중인 소프트웨어 카운트 조회
+    @Test
+    public void getSoftwareUsedCategoryCount() {
+        when(paasApiRest.getForObject(startsWith("/admin/softwares/softwareUsedCategoryCount/"), eq(Long.class))).thenReturn(1L);
+        Long result = adminCategoryService.getSoftwareUsedCategoryCount(Long.parseLong(categoryId));
+        assertEquals(1L, result.longValue());
+
+    }
+
 }

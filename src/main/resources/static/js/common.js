@@ -98,9 +98,11 @@ function doubleSubmitCheck(){
 
 var commonUtils = {
 	addComma: function(num) {
-		return num;
-		// var regexp = /\B(?=(\d{3})+(?!\d))/g;
-		// return num.toString().replace(regexp, ',');
+		if (this.isBlank(num)) {
+			return num;
+		}
+		var regexp = /\B(?=(\d{3})+(?!\d))/g;
+		return num.toString().replace(regexp, ',');
 	},
 	dateValueDigit: function(value) {
     	var result = value;
@@ -157,7 +159,20 @@ var commonUtils = {
     sleep: function(delayTimeMillis) {
  	   var start = new Date().getTime();
  	   while (new Date().getTime() < (start + delayTimeMillis));
- 	}
+	},
+	defaultString: function(value, defaultValue) {
+		if (this.isBlank(value) || value == "null") {
+			return defaultValue;
+		}
+		return value;
+	},
+	onlyNumber: function(value) {
+		if (this.isBlank(value)) {
+			return value;
+		}
+		var regexp = /[^0-9]/g;
+		return value.toString().replace(regexp, '');
+	}
 }
 
 /*
@@ -206,7 +221,14 @@ var loading = {
 //공통 알림 Modal
 var commonAlert = {
 	callBackArguments: null,
-	show: function(message) {
+	show: function(message, focusTargetId) {
+		if (!commonUtils.isBlank(focusTargetId)) {
+       		this.setCallBackFunc(function(){
+				setTimeout(function(){
+					$('html, body').animate({scrollTop : ($("#"+ focusTargetId).offset().top - 100)}, 200);
+				}, 300);
+			});
+		}
 		$("#commonAlertModal-Message").html(message);
 		$("#commonAlertModal").modal("show");
 	},

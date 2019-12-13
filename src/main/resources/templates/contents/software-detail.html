@@ -691,10 +691,10 @@
                         + '<td>'+data[i].name+'</td>'
                         + '<td>'+data[i].memorySize+'</td>'
                         + '<td>'+data[i].diskSize+'</td>'
-                        + '<td>'+data[i].cpuAmt+'</td>'
-                        + '<td>'+data[i].memoryAmt+'</td>'
-                        + '<td>'+data[i].diskAmt+'</td>'
-                        + '<td>'+totalAmt+'</td>'
+                        + '<td>'+commonUtils.addComma(data[i].cpuAmt)+'</td>'
+                        + '<td>'+commonUtils.addComma(data[i].memoryAmt)+'</td>'
+                        + '<td>'+commonUtils.addComma(data[i].diskAmt)+'</td>'
+                        + '<td>'+commonUtils.addComma(totalAmt)+'</td>'
                         + '</tr>'
                     );
                 }

@@ -296,7 +296,7 @@
                         + "<td>" + createdDate + "</td>"
                         + "<td>" + content[i].inUse + "</td>"
                         + "<td>" + content[i].status + "</td>"
-                        + "<td>" + statusModifiedDate + "</td>"
+                        + "<td>" + commonUtils.defaultString(statusModifiedDate, "-") + "</td>"
                         + "</tr>"
                     );
                 }

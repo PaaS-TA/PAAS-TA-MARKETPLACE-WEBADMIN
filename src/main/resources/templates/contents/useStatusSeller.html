@@ -349,19 +349,18 @@
                         + "<td>" + content[i].id + "</a></td>"
                         + "<td>" + content[i].type+ "</td>"
                         + "<td>" + createdDate + "</td>"
-                        + "<td>" + approvalSWCount + "</td>"
-                        + "<td>" + instanceCount[content[i].id] + "</td>"
-                        + "<td>" + soldSWCount + "</td>"
+                        + "<td>" + commonUtils.addComma(approvalSWCount) + "</td>"
+                        + "<td>" + commonUtils.addComma(instanceCount[content[i].id]) + "</td>"
+                        + "<td>" + commonUtils.addComma(soldSWCount) + "</td>"
                         + "</tr>"
                     );
                 }
 
-                $("#totalCount").text("(" + data.totalElements + ")");
+                $("#totalCount").text("("+ commonUtils.addComma(data.totalElements) +")");
 
             }else{
                 $("#totalCount").text("(0)");
-                htmlString = "<tr>"
-                    + "<td colspan='8'><p class='user_p'>판매자가 존재하지 않습니다.</p></td>" + "</tr>"
+                htmlString = "<tr><td colspan='8'><p class='user_p'>판매자가 존재하지 않습니다.</p></td></tr>";
             }
 
             adminProfileList.html(htmlString);

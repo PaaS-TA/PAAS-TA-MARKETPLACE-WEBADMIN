@@ -379,9 +379,9 @@
         
         // 상태 요약 정보 화면설정
         var callbackSoftwareStatsInfo = function(data) {
-        	$("#view-totalElements").text(" ("+ CURR_TOTAL_ELEMENTS +")");
-        	$("#view-countOfInstsUsing").text(" ("+ data.countOfInstsUsing +")");
-        	$("#view-countOfUsersUsing").text(" ("+ data.countOfUsersUsing +")");
+        	$("#view-totalElements").text(" ("+ commonUtils.addComma(CURR_TOTAL_ELEMENTS) +")");
+        	$("#view-countOfInstsUsing").text(" ("+ commonUtils.addComma(data.countOfInstsUsing) +")");
+        	$("#view-countOfUsersUsing").text(" ("+ commonUtils.addComma(data.countOfUsersUsing) +")");
         }
 
         var callbackSoftwareList = function(resultMap) {

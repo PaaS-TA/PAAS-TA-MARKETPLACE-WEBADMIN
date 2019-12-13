@@ -89,7 +89,7 @@
                     <col style="width:8%;">
                     <col style="width:auto;">
                     <col style="width:auto;">
-                    <col style="width:auto%;">
+                    <col style="width:auto;">
                     <col style="width:10%;">
                 </colgroup>
                 <thead>
@@ -296,17 +296,16 @@
                         + "<td><a href='javascript:void(0);' onclick=moveUserStatsDetail('"+content[i].id+"')>" + content[i].name + "</a></td>"
                         + "<td>" + content[i].id + "</td>"
                         + "<td>" + createdDate + "</td>"
-                        + "<td>" + instanceCount + "</td>"
+                        + "<td>" + commonUtils.addComma(instanceCount) + "</td>"
                         + "</tr>"
                     );
                 }
                 
                 //총 건수
-                $("#totalCount").text(" (" + data.totalElements +")");
+                $("#totalCount").text(" (" + commonUtils.addComma(data.totalElements) +")");
             }else{
                 //총 건수
                 $("#totalCount").text(" (0)");
-
                 htmlString = "<tr><td colspan='5'><p class='user_p'>사용자가 존재하지 않습니다.</p></td></tr>";
             }
 

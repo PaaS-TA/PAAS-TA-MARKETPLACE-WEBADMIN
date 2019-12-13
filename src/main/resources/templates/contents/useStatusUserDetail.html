@@ -120,7 +120,7 @@
         <!-- //검색 Form -->
 
         <div class="cont-titWrap mt30">
-            <h3 class="h-tit3">총 건수 / 총 금액 <span class="point4" id="totalCount"></span></h3>
+            <h3 class="h-tit3">총 건수<span class="point4" id="view-totalElements"></span> / 총 금액 <span class="point4" id="view-totalPrice"></span></h3>
         </div>
 
 
@@ -384,17 +384,20 @@
                         + "<td>" + software.name + "</td>"
                         + "<td>" + content[i].software.version + "</td>"
                         + "<td>" + usageStartDate+ " ~ "+ usageEndDate +"</td>"
-                        + "<td>" + btMonthRounds +"</td>"
+                        + "<td>" + commonUtils.addComma(btMonthRounds) +"</td>"
                         + "<td>" + content[i].status + "</td>"
                         + "</tr>"
                     );
                 }
+
                 //총 건수 / 총 금액
-                $("#totalCount").text(" (" + data.totalElements + " / " + result.totalPricePerMonth +" 원)");
+                $("#view-totalElements").text(" ("+ commonUtils.addComma(data.totalElements) +")");
+                $("#view-totalPrice").text(" ("+ commonUtils.addComma(result.totalPricePerMonth) +" 원)");
             }else{
-                $("#totalCount").text(" (" + 0 + " / " + 0 +" 원)");
-                htmlString = "<tr>"
-                    + "<td colspan='7'><p class='user_p'>상품이 존재하지 않습니다.</p></td>" + "</tr>"
+                $("#view-totalElements").text(" (0)");
+                $("#view-totalPrice").text(" (0)");
+
+                htmlString = "<tr><td colspan='7'><p class='user_p'>상품이 존재하지 않습니다.</p></td></tr>"
             }
             userList.html(htmlString);
 
@@ -477,35 +480,36 @@
         //[공통] 년,월(select box)
         function selectCal(monthfieldF, yearfieldF, monthfieldS, yearfieldS) {
             var today = new Date();
+            var nextday = new Date(today.getFullYear(), today.getMonth()+1, today.getDate());
+            if (today.getMonth() == 12) {
+                nextday.setFullYear(today.getFullYear() + 1);
+            }
 
             yearValueF = today.getFullYear();
             monthValueF = (today.getMonth() + 1);
 
-            yearValueS = today.getFullYear();
-            monthValueS = (today.getMonth() + 2);
+            yearValueS = nextday.getFullYear();
+            monthValueS = (nextday.getMonth() + 1);
 
             for (var i = 1; i < 13; i++) {
-                if ((today.getMonth() + 1) == i) $("#" + monthfieldF).append("<option value='" + i + "' selected='selected'>" + i + "</option>");
+                if (monthValueF == i) $("#" + monthfieldF).append("<option value='" + i + "' selected='selected'>" + i + "</option>");
                 else $("#" + monthfieldF).append("<option value='" + i + "'>" + i + "</option>");
             }
 
             for (var i = 1; i < 13; i++) {
-                if ((today.getMonth() + 2) == i) $("#" + monthfieldS).append("<option value='" + i + "' selected='selected'>" + i + "</option>");
+                if (monthValueS == i) $("#" + monthfieldS).append("<option value='" + i + "' selected='selected'>" + i + "</option>");
                 else $("#" + monthfieldS).append("<option value='" + i + "'>" + i + "</option>");
             }
 
-            var thisyear = today.getFullYear();
-            for (var y = thisyear - 10; y < thisyear + 10; y++) {
-
-                if (thisyear == y) $("#" + yearfieldF).append("<option value='" + y + "' selected='selected'>" + y + "</option>");
+            for (var y = yearValueF - 10; y < yearValueF + 10; y++) {
+                if (yearValueF == y) $("#" + yearfieldF).append("<option value='" + y + "' selected='selected'>" + y + "</option>");
                 else $("#" + yearfieldF).append("<option value='" + y + "'>" + y + "</option>");
             }
 
-            for (var y = thisyear - 10; y < thisyear + 10; y++) {
-                if (thisyear == y) $("#" + yearfieldS).append("<option value='" + y + "' selected='selected'>" + y + "</option>");
+            for (var y = yearValueS - 10; y < yearValueS + 10; y++) {
+                if (yearValueS == y) $("#" + yearfieldS).append("<option value='" + y + "' selected='selected'>" + y + "</option>");
                 else $("#" + yearfieldS).append("<option value='" + y + "'>" + y + "</option>");
             }
-
         }
 
         var selectYear = function() {

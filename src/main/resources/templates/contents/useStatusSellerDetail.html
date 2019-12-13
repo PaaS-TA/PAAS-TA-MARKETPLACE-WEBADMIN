@@ -60,11 +60,11 @@
                                 <th scope="row">판매자</th>
                                 <td th:text="${sellerStat.name}"></td>
                                 <th scope="row">승인상품 수</th>
-                                <td th:text="${approvalSwOfProvider}"></td>
+                                <td th:text="${#numbers.formatInteger(approvalSwOfProvider, 0, 'COMMA')}"></td>
                                 <th scope="row">판매상품 수</th>
-                                <td th:text="${mySoldSoftwareCount}"></td>
+                                <td th:text="${#numbers.formatInteger(mySoldSoftwareCount, 0, 'COMMA')}"></td>
                                 <th scope="row">판매량</th>
-                                <td th:text="${mySoldInstanceCount}"></td>
+                                <td th:text="${#numbers.formatInteger(mySoldInstanceCount, 0, 'COMMA')}"></td>
                             </tr>
                             </tbody>
                         </table>
@@ -395,7 +395,7 @@
                         + "<td>" + content[i].version + "</td>"
                         + "<td>" + createdDate + "</td>"
                         + "<td>" + lastModifiedDateValue + "</td>"
-                        + "<td>" + instanceUserCount + "</td>"
+                        + "<td>" + commonUtils.addComma(instanceUserCount) + "</td>"
                         + "</tr>"
                     );
                 }

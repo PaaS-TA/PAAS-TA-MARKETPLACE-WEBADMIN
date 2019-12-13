@@ -44,7 +44,6 @@
                             </colgroup>
                             <tbody>
                             <tr>
-<!--                                <i class="i_star">필수입력</i>-->
                                 <th scope="row">상품명</th>
                                 <td><input class="form-control" type="text" th:value="${software.name}" id="softwareName" readonly></td>
                             </tr>
@@ -52,7 +51,6 @@
                                 <th scope="row">카테고리<i class="i_star">필수입력</i></th>
                                 <td>
                                     <select id="softwareCategory">
-<!--                                        <option value="">전체</option>-->
                                         <option th:each="category : ${categories}"
                                                 th:value="${category.id}"
                                                 th:utext="${category.name}"
@@ -71,17 +69,12 @@
                                 <td>
                                     <!-- 첨부파일 -->
                                     <div class="fileUploadWrap selected_ico" style="width:50%;">
-                                        <!--<input tabindex="-1" class="form-control" id="iconFileInput" style="position: absolute; clip: rect(0px 0px 0px 0px);" type="file" name="iconFile" data-icon-name="fa fa-upload" data-button-text="" data-class-input="form-control" data-class-button="btn btn-default" filestyle="" onchange="getThumbnailPreview(this, $('#icon_image'))">-->
                                         <div class="bootstrap-filestyle input-group">
                                             <span tabindex="0" class="group-span-filestyle input-group-btn">
                                                 <label class="btn btn-default " id="icon_image">
                                                     <img class="logo" alt="" th:src="${software.iconPath}" /> <!--파일업로드 후 첨부한 이미지 넣는 영역-->
-<!--                                                           <span class="ico ico_fileupload">파일찾기</span>-->
                                                 </label>
                                             </span>
-<!--                                            <div class="input-form-group">-->
-<!--                                                <input name="userfile" disabled="" class="form-control" id="iconFile" type="text" placeholder="아이콘으로 등록할 이미지를 선택하세요.">-->
-<!--                                            </div>-->
                                         </div>
                                     </div>
                                     <!-- //첨부파일 -->
@@ -161,14 +154,14 @@
                                             </td>
                                             <td><input class="form-control" type="text" th:value="${softwarePlan.description}" th:id="'description_'+ ${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].description'" placeholder="1CPU/256M/1G" readonly></td>
 
-                                            <td><input class="form-control" type="text" th:value="${softwarePlan.cpuAmt}" th:id="'cpuAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].cpu'" th:onkeyup="'amt('+${stat.index}+')'" readonly></td>
+                                            <td><input class="form-control" type="text" th:value="${#numbers.formatInteger(softwarePlan.cpuAmt, 0, 'COMMA')}" th:id="'cpuAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].cpu'" th:onkeyup="'amt('+${stat.index}+')'" readonly></td>
                                             <td>
-                                                <input class="form-control" type="text" th:value="${softwarePlan.memorySize}" th:id="'memorySize_'+ ${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].memorySize'" placeholder="256M" readonly> &nbsp;<input class="form-control" type="text" th:value="${softwarePlan.memoryAmt}" th:id="'memoryAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].memoryAmt'" th:onkeyup="'amt('+${stat.index}+')'" readonly>
+                                                <input class="form-control" type="text" th:value="${softwarePlan.memorySize}" th:id="'memorySize_'+ ${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].memorySize'" placeholder="256M" readonly> &nbsp;<input class="form-control" type="text" th:value="${#numbers.formatInteger(softwarePlan.memoryAmt, 0, 'COMMA')}" th:id="'memoryAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].memoryAmt'" th:onkeyup="'amt('+${stat.index}+')'" readonly>
                                             </td>
                                             <td>
-                                                <input class="form-control" type="text" th:value="${softwarePlan.diskSize}" th:id="'diskSize_'+ ${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].diskSize'" placeholder="1G" readonly>&nbsp;<input class="form-control" type="text" th:value="${softwarePlan.diskAmt}" th:id="'diskAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].diskAmt'"  th:onkeyup="'amt('+${stat.index}+')'" readonly>
+                                                <input class="form-control" type="text" th:value="${softwarePlan.diskSize}" th:id="'diskSize_'+ ${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].diskSize'" placeholder="1G" readonly>&nbsp;<input class="form-control" type="text" th:value="${#numbers.formatInteger(softwarePlan.diskAmt, 0, 'COMMA')}" th:id="'diskAmt_' +${stat.index}" th:name="'softwarePlanList['+${stat.index}+'].diskAmt'"  th:onkeyup="'amt('+${stat.index}+')'" readonly>
                                             </td>
-                                            <td><input class="form-control" th:value="${#numbers.formatInteger(softwarePlan.memoryAmt + softwarePlan.diskAmt + softwarePlan.memoryAmt , 0, 'COMMA')}" th:id="'sumAmt_' +${stat.index}" name="sumAmt" readonly></td>
+                                            <td><input class="form-control" th:value="${#numbers.formatInteger(softwarePlan.cpuAmt + softwarePlan.diskAmt + softwarePlan.memoryAmt , 0, 'COMMA')}" th:id="'sumAmt_' +${stat.index}" name="sumAmt" readonly></td>
                                         </tr>
                                         </tbody>
                                     </table>
@@ -265,7 +258,7 @@
         </div>
     </div>
     <!-- //content -->
-;
+
     <script th:inline="javascript" type="text/javascript" layout:fragment="custom-script">
         /*<![CDATA[*/
 
@@ -438,13 +431,21 @@
 
 
         var callbackRow  = function (data) {
+            var tempCpuAmt = 0;
+            var tempMemoryAmt = 0;
+            var tempDiskAmt = 0;
+            var tempTotalAmt = 0;
+            
             $('#pricePerMonth-tbody').html("");
             index = 1000;
             nameIndex = 0;
 
             if(data.length > 0){
                 for(var i = 0; i < data.length; i++){
-                    var totalAmt = data[i].cpuAmt+data[i].memoryAmt+data[i].diskAmt;
+                    tempCpuAmt = commonUtils.addComma(data[i].cpuAmt);
+                    tempMemoryAmt = commonUtils.addComma(data[i].memoryAmt);
+                    tempDiskAmt = commonUtils.addComma(data[i].diskAmt);
+                    tempTotalAmt = commonUtils.addComma(data[i].cpuAmt + data[i].memoryAmt + data[i].diskAmt);
 
                     $('#pricePerMonth-tbody').append(
                         "<tr>"
@@ -452,22 +453,23 @@
                         +"		<input class='form-control' type='text' id='name_"+index+"' name='softwarePlanList["+nameIndex+"].name' value='"+data[i].name+"' placeholder='Small' readonly><input type=hidden id='planid_"+index+"'name='softwarePlanList["+nameIndex+"].planid' value='"+data[i].index+"' readonly>"
                         +"	</td>"
                         +"	<td><input class='form-control' type='text' name='softwarePlanList["+nameIndex+"].description' value='"+data[i].description+"' placeholder='1CPU/256M/1G' readonly></td>"
-                        +"	<td><input class='form-control' type='text' id='cpuAmt_"+index+"' name='softwarePlanList["+nameIndex+"].cpuAmt' value='"+data[i].cpuAmt+"' onkeyup='amt("+index +")' readonly></td>"
+                        +"	<td><input class='form-control' type='text' id='cpuAmt_"+index+"' name='softwarePlanList["+nameIndex+"].cpuAmt' value='"+tempCpuAmt+"' onkeyup='amt("+index +")' readonly></td>"
                         +"	<td>"
                         +"		<input class='form-control' type='text' id='memorySize' name='softwarePlanList["+nameIndex+"].memorySize' value='"+data[i].memorySize+"' placeholder='256M' readonly> &nbsp;"
-                        +"		<input class='form-control' type='text' id='memoryAmt_"+index+"' name='softwarePlanList["+nameIndex+"].memoryAmt' value='"+data[i].memoryAmt+"' onkeyup='amt("+index+")' readonly>"
+                        +"		<input class='form-control' type='text' id='memoryAmt_"+index+"' name='softwarePlanList["+nameIndex+"].memoryAmt' value='"+tempMemoryAmt+"' onkeyup='amt("+index+")' readonly>"
                         +"	</td>"
                         +"	<td>"
                         +"		<input class='form-control' type='text' id='diskSize' name='softwarePlanList["+nameIndex+"].diskSize'value='"+data[i].diskSize+"' placeholder='1G' readonly> &nbsp;"
-                        +"		<input class='form-control' type='text' id='diskAmt_"+index+"' name='softwarePlanList["+nameIndex+"].diskAmt' value='"+data[i].diskAmt+"'onkeyup='amt("+index+")' readonly>"
+                        +"		<input class='form-control' type='text' id='diskAmt_"+index+"' name='softwarePlanList["+nameIndex+"].diskAmt' value='"+tempDiskAmt+"'onkeyup='amt("+index+")' readonly>"
                         +"	</td>"
                         +"	<td>"
-                        +"		<input class='form-control' type='text' id='sumAmt_"+index+"' name='sumAmt' value='"+totalAmt+"' readonly>"
+                        +"		<input class='form-control' type='text' id='sumAmt_"+index+"' name='sumAmt' value='"+tempTotalAmt+"' readonly>"
                         +"		<input type='hidden' name='softwarePlanList["+nameIndex+"].applyMonth' value='"+data[i].applyMonth+"'>"
                         +"	</td>"
                         +"</tr>"
                     );
 
+                    index++;
                     nameIndex++;
                 }
             }

@@ -1,0 +1,36 @@
+applications:
+- name: marketplace-webadmin
+  memory: 1G
+  instances: 1
+  buildpacks:
+  - java_buildpack
+  path: build/libs/marketplace-web-admin.war
+  env:
+    server_port: 8778
+
+    spring_application_name: marketplace-webadmin
+    spring_servlet_multipart_max-file-size: 1024MB
+    spring_servlet_multipart_max-request-size: 1024MB
+    spring_session_store-type: jdbc
+    spring_session_jdbc_initialize-schema: always
+    spring_session_jdbc_schema: classpath:org/springframework/session/jdbc/schema-mysql.sql
+    spring_mvc_static-path-pattern: /static/**
+    spring_datasource_driver-class-name: com.mysql.cj.jdbc.Driver
+    spring_datasource_url: jdbc:mysql://<<DB_IP>>:<DB_PORT>/marketplace_admin?characterEncoding=utf8&autoReconnect=true
+    spring_datasource_username: root
+    spring_datasource_password: <DB_ADMIN_PASSWORD>
+
+    marketplace_api_url: http://marketplace-api.<DOMAIN>   # 'marketplace-api' App 의 urls
+    marketplace_registration: cf
+    marketplace_client-id: marketclient
+    marketplace_client-secret: clientsecret
+    marketplace_redirect-uri: "http://marketplace-webadmin.<DOMAIN>/login/oauth2/code/cf"
+    marketplace_uaa-logout-url:  https://uaa.<DOMAIN>/logout.do
+    marketplace_uaa-logout-rediredct-url: http://marketplace-webadmin.<DOMAIN>/main
+
+    marketplace_authorization-uri: https://uaa.<DOMAIN>/oauth/authorize
+    marketplace_token-uri: https://uaa.<DOMAIN>/oauth/token
+    marketplace_user-info-uri: https://uaa.<DOMAIN>/userinfo
+    marketplace_jwk-set-uri: https://uaa.<DOMAIN>/token_keys
+
+    cloudfoundry_cc_api_host: ".<DOMAIN>"
